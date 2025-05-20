@@ -1,24 +1,8 @@
 import argparse
-import copy
-
-parser = argparse.ArgumentParser(description="sp")
-parser.add_argument("--outdir", type=str, default="0")
-parser.add_argument("--data_path", type=str, default="0")
-parser.add_argument("--model_path", type=str, default="0")
-parser.add_argument("--dataset_name", type=str, default="ShareGPT")
-args = parser.parse_args()
-
 import os
 from concurrent.futures import ThreadPoolExecutor
 
-s = 0
-e = 68000 - 1
-# e = 68 - 1
-# gpus = [[0],[1],[2],[3],[4],[5],[6],[7]]
-
-gpus = [[0], [1], [2], [3]]
-num_p = len(gpus)
-outdir = "{}/sharegpt_{}_{}_mufp16".format(args.outdir, s, e)
+from loguru import logger
 
 
 def split_range(start, end, n, over=False):
@@ -41,39 +25,53 @@ def split_range(start, end, n, over=False):
     return intervals
 
 
-def run_command(cmd):
-    os.system(cmd)
+def main():
+    parser = argparse.ArgumentParser()
+
+    # entrance
+    parser.add_argument('--script', type=str)
+    # path
+    parser.add_argument('--outdir', type=str)
+    parser.add_argument('--data_path', type=str)
+    parser.add_argument('--model_path', type=str)
+    # data
+    parser.add_argument('--dataset_name', type=str, default='ShareGPT')
+    parser.add_argument('--num_rows', type=int, default=68000)
+    parser.add_argument('--num_gpus', type=int, default=4)
+
+    args = parser.parse_args()
+
+    dataset_name = args.dataset_name
+    num_rows = args.num_rows
+    num_gpus = args.num_gpus
+
+    outdir = f'{args.outdir}/{dataset_name}_{num_rows}'
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
+
+    intervals = split_range(0, num_rows - 1, num_gpus, over=True)
+
+    commands = []
+    for index in range(num_gpus):
+        start, end = intervals[index]
+
+        command = (
+            f'CUDA_VISIBLE_DEVICES={index} python {args.script} '
+            f'--start {start} '
+            f'--end {end} '
+            f'--index {index} '
+            f'--outdir {outdir} '
+            f'--data_path {args.data_path} '
+            f'--model_path {args.model_path} '
+            f'--dataset_name {dataset_name}'
+        )
+        commands.append(command)
+    logger.info('\n'.join(commands))
+
+    with ThreadPoolExecutor(max_workers=len(commands)) as executor:
+        for command in commands:
+            executor.submit(lambda cmd: os.system(cmd), command)
 
 
-if not os.path.exists(outdir):
-    os.makedirs(outdir)
-
-
-data_a = split_range(s, e, num_p, over=True)
-commands = []
-for i in range(num_p):
-    index = i
-    start = data_a[i][0]
-    end = data_a[i][1]
-    # gpu_index_str = [str(i) for i in gpu_index]
-    # gpu_index_str=','.join(gpu_index_str)
-    gpu_index = gpus[i]
-    gpu_index_str = " ".join(map(str, gpu_index))
-    # gpu_index_str='['+gpu_index_str+']'
-    command = "python ge_data/ge_data_all_llama2chat.py --start={} --end={} --index={} --gpu_index {} --outdir {} --data_path {} --model_path {} --dataset_name {}".format(
-        start,
-        end,
-        index,
-        gpu_index_str,
-        outdir,
-        args.data_path,
-        args.model_path,
-        args.dataset_name,
-    )
-    commands.append(command)
-# run_command(commands[0])
-# commands=commands[:1]
-with ThreadPoolExecutor(max_workers=len(commands)) as executor:
-    for command in commands:
-        executor.submit(run_command, command)
-        print(command)
+if __name__ == '__main__':
+    main()

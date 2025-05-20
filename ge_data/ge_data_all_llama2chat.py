@@ -1,23 +1,21 @@
 import argparse
+import os
 import re
 
-parser = argparse.ArgumentParser(description="sp")
+import torch
+from datasets import concatenate_datasets, load_dataset
+from fastchat.model.model_adapter import get_conversation_template
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+parser = argparse.ArgumentParser()
 parser.add_argument("--start", type=int, default=0)
 parser.add_argument("--end", type=int, default=100)
-parser.add_argument("--index", type=int, default=1)
-parser.add_argument("--gpu_index", type=int, nargs="+", default=[0])
-parser.add_argument("--outdir", type=str, default="outdir0")
+parser.add_argument("--index", type=int, default=0)
+parser.add_argument("--outdir", type=str, default="0")
 parser.add_argument("--data_path", type=str, default="0")
 parser.add_argument("--model_path", type=str, default="0")
 parser.add_argument("--dataset_name", type=str, default="ShareGPT")
 args = parser.parse_args()
-import os
-
-os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_index)[1:-1]
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from datasets import load_dataset, concatenate_datasets
-from fastchat.model.model_adapter import get_conversation_template
 
 bigname = args.model_path
 
@@ -30,9 +28,9 @@ dataset_info = {
     "UltraChat": {
         "load_type": "datasets",
         "conv_key": ["messages"],
-        "split_key": ["train_sft", "test_sft", "train_gen", "test_gen"],
+        "split_key": ["train_sft", "train_gen"],
     },
-    "OpenThoughts": {
+    "OpenThoughts2": {
         "load_type": "datasets",
         "conv_key": ["conversations"],
         "split_key": ["train"],
@@ -68,6 +66,7 @@ def longest_common_prefix(list1, list2):
     common_prefix = list1[:prefix_length]
     return common_prefix, prefix_length
 
+
 # for different datasets, we just need to change the way we fill the conv template
 def fill_conv_template(dataset_name, conv, source):
     # 1. Get the roles
@@ -75,7 +74,7 @@ def fill_conv_template(dataset_name, conv, source):
         roles = {"human": conv.roles[0], "gpt": conv.roles[1]}
     elif dataset_name == "UltraChat":
         roles = {"user": conv.roles[0], "assistant": conv.roles[1]}
-    elif dataset_name == "OpenThoughts":
+    elif dataset_name == "OpenThoughts2":
         roles = {"user": conv.roles[0], "assistant": conv.roles[1]}
     elif dataset_name == "Baize":
         roles = {"Human": conv.roles[0], "AI": conv.roles[1]}
@@ -102,6 +101,7 @@ def fill_conv_template(dataset_name, conv, source):
             if sentence["from"] == "gpt":
                 sentence["value"] = " " + sentence["value"]
             conv.append_message(role, sentence["value"])
+
     elif dataset_name == "UltraChat":
         source = source[0]
         if roles[source[0]["role"]] != conv.roles[0]:
@@ -115,7 +115,7 @@ def fill_conv_template(dataset_name, conv, source):
                 sentence["content"] = " " + sentence["content"]
             conv.append_message(role, sentence["content"])
 
-    elif dataset_name == "OpenThoughts":
+    elif dataset_name == "OpenThoughts2":
         source = source[0]
         if roles[source[0]["from"]] != conv.roles[0]:
             source = source[1:]
@@ -153,28 +153,24 @@ def fill_conv_template(dataset_name, conv, source):
             if role == "AI":
                 value = " " + value
             conv.append_message(role, value)
-    
+
     elif dataset_name == "evol_instruct":
         # there is no such thing as a turn here
         conv.append_message(conv.roles[0], source[0])
-        conv.append_message(conv.roles[1], " " +source[1])
-    
+        conv.append_message(conv.roles[1], " " + source[1])
+
     elif dataset_name == "lima":
         source = source[0]
         for j, sentence in enumerate(source):
-            if j%2 == 0:
+            if j % 2 == 0:
                 conv.append_message(conv.roles[0], sentence)
             else:
-                conv.append_message(conv.roles[1], " " + sentence)            
+                conv.append_message(conv.roles[1], " " + sentence)
 
     return conv
 
 
-def build_dataset_rank(
-    tokenizer,
-    split="train",
-    select=None,
-):
+def build_dataset_rank(tokenizer):
     info = dataset_info[args.dataset_name]
     if info["load_type"] == "json":
         ds = load_dataset("json", data_files=args.data_path)
@@ -213,7 +209,13 @@ def build_dataset_rank(
         new_examples = {"conversation": [], "input_ids": [], "loss_mask": []}
         for i in range(len(examples[info["conv_key"][0]])):
             conv = get_conversation_template("llama-2-chat")
-            sys_p = "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."
+            sys_p = (
+                "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  "
+                "Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. "
+                "Please ensure that your responses are socially unbiased and positive in nature.\n\n"
+                "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. "
+                "If you don't know the answer to a question, please don't share false information."
+            )
             conv.system_message = sys_p
             source = [examples[key][i] for key in info["conv_key"]]
             """
@@ -272,7 +274,7 @@ def build_dataset_rank(
                 #     instruction_len -= 1
 
                 # Ignore the user instructions
-                loss_mask[cur_len : cur_len + instruction_len] = 0
+                loss_mask[cur_len: cur_len + instruction_len] = 0
                 cur_len += turn_len
                 cur_len += 2
 

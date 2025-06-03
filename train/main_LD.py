@@ -1,4 +1,5 @@
 import argparse
+import random
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--basepath', type=str, default=None)
@@ -24,6 +25,7 @@ total_steps = int(args.data_num * 0.95 * (args.epoch + 1) / (args.bs * args.grad
 warm_steps = total_steps // 100
 
 train_config = {
+    "data_num": args.data_num,
     "lr": args.lr,
     "bs": args.bs,
     "gradient_accumulation_steps": args.gradient_accumulation_steps,
@@ -114,13 +116,33 @@ for param in head.parameters():
     param.requires_grad = False
 
 
-def list_files(path):
+def list_files(
+        path: str,
+        index_file_name: str = 'index.txt',
+        num: int = 800000
+):
     datapath = []
-    for root, directories, files in os.walk(path):
+
+    index_file_path = os.path.join(path, index_file_name)
+    if os.path.exists(index_file_path):
+        with open(index_file_path, mode='r', encoding='utf-8') as reader:
+            for line in reader:
+                file_path = line.strip()
+                datapath.append(file_path)
+        return datapath[:num]
+
+    for root, _, files in os.walk(path):
         for file in files:
             file_path = os.path.join(root, file)
             datapath.append(file_path)
-    return datapath
+
+    random.seed(42)
+    random.shuffle(datapath)
+    with open(index_file_path, mode='w', encoding='utf-8') as writer:
+        for file_path in datapath:
+            writer.write(file_path + '\n')
+
+    return datapath[:num]
 
 
 class AddGaussianNoise:
@@ -332,7 +354,7 @@ if train_config["data_noise"]:
 else:
     aug = None
 
-datapath = list_files(train_config["datapath"])
+datapath = list_files(train_config["datapath"], num=train_config["data_num"])
 
 traindatapath = datapath[:int(len(datapath) * 0.95)]
 testdatapath = datapath[int(len(datapath) * 0.95):]

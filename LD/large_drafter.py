@@ -23,6 +23,7 @@ class LlamaDecoderLayerMoE(LlamaDecoderLayer):
             # redefine self.mlp
             self.mlp = DCMoe(**moe_config)
 
+
 class InferLlamaDecoderLayerMoE(InferLlamaDecoderLayer):
     def __init__(self, config, index, moe_config=None):
         super().__init__(config=config, index=index)
@@ -31,17 +32,18 @@ class InferLlamaDecoderLayerMoE(InferLlamaDecoderLayer):
             # redefine self.mlp
             self.mlp = DCMoe(**moe_config)
 
+
 class LargeDrafter(Model):
     def __init__(
-        self,
-        config,
-        load_emb=False,
-        path=None,
-        bias=True,
-        total_tokens=63,
-        depth=5,
-        top_k=8,
-        threshold=1.0,
+            self,
+            config,
+            load_emb=False,
+            path=None,
+            bias=True,
+            total_tokens=63,
+            depth=5,
+            top_k=8,
+            threshold=1.0,
     ):
         eagle_config = EConfig(**config["eagle_config"])
         super().__init__(
@@ -103,19 +105,19 @@ class LargeDrafter(Model):
         self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
 
     def forward(
-        self,
-        hidden_states,
-        input_ids,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-        std=None,
-        q_hidden_states=None,
+            self,
+            hidden_states,
+            input_ids,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_values: Optional[List[torch.FloatTensor]] = None,
+            inputs_embeds: Optional[torch.FloatTensor] = None,
+            use_cache: Optional[bool] = None,
+            output_attentions: Optional[bool] = None,
+            output_hidden_states: Optional[bool] = None,
+            return_dict: Optional[bool] = None,
+            std=None,
+            q_hidden_states=None,
     ):
         # mainly deal with the logic to switch the step models and adapters
         results = super().forward(
@@ -169,15 +171,15 @@ class LargeDrafter(Model):
 
 class InferLargeDrafter(InferModel):
     def __init__(
-        self,
-        config,
-        load_emb=False,
-        path=None,
-        bias=True,
-        total_tokens=63,
-        depth=5,
-        top_k=8,
-        threshold=1.0,
+            self,
+            config,
+            load_emb=False,
+            path=None,
+            bias=True,
+            total_tokens=63,
+            depth=5,
+            top_k=8,
+            threshold=1.0,
     ):
         eagle_config = EConfig(**config["eagle_config"])
         super().__init__(
@@ -239,18 +241,18 @@ class InferLargeDrafter(InferModel):
         self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
 
     def forward(
-        self,
-        hidden_states,
-        input_ids,
-        attention_mask: Optional[torch.Tensor] = None,
-        position_ids: Optional[torch.LongTensor] = None,
-        past_key_values: Optional[List[torch.FloatTensor]] = None,
-        inputs_embeds: Optional[torch.FloatTensor] = None,
-        use_cache: Optional[bool] = None,
-        output_attentions: Optional[bool] = None,
-        output_hidden_states: Optional[bool] = None,
-        return_dict: Optional[bool] = None,
-        std=None,
+            self,
+            hidden_states,
+            input_ids,
+            attention_mask: Optional[torch.Tensor] = None,
+            position_ids: Optional[torch.LongTensor] = None,
+            past_key_values: Optional[List[torch.FloatTensor]] = None,
+            inputs_embeds: Optional[torch.FloatTensor] = None,
+            use_cache: Optional[bool] = None,
+            output_attentions: Optional[bool] = None,
+            output_hidden_states: Optional[bool] = None,
+            return_dict: Optional[bool] = None,
+            std=None,
     ):
         # mainly deal with the logic to switch the step models and adapters
         results = super().forward(
@@ -372,7 +374,7 @@ class InferLargeDrafter(InferModel):
             # with Timer("sort1"):
             bias1 = top_k if i > 0 else 0
             bias2 = max(0, i - 1)
-            bias = 1 + top_k**2 * bias2 + bias1
+            bias = 1 + top_k ** 2 * bias2 + bias1
             parents = topk_cs_index + bias
             parents_list.append(parents)
 
@@ -510,15 +512,15 @@ class InferLargeDrafter(InferModel):
 
 class LDModel(EaModel):
     def __init__(
-        self,
-        base_model,
-        base_model_name_or_path,
-        ea_model_path,
-        total_token,
-        depth,
-        top_k,
-        threshold,
-        ea_layer_state_dict,
+            self,
+            base_model,
+            base_model_name_or_path,
+            ea_model_path,
+            total_token,
+            depth,
+            top_k,
+            threshold,
+            ea_layer_state_dict,
     ):
 
         nn.Module.__init__(self)
@@ -538,7 +540,6 @@ class LDModel(EaModel):
         except:
             bias = True
 
-        
         self.ea_layer = InferLargeDrafter(
             config,
             bias=bias,

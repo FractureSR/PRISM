@@ -287,7 +287,11 @@ def getkacc(model, data, head, max_length=5):
     def generate(hidden_states, input_ids, head, max_length=4, use_cache=True):
         if use_cache:
             past_key_values = None
+            unwarped_model = accelerator.unwrap_model(model)
+            unwarped_model.reset_step()
             for i in range(max_length):
+                if i < args.forward_num_total:
+                    assert i == unwarped_model.current_step, i
                 if past_key_values != None:
                     out_hidden, past_key_values, sample_hidden = model(last_hidden, input_ids=token,
                                                                        past_key_values=past_key_values,
@@ -302,10 +306,6 @@ def getkacc(model, data, head, max_length=5):
                     last_headout = head(sample_hidden[:, -1:])
                 token = torch.argmax(last_headout, dim=-1)
                 input_ids = torch.cat((input_ids, token), dim=1)
-
-            unwarped_model = accelerator.unwrap_model(model)
-            unwarped_model.reset_step()
-
         else:
             raise NotImplementedError
 
@@ -438,6 +438,7 @@ for epoch in range(num_epochs + 1):
             q_hidden_states = None  ### q hidden states is used to store past step's hidden states
             unwarped_model.reset_step()
             for forward_idx in range(args.forward_num_total):  ### forward for multiple times
+                assert forward_idx == unwarped_model.current_step
                 predict, sample_hidden = model(hidden_states, input_ids, attention_mask,
                                                q_hidden_states=q_hidden_states)  ### for me. just enable the model to switch paratmers is enough
 
@@ -450,6 +451,7 @@ for epoch in range(num_epochs + 1):
                                           :, :]
                     q_hidden_states = torch.cat([q_hidden_states, new_q_hidden_states], dim=0)
                     ### q_hidden_states always maintains the hidden states of different generation steps
+
                 if not args.train_LD:
                     q_hidden_states = q_hidden_states.detach()
                 ### see here, the gradient is detached
@@ -538,6 +540,7 @@ for epoch in range(num_epochs + 1):
                 q_hidden_states = None
                 unwarped_model.reset_step()
                 for forward_idx in range(args.forward_num_total):
+                    assert forward_idx == unwarped_model.current_step
                     predict, sample_hidden = model(data["hidden_states"], input_ids=data["input_ids"],
                                                    attention_mask=data["attention_mask"],
                                                    q_hidden_states=q_hidden_states)

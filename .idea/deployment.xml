@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="criait_liuf@BSCC-N42A14P@ssh.cn-beijing-1.paracloud.com:2222 agent (3)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="criait_liuf@BSCC-N42A14P@ssh.cn-beijing-1.paracloud.com:2222 agent">
         <serverdata>
@@ -9,6 +9,21 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="criait_liuf@BSCC-N42A14P@ssh.cn-beijing-1.paracloud.com:2222 agent (2)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="criait_liuf@BSCC-N42A14P@ssh.cn-beijing-1.paracloud.com:2222 agent (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/dalhxwlyjsuo/criait_liuf/codes/LD" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

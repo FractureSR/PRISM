@@ -1,508 +1,0 @@
-nvcc: NVIDIA (R) Cuda compiler driver
-Copyright (c) 2005-2023 NVIDIA Corporation
-Built on Tue_Feb__7_19:32:13_PST_2023
-Cuda compilation tools, release 12.1, V12.1.66
-Build cuda_12.1.r12.1/compiler.32415258_0
-Python 3.11.11
-start time: Thu May 22 21:22:54 CST 2025
-2025-05-22 21:22:55.422 | INFO     | __main__:main:69 - CUDA_VISIBLE_DEVICES=0 python ge_data_all_llama2chat.py --start 0 --end 115750 --index 0 --outdir /home/dalhxwlyjsuo_20T/LD_train_data/llama2-7b/UltraChat_463000 --data_path /home/dalhxwlyjsuo/criait_liuf/zmc_data/ultrachat_200k --model_path /home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf --dataset_name UltraChat
-CUDA_VISIBLE_DEVICES=1 python ge_data_all_llama2chat.py --start 115750 --end 231500 --index 1 --outdir /home/dalhxwlyjsuo_20T/LD_train_data/llama2-7b/UltraChat_463000 --data_path /home/dalhxwlyjsuo/criait_liuf/zmc_data/ultrachat_200k --model_path /home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf --dataset_name UltraChat
-CUDA_VISIBLE_DEVICES=2 python ge_data_all_llama2chat.py --start 231500 --end 347250 --index 2 --outdir /home/dalhxwlyjsuo_20T/LD_train_data/llama2-7b/UltraChat_463000 --data_path /home/dalhxwlyjsuo/criait_liuf/zmc_data/ultrachat_200k --model_path /home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf --dataset_name UltraChat
-CUDA_VISIBLE_DEVICES=3 python ge_data_all_llama2chat.py --start 347250 --end 463000 --index 3 --outdir /home/dalhxwlyjsuo_20T/LD_train_data/llama2-7b/UltraChat_463000 --data_path /home/dalhxwlyjsuo/criait_liuf/zmc_data/ultrachat_200k --model_path /home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf --dataset_name UltraChat
-Successfully merged the following splits: ['train_sft', 'train_gen']
-Total examples in merged dataset: 463897
-Map (num_proc=4):   0%|          | 0/115750 [00:00<?, ? examples/s]Successfully merged the following splits: ['train_sft', 'train_gen']
-Total examples in merged dataset: 463897
-Successfully merged the following splits: ['train_sft', 'train_gen']
-Total examples in merged dataset: 463897
-Map (num_proc=4):   0%|          | 0/115750 [00:00<?, ? examples/s]Map (num_proc=4):   0%|          | 0/115750 [00:00<?, ? examples/s]Successfully merged the following splits: ['train_sft', 'train_gen']
-Total examples in merged dataset: 463897
-Map (num_proc=4):   0%|          | 0/115750 [00:00<?, ? examples/s]Map (num_proc=4):   1%|          | 1000/115750 [00:18<35:11, 54.35 examples/s]Map (num_proc=4):   1%|          | 1000/115750 [00:18<35:23, 54.03 examples/s]Map (num_proc=4):   2%|▏         | 2000/115750 [00:18<14:56, 126.82 examples/s]Map (num_proc=4):   2%|▏         | 2000/115750 [00:18<14:52, 127.48 examples/s]Map (num_proc=4):   1%|          | 1000/115750 [00:19<36:34, 52.30 examples/s]Map (num_proc=4):   1%|          | 1000/115750 [00:19<36:35, 52.27 examples/s]Map (num_proc=4):   3%|▎         | 3000/115750 [00:19<09:27, 198.59 examples/s]Map (num_proc=4):   3%|▎         | 3000/115750 [00:19<09:32, 197.06 examples/s]Map (num_proc=4):   3%|▎         | 3000/115750 [00:19<08:18, 226.00 examples/s]Map (num_proc=4):   3%|▎         | 4000/115750 [00:19<06:14, 298.43 examples/s]Map (num_proc=4):   3%|▎         | 4000/115750 [00:19<05:12, 357.66 examples/s]Map (num_proc=4):   3%|▎         | 4000/115750 [00:19<05:55, 314.38 examples/s]Map (num_proc=4):   3%|▎         | 4000/115750 [00:29<09:27, 197.06 examples/s]Map (num_proc=4):   4%|▍         | 5000/115750 [00:37<14:14, 129.61 examples/s]Map (num_proc=4):   4%|▍         | 5000/115750 [00:37<15:17, 120.76 examples/s]Map (num_proc=4):   5%|▌         | 6000/115750 [00:37<09:53, 184.88 examples/s]Map (num_proc=4):   5%|▌         | 6000/115750 [00:37<10:15, 178.36 examples/s]Map (num_proc=4):   6%|▌         | 7000/115750 [00:38<07:03, 256.64 examples/s]Map (num_proc=4):   4%|▍         | 5000/115750 [00:38<15:38, 118.00 examples/s]Map (num_proc=4):   5%|▌         | 6000/115750 [00:38<10:46, 169.72 examples/s]Map (num_proc=4):   4%|▍         | 5000/115750 [00:38<13:48, 133.73 examples/s]Map (num_proc=4):   6%|▌         | 7000/115750 [00:38<07:23, 245.33 examples/s]Map (num_proc=4):   7%|▋         | 8000/115750 [00:39<05:04, 354.04 examples/s]Map (num_proc=4):   6%|▌         | 7000/115750 [00:39<07:55, 228.57 examples/s]Map (num_proc=4):   6%|▌         | 7000/115750 [00:39<07:33, 239.93 examples/s]Map (num_proc=4):   7%|▋         | 8000/115750 [00:39<05:34, 321.66 examples/s]Map (num_proc=4):   7%|▋         | 8000/115750 [00:39<06:18, 284.81 examples/s]Map (num_proc=4):   7%|▋         | 8000/115750 [00:49<05:04, 354.04 examples/s]Map (num_proc=4):   7%|▋         | 8000/115750 [00:49<07:29, 239.93 examples/s]Map (num_proc=4):   8%|▊         | 9000/115750 [00:56<13:15, 134.20 examples/s]Map (num_proc=4):   8%|▊         | 9000/115750 [00:56<13:10, 135.11 examples/s]Map (num_proc=4):   9%|▊         | 10000/115750 [00:57<09:31, 185.10 examples/s]Map (num_proc=4):   9%|▊         | 10000/115750 [00:57<09:30, 185.52 examples/s]Map (num_proc=4):  10%|▉         | 11000/115750 [00:57<06:42, 260.46 examples/s]Map (num_proc=4):   8%|▊         | 9000/115750 [00:57<11:47, 150.79 examples/s]Map (num_proc=4):  10%|▉         | 11000/115750 [00:58<07:12, 242.34 examples/s]Map (num_proc=4):   9%|▊         | 10000/115750 [00:58<09:11, 191.74 examples/s]Map (num_proc=4):  10%|█         | 12000/115750 [00:59<05:13, 331.06 examples/s]Map (num_proc=4):   8%|▊         | 9000/115750 [00:59<13:19, 133.46 examples/s]Map (num_proc=4):  10%|▉         | 11000/115750 [00:59<06:56, 251.64 examples/s]Map (num_proc=4):  10%|▉         | 11000/115750 [00:59<07:45, 224.95 examples/s]Map (num_proc=4):  10%|█         | 12000/115750 [01:00<05:56, 290.69 examples/s]Map (num_proc=4):  10%|█         | 12000/115750 [01:00<06:14, 277.17 examples/s]Map (num_proc=4):  10%|█         | 12000/115750 [01:09<05:13, 331.06 examples/s]Map (num_proc=4):  11%|█         | 13000/115750 [01:15<12:15, 139.78 examples/s]Map (num_proc=4):  11%|█         | 13000/115750 [01:16<12:17, 139.38 examples/s]Map (num_proc=4):  12%|█▏        | 14000/115750 [01:17<09:04, 186.76 examples/s]Map (num_proc=4):  12%|█▏        | 14000/115750 [01:17<09:21, 181.06 examples/s]Map (num_proc=4):  11%|█         | 13000/115750 [01:17<10:38, 160.92 examples/s]Map (num_proc=4):  13%|█▎        | 15000/115750 [01:18<06:44, 249.38 examples/s]Map (num_proc=4):  12%|█▏        | 14000/115750 [01:18<08:20, 203.35 examples/s]Map (num_proc=4):  11%|█         | 13000/115750 [01:19<12:31, 136.72 examples/s]Map (num_proc=4):  13%|█▎        | 15000/115750 [01:19<06:25, 261.25 examples/s]Map (num_proc=4):  12%|█▏        | 14000/115750 [01:19<09:15, 183.19 examples/s]Map (num_proc=4):  14%|█▍        | 16000/115750 [01:19<05:15, 316.14 examples/s]Map (num_proc=4):  14%|█▍        | 16000/115750 [01:19<04:49, 344.27 examples/s]Map (num_proc=4):  13%|█▎        | 15000/115750 [01:20<07:12, 232.93 examples/s]Map (num_proc=4):  14%|█▍        | 16000/115750 [01:20<06:09, 270.25 examples/s]Map (num_proc=4):  14%|█▍        | 16000/115750 [01:20<05:19, 312.13 examples/s]Map (num_proc=4):  15%|█▍        | 17000/115750 [01:35<11:32, 142.51 examples/s]Map (num_proc=4):  15%|█▍        | 17000/115750 [01:35<10:39, 154.51 examples/s]Map (num_proc=4):  16%|█▌        | 18000/115750 [01:36<08:11, 198.78 examples/s]Map (num_proc=4):  16%|█▋        | 19000/115750 [01:36<06:00, 268.13 examples/s]Map (num_proc=4):  15%|█▍        | 17000/115750 [01:37<11:23, 144.38 examples/s]Map (num_proc=4):  16%|█▌        | 18000/115750 [01:37<09:07, 178.54 examples/s]Map (num_proc=4):  16%|█▋        | 19000/115750 [01:37<06:23, 251.98 examples/s]Map (num_proc=4):  16%|█▌        | 18000/115750 [01:38<08:43, 186.60 examples/s]Map (num_proc=4):  17%|█▋        | 20000/115750 [01:38<04:50, 329.48 examples/s]Map (num_proc=4):  16%|█▋        | 19000/115750 [01:38<06:25, 250.76 examples/s]Map (num_proc=4):  15%|█▍        | 17000/115750 [01:39<12:21, 133.15 examples/s]Map (num_proc=4):  16%|█▌        | 18000/115750 [01:39<08:46, 185.50 examples/s]Map (num_proc=4):  17%|█▋        | 20000/115750 [01:40<05:57, 268.00 examples/s]Map (num_proc=4):  16%|█▋        | 19000/115750 [01:41<07:03, 228.53 examples/s]Map (num_proc=4):  17%|█▋        | 20000/115750 [01:41<04:59, 319.67 examples/s]Map (num_proc=4):  17%|█▋        | 20000/115750 [01:49<06:21, 250.76 examples/s]Map (num_proc=4):  17%|█▋        | 20000/115750 [01:49<04:50, 329.48 examples/s]Map (num_proc=4):  18%|█▊        | 21000/115750 [01:54<11:00, 143.55 examples/s]Map (num_proc=4):  18%|█▊        | 21000/115750 [01:55<10:45, 146.75 examples/s]Map (num_proc=4):  19%|█▉        | 22000/115750 [01:55<07:49, 199.89 examples/s]Map (num_proc=4):  20%|█▉        | 23000/115750 [01:56<05:41, 271.38 examples/s]Map (num_proc=4):  18%|█▊        | 21000/115750 [01:56<09:38, 163.74 examples/s]Map (num_proc=4):  19%|█▉        | 22000/115750 [01:57<08:44, 178.72 examples/s]Map (num_proc=4):  20%|█▉        | 23000/115750 [01:57<06:14, 247.68 examples/s]Map (num_proc=4):  21%|██        | 24000/115750 [01:57<04:30, 339.53 examples/s]Map (num_proc=4):  19%|█▉        | 22000/115750 [01:58<07:57, 196.53 examples/s]Map (num_proc=4):  20%|█▉        | 23000/115750 [01:58<05:58, 258.50 examples/s]Map (num_proc=4):  17%|█▋        | 20000/115750 [01:59<04:59, 319.67 examples/s]Map (num_proc=4):  18%|█▊        | 21000/115750 [01:59<12:00, 131.42 examples/s]Map (num_proc=4):  21%|██        | 24000/115750 [02:00<06:04, 251.51 examples/s]Map (num_proc=4):  20%|█▉        | 23000/115750 [02:02<07:13, 213.98 examples/s]Map (num_proc=4):  21%|██        | 24000/115750 [02:02<05:25, 281.83 examples/s]Map (num_proc=4):  21%|██        | 24000/115750 [02:09<05:54, 258.50 examples/s]Map (num_proc=4):  21%|██        | 24000/115750 [02:09<04:30, 339.53 examples/s]Map (num_proc=4):  22%|██▏       | 25000/115750 [02:13<10:15, 147.49 examples/s]Map (num_proc=4):  22%|██▏       | 25000/115750 [02:14<10:31, 143.66 examples/s]Map (num_proc=4):  22%|██▏       | 26000/115750 [02:15<07:31, 198.75 examples/s]Map (num_proc=4):  23%|██▎       | 27000/115750 [02:15<05:21, 275.63 examples/s]Map (num_proc=4):  22%|██▏       | 25000/115750 [02:15<08:56, 169.27 examples/s]Map (num_proc=4):  22%|██▏       | 26000/115750 [02:17<08:43, 171.39 examples/s]Map (num_proc=4):  23%|██▎       | 27000/115750 [02:17<06:07, 241.48 examples/s]Map (num_proc=4):  22%|██▏       | 26000/115750 [02:17<07:27, 200.72 examples/s]Map (num_proc=4):  24%|██▍       | 28000/115750 [02:17<04:26, 329.41 examples/s]Map (num_proc=4):  23%|██▎       | 27000/115750 [02:18<05:49, 253.88 examples/s]Map (num_proc=4):  24%|██▍       | 28000/115750 [02:19<04:26, 328.88 examples/s]Map (num_proc=4):  21%|██        | 24000/115750 [02:19<05:25, 281.83 examples/s]Map (num_proc=4):  22%|██▏       | 25000/115750 [02:19<10:49, 139.80 examples/s]Map (num_proc=4):  24%|██▍       | 28000/115750 [02:20<05:37, 260.06 examples/s]Map (num_proc=4):  23%|██▎       | 27000/115750 [02:22<06:58, 212.22 examples/s]Map (num_proc=4):  24%|██▍       | 28000/115750 [02:22<05:21, 272.78 examples/s]Map (num_proc=4):  24%|██▍       | 28000/115750 [02:29<04:26, 328.88 examples/s]Map (num_proc=4):  24%|██▍       | 28000/115750 [02:29<04:26, 329.41 examples/s]Map (num_proc=4):  25%|██▌       | 29000/115750 [02:32<09:32, 151.50 examples/s]Map (num_proc=4):  25%|██▌       | 29000/115750 [02:34<10:02, 143.91 examples/s]Map (num_proc=4):  26%|██▌       | 30000/115750 [02:34<07:08, 200.16 examples/s]Map (num_proc=4):  27%|██▋       | 31000/115750 [02:35<05:20, 264.83 examples/s]Map (num_proc=4):  25%|██▌       | 29000/115750 [02:35<09:45, 148.08 examples/s]Map (num_proc=4):  26%|██▌       | 30000/115750 [02:36<08:13, 173.76 examples/s]Map (num_proc=4):  27%|██▋       | 31000/115750 [02:36<05:49, 242.29 examples/s]Map (num_proc=4):  26%|██▌       | 30000/115750 [02:37<07:41, 185.85 examples/s]Map (num_proc=4):  28%|██▊       | 32000/115750 [02:37<04:19, 322.69 examples/s]Map (num_proc=4):  27%|██▋       | 31000/115750 [02:38<05:53, 239.90 examples/s]Map (num_proc=4):  24%|██▍       | 28000/115750 [02:39<05:21, 272.78 examples/s]Map (num_proc=4):  28%|██▊       | 32000/115750 [02:39<04:27, 312.84 examples/s]Map (num_proc=4):  28%|██▊       | 32000/115750 [02:39<05:29, 254.12 examples/s]Map (num_proc=4):  25%|██▌       | 29000/115750 [02:40<10:16, 140.75 examples/s]Map (num_proc=4):  26%|██▌       | 30000/115750 [02:40<07:34, 188.74 examples/s]Map (num_proc=4):  27%|██▋       | 31000/115750 [02:42<06:13, 227.21 examples/s]Map (num_proc=4):  28%|██▊       | 32000/115750 [02:42<04:33, 306.75 examples/s]Map (num_proc=4):  28%|██▊       | 32000/115750 [02:49<04:19, 322.69 examples/s]Map (num_proc=4):  29%|██▊       | 33000/115750 [02:51<08:46, 157.21 examples/s]Map (num_proc=4):  29%|██▊       | 33000/115750 [02:53<09:34, 144.16 examples/s]Map (num_proc=4):  29%|██▉       | 34000/115750 [02:54<06:41, 203.81 examples/s]Map (num_proc=4):  30%|███       | 35000/115750 [02:54<04:57, 271.32 examples/s]Map (num_proc=4):  29%|██▊       | 33000/115750 [02:55<09:30, 145.11 examples/s]Map (num_proc=4):  29%|██▉       | 34000/115750 [02:56<08:05, 168.24 examples/s]Map (num_proc=4):  30%|███       | 35000/115750 [02:56<05:42, 235.83 examples/s]Map (num_proc=4):  29%|██▉       | 34000/115750 [02:57<07:32, 180.55 examples/s]Map (num_proc=4):  31%|███       | 36000/115750 [02:57<04:18, 308.05 examples/s]Map (num_proc=4):  30%|███       | 35000/115750 [02:58<05:24, 248.82 examples/s]Map (num_proc=4):  28%|██▊       | 32000/115750 [02:59<04:33, 306.75 examples/s]Map (num_proc=4):  31%|███       | 36000/115750 [02:59<05:14, 253.41 examples/s]Map (num_proc=4):  31%|███       | 36000/115750 [02:59<04:21, 305.22 examples/s]Map (num_proc=4):  29%|██▊       | 33000/115750 [03:00<10:08, 135.88 examples/s]Map (num_proc=4):  29%|██▉       | 34000/115750 [03:00<07:19, 185.81 examples/s]Map (num_proc=4):  30%|███       | 35000/115750 [03:02<05:46, 232.84 examples/s]Map (num_proc=4):  31%|███       | 36000/115750 [03:02<04:09, 320.14 examples/s]Map (num_proc=4):  31%|███       | 36000/115750 [03:09<04:18, 308.05 examples/s]Map (num_proc=4):  32%|███▏      | 37000/115750 [03:11<08:25, 155.77 examples/s]Map (num_proc=4):  32%|███▏      | 37000/115750 [03:13<09:05, 144.43 examples/s]Map (num_proc=4):  33%|███▎      | 38000/115750 [03:14<06:35, 196.81 examples/s]Map (num_proc=4):  32%|███▏      | 37000/115750 [03:14<08:56, 146.71 examples/s]Map (num_proc=4):  34%|███▎      | 39000/115750 [03:15<04:53, 261.22 examples/s]Map (num_proc=4):  33%|███▎      | 38000/115750 [03:16<07:46, 166.49 examples/s]Map (num_proc=4):  35%|███▍      | 40000/115750 [03:17<04:20, 291.07 examples/s]Map (num_proc=4):  33%|███▎      | 38000/115750 [03:17<07:19, 176.76 examples/s]Map (num_proc=4):  34%|███▎      | 39000/115750 [03:18<05:10, 247.42 examples/s]Map (num_proc=4):  35%|███▍      | 40000/115750 [03:19<05:02, 250.81 examples/s]Map (num_proc=4):  31%|███       | 36000/115750 [03:19<04:09, 320.14 examples/s]Map (num_proc=4):  35%|███▍      | 40000/115750 [03:19<04:11, 301.35 examples/s]Map (num_proc=4):  32%|███▏      | 37000/115750 [03:20<09:40, 135.77 examples/s]Map (num_proc=4):  33%|███▎      | 38000/115750 [03:20<06:58, 185.65 examples/s]Map (num_proc=4):  34%|███▎      | 39000/115750 [03:23<05:41, 224.45 examples/s]Map (num_proc=4):  35%|███▍      | 40000/115750 [03:29<05:02, 250.81 examples/s]Map (num_proc=4):  35%|███▍      | 40000/115750 [03:29<04:20, 291.07 examples/s]Map (num_proc=4):  35%|███▌      | 41000/115750 [03:31<07:26, 167.23 examples/s]Map (num_proc=4):  35%|███▌      | 41000/115750 [03:32<08:27, 147.38 examples/s]Map (num_proc=4):  36%|███▋      | 42000/115750 [03:33<06:09, 199.79 examples/s]Map (num_proc=4):  35%|███▌      | 41000/115750 [03:34<08:17, 150.39 examples/s]Map (num_proc=4):  37%|███▋      | 43000/115750 [03:34<04:42, 257.10 examples/s]Map (num_proc=4):  36%|███▋      | 42000/115750 [03:36<07:02, 174.46 examples/s]Map (num_proc=4):  37%|███▋      | 43000/115750 [03:36<05:12, 232.71 examples/s]Map (num_proc=4):  38%|███▊      | 44000/115750 [03:37<03:54, 306.00 examples/s]Map (num_proc=4):  36%|███▋      | 42000/115750 [03:37<06:59, 175.64 examples/s]Map (num_proc=4):  37%|███▋      | 43000/115750 [03:38<05:05, 238.49 examples/s]Map (num_proc=4):  38%|███▊      | 44000/115750 [03:38<04:44, 251.95 examples/s]Map (num_proc=4):  35%|███▍      | 40000/115750 [03:39<05:37, 224.45 examples/s]Map (num_proc=4):  38%|███▊      | 44000/115750 [03:39<04:00, 298.05 examples/s]Map (num_proc=4):  35%|███▌      | 41000/115750 [03:40<08:00, 155.55 examples/s]Map (num_proc=4):  36%|███▋      | 42000/115750 [03:41<06:10, 199.29 examples/s]Map (num_proc=4):  37%|███▋      | 43000/115750 [03:43<05:03, 239.99 examples/s]Map (num_proc=4):  38%|███▊      | 44000/115750 [03:43<03:43, 320.42 examples/s]Map (num_proc=4):  38%|███▊      | 44000/115750 [03:49<04:44, 251.95 examples/s]Map (num_proc=4):  38%|███▊      | 44000/115750 [03:49<03:54, 306.00 examples/s]Map (num_proc=4):  39%|███▉      | 45000/115750 [03:51<07:22, 160.00 examples/s]Map (num_proc=4):  39%|███▉      | 45000/115750 [03:51<07:47, 151.33 examples/s]Map (num_proc=4):  40%|███▉      | 46000/115750 [03:53<05:49, 199.40 examples/s]Map (num_proc=4):  39%|███▉      | 45000/115750 [03:54<07:53, 149.39 examples/s]Map (num_proc=4):  41%|████      | 47000/115750 [03:54<04:38, 246.99 examples/s]Map (num_proc=4):  40%|███▉      | 46000/115750 [03:55<06:33, 177.36 examples/s]Map (num_proc=4):  41%|████      | 47000/115750 [03:56<05:02, 226.97 examples/s]Map (num_proc=4):  40%|███▉      | 46000/115750 [03:57<06:28, 179.38 examples/s]Map (num_proc=4):  41%|████▏     | 48000/115750 [03:57<03:54, 289.46 examples/s]Map (num_proc=4):  41%|████▏     | 48000/115750 [03:58<04:20, 260.19 examples/s]Map (num_proc=4):  41%|████      | 47000/115750 [03:58<04:54, 233.20 examples/s]Map (num_proc=4):  38%|███▊      | 44000/115750 [03:59<03:43, 320.42 examples/s]Map (num_proc=4):  41%|████▏     | 48000/115750 [04:00<03:58, 283.60 examples/s]Map (num_proc=4):  39%|███▉      | 45000/115750 [04:01<08:37, 136.83 examples/s]Map (num_proc=4):  40%|███▉      | 46000/115750 [04:02<06:14, 186.09 examples/s]Map (num_proc=4):  41%|████      | 47000/115750 [04:03<04:45, 241.00 examples/s]Map (num_proc=4):  41%|████▏     | 48000/115750 [04:03<03:27, 326.41 examples/s]Map (num_proc=4):  41%|████▏     | 48000/115750 [04:09<04:20, 260.19 examples/s]Map (num_proc=4):  41%|████▏     | 48000/115750 [04:09<03:54, 289.46 examples/s]Map (num_proc=4):  42%|████▏     | 49000/115750 [04:10<06:54, 160.86 examples/s]Map (num_proc=4):  42%|████▏     | 49000/115750 [04:11<07:18, 152.34 examples/s]Map (num_proc=4):  43%|████▎     | 50000/115750 [04:13<05:42, 191.70 examples/s]Map (num_proc=4):  42%|████▏     | 49000/115750 [04:13<07:19, 151.85 examples/s]Map (num_proc=4):  44%|████▍     | 51000/115750 [04:14<04:20, 248.88 examples/s]Map (num_proc=4):  43%|████▎     | 50000/115750 [04:14<06:10, 177.61 examples/s]Map (num_proc=4):  44%|████▍     | 51000/115750 [04:16<04:45, 226.84 examples/s]Map (num_proc=4):  43%|████▎     | 50000/115750 [04:16<06:01, 182.05 examples/s]Map (num_proc=4):  45%|████▍     | 52000/115750 [04:17<04:04, 261.11 examples/s]Map (num_proc=4):  45%|████▍     | 52000/115750 [04:18<03:58, 267.48 examples/s]Map (num_proc=4):  44%|████▍     | 51000/115750 [04:18<04:45, 226.56 examples/s]Map (num_proc=4):  41%|████▏     | 48000/115750 [04:19<03:27, 326.41 examples/s]Map (num_proc=4):  45%|████▍     | 52000/115750 [04:19<03:37, 293.61 examples/s]Map (num_proc=4):  42%|████▏     | 49000/115750 [04:21<08:10, 136.05 examples/s]Map (num_proc=4):  43%|████▎     | 50000/115750 [04:22<06:08, 178.19 examples/s]Map (num_proc=4):  44%|████▍     | 51000/115750 [04:23<04:25, 244.05 examples/s]Map (num_proc=4):  45%|████▍     | 52000/115750 [04:24<03:29, 304.03 examples/s]Map (num_proc=4):  45%|████▍     | 52000/115750 [04:29<04:04, 261.11 examples/s]Map (num_proc=4):  45%|████▍     | 52000/115750 [04:29<03:58, 267.48 examples/s]Map (num_proc=4):  46%|████▌     | 53000/115750 [04:29<06:17, 166.03 examples/s]Map (num_proc=4):  46%|████▌     | 53000/115750 [04:30<06:47, 153.91 examples/s]Map (num_proc=4):  47%|████▋     | 54000/115750 [04:32<05:23, 191.05 examples/s]Map (num_proc=4):  48%|████▊     | 55000/115750 [04:33<03:55, 258.04 examples/s]Map (num_proc=4):  46%|████▌     | 53000/115750 [04:33<06:51, 152.59 examples/s]Map (num_proc=4):  47%|████▋     | 54000/115750 [04:34<05:45, 178.71 examples/s]Map (num_proc=4):  48%|████▊     | 55000/115750 [04:35<04:16, 236.74 examples/s]Map (num_proc=4):  47%|████▋     | 54000/115750 [04:36<05:39, 181.72 examples/s]Map (num_proc=4):  48%|████▊     | 56000/115750 [04:38<04:09, 239.80 examples/s]Map (num_proc=4):  48%|████▊     | 56000/115750 [04:38<03:56, 253.03 examples/s]Map (num_proc=4):  48%|████▊     | 55000/115750 [04:39<04:38, 218.21 examples/s]Map (num_proc=4):  45%|████▍     | 52000/115750 [04:39<03:29, 304.03 examples/s]Map (num_proc=4):  46%|████▌     | 53000/115750 [04:41<07:36, 137.50 examples/s]Map (num_proc=4):  47%|████▋     | 54000/115750 [04:43<05:54, 174.07 examples/s]Map (num_proc=4):  48%|████▊     | 56000/115750 [04:45<03:36, 275.45 examples/s]Map (num_proc=4):  48%|████▊     | 56000/115750 [04:49<04:09, 239.80 examples/s]Map (num_proc=4):  48%|████▊     | 56000/115750 [04:49<04:33, 218.21 examples/s]Map (num_proc=4):  48%|████▊     | 56000/115750 [04:49<03:56, 253.03 examples/s]Map (num_proc=4):  49%|████▉     | 57000/115750 [04:49<05:48, 168.57 examples/s]Map (num_proc=4):  49%|████▉     | 57000/115750 [04:50<06:16, 155.87 examples/s]Map (num_proc=4):  50%|█████     | 58000/115750 [04:52<05:05, 188.96 examples/s]Map (num_proc=4):  51%|█████     | 59000/115750 [04:53<03:42, 255.37 examples/s]Map (num_proc=4):  49%|████▉     | 57000/115750 [04:54<05:46, 169.38 examples/s]Map (num_proc=4):  50%|█████     | 58000/115750 [04:54<05:24, 177.91 examples/s]Map (num_proc=4):  51%|█████     | 59000/115750 [04:55<04:07, 229.42 examples/s]Map (num_proc=4):  50%|█████     | 58000/115750 [04:56<04:48, 200.29 examples/s]Map (num_proc=4):  52%|█████▏    | 60000/115750 [04:58<04:02, 229.83 examples/s]Map (num_proc=4):  51%|█████     | 59000/115750 [04:59<04:12, 224.57 examples/s]Map (num_proc=4):  48%|████▊     | 56000/115750 [04:59<03:36, 275.45 examples/s]Map (num_proc=4):  52%|█████▏    | 60000/115750 [04:59<03:52, 239.76 examples/s]Map (num_proc=4):  52%|█████▏    | 60000/115750 [04:59<03:07, 297.82 examples/s]Map (num_proc=4):  49%|████▉     | 57000/115750 [05:01<06:30, 150.51 examples/s]Map (num_proc=4):  50%|█████     | 58000/115750 [05:03<05:16, 182.55 examples/s]Map (num_proc=4):  51%|█████     | 59000/115750 [05:04<03:55, 241.43 examples/s]Map (num_proc=4):  52%|█████▏    | 60000/115750 [05:06<03:13, 288.06 examples/s]Map (num_proc=4):  53%|█████▎    | 61000/115750 [05:08<05:14, 174.29 examples/s]Map (num_proc=4):  52%|█████▏    | 60000/115750 [05:09<04:02, 229.83 examples/s]Map (num_proc=4):  53%|█████▎    | 61000/115750 [05:09<05:45, 158.65 examples/s]Map (num_proc=4):  54%|█████▎    | 62000/115750 [05:12<04:40, 191.49 examples/s]Map (num_proc=4):  54%|█████▍    | 63000/115750 [05:12<03:23, 259.48 examples/s]Map (num_proc=4):  53%|█████▎    | 61000/115750 [05:13<05:46, 157.83 examples/s]Map (num_proc=4):  54%|█████▎    | 62000/115750 [05:13<04:56, 181.31 examples/s]Map (num_proc=4):  54%|█████▍    | 63000/115750 [05:15<03:43, 236.52 examples/s]Map (num_proc=4):  54%|█████▎    | 62000/115750 [05:16<04:46, 187.70 examples/s]Map (num_proc=4):  55%|█████▌    | 64000/115750 [05:18<03:43, 231.33 examples/s]Map (num_proc=4):  54%|█████▍    | 63000/115750 [05:19<04:03, 216.48 examples/s]Map (num_proc=4):  55%|█████▌    | 64000/115750 [05:19<03:38, 236.62 examples/s]Map (num_proc=4):  55%|█████▌    | 64000/115750 [05:19<02:51, 302.13 examples/s]Map (num_proc=4):  52%|█████▏    | 60000/115750 [05:19<03:13, 288.06 examples/s]Map (num_proc=4):  53%|█████▎    | 61000/115750 [05:22<06:36, 138.08 examples/s]Map (num_proc=4):  54%|█████▎    | 62000/115750 [05:23<04:51, 184.21 examples/s]Map (num_proc=4):  54%|█████▍    | 63000/115750 [05:24<03:35, 244.48 examples/s]Map (num_proc=4):  55%|█████▌    | 64000/115750 [05:26<02:57, 291.68 examples/s]Map (num_proc=4):  56%|█████▌    | 65000/115750 [05:27<04:38, 182.34 examples/s]Map (num_proc=4):  56%|█████▌    | 65000/115750 [05:29<05:17, 160.09 examples/s]Map (num_proc=4):  57%|█████▋    | 66000/115750 [05:32<04:28, 185.12 examples/s]Map (num_proc=4):  57%|█████▋    | 66000/115750 [05:33<04:30, 183.97 examples/s]Map (num_proc=4):  58%|█████▊    | 67000/115750 [05:33<03:20, 243.50 examples/s]Map (num_proc=4):  56%|█████▌    | 65000/115750 [05:34<05:37, 150.52 examples/s]Map (num_proc=4):  58%|█████▊    | 67000/115750 [05:34<03:22, 240.41 examples/s]Map (num_proc=4):  57%|█████▋    | 66000/115750 [05:35<04:20, 191.11 examples/s]Map (num_proc=4):  59%|█████▊    | 68000/115750 [05:37<03:12, 248.52 examples/s]Map (num_proc=4):  59%|█████▊    | 68000/115750 [05:38<03:24, 233.36 examples/s]Map (num_proc=4):  58%|█████▊    | 67000/115750 [05:39<03:44, 217.60 examples/s]Map (num_proc=4):  59%|█████▊    | 68000/115750 [05:39<02:39, 299.16 examples/s]Map (num_proc=4):  55%|█████▌    | 64000/115750 [05:39<02:57, 291.68 examples/s]Map (num_proc=4):  56%|█████▌    | 65000/115750 [05:43<06:12, 136.11 examples/s]Map (num_proc=4):  57%|█████▋    | 66000/115750 [05:44<04:30, 184.14 examples/s]Map (num_proc=4):  58%|█████▊    | 67000/115750 [05:44<03:14, 250.80 examples/s]Map (num_proc=4):  60%|█████▉    | 69000/115750 [05:47<04:18, 180.56 examples/s]Map (num_proc=4):  59%|█████▊    | 68000/115750 [05:47<02:56, 269.98 examples/s]Map (num_proc=4):  60%|█████▉    | 69000/115750 [05:48<04:52, 159.83 examples/s]Map (num_proc=4):  60%|██████    | 70000/115750 [05:52<04:06, 185.74 examples/s]Map (num_proc=4):  60%|██████    | 70000/115750 [05:52<04:13, 180.39 examples/s]Map (num_proc=4):  61%|██████▏   | 71000/115750 [05:53<03:00, 247.30 examples/s]Map (num_proc=4):  61%|██████▏   | 71000/115750 [05:54<03:13, 231.56 examples/s]Map (num_proc=4):  60%|█████▉    | 69000/115750 [05:54<05:17, 147.23 examples/s]Map (num_proc=4):  60%|██████    | 70000/115750 [05:55<03:56, 193.72 examples/s]Map (num_proc=4):  62%|██████▏   | 72000/115750 [05:57<02:52, 253.95 examples/s]Map (num_proc=4):  61%|██████▏   | 71000/115750 [05:58<03:20, 223.22 examples/s]Map (num_proc=4):  62%|██████▏   | 72000/115750 [05:58<03:15, 223.52 examples/s]Map (num_proc=4):  59%|█████▊    | 68000/115750 [05:59<02:56, 269.98 examples/s]Map (num_proc=4):  62%|██████▏   | 72000/115750 [05:59<02:30, 290.84 examples/s]Map (num_proc=4):  60%|█████▉    | 69000/115750 [06:03<05:39, 137.74 examples/s]Map (num_proc=4):  60%|██████    | 70000/115750 [06:03<03:58, 192.17 examples/s]Map (num_proc=4):  61%|██████▏   | 71000/115750 [06:04<02:56, 253.81 examples/s]Map (num_proc=4):  63%|██████▎   | 73000/115750 [06:07<03:59, 178.86 examples/s]Map (num_proc=4):  62%|██████▏   | 72000/115750 [06:08<02:45, 264.67 examples/s]Map (num_proc=4):  63%|██████▎   | 73000/115750 [06:08<04:24, 161.38 examples/s]Map (num_proc=4):  64%|██████▍   | 74000/115750 [06:11<03:38, 190.70 examples/s]Map (num_proc=4):  64%|██████▍   | 74000/115750 [06:12<03:48, 182.52 examples/s]Map (num_proc=4):  65%|██████▍   | 75000/115750 [06:13<02:51, 237.11 examples/s]Map (num_proc=4):  65%|██████▍   | 75000/115750 [06:14<03:00, 225.25 examples/s]Map (num_proc=4):  63%|██████▎   | 73000/115750 [06:14<04:58, 142.98 examples/s]Map (num_proc=4):  64%|██████▍   | 74000/115750 [06:15<03:30, 198.22 examples/s]Map (num_proc=4):  66%|██████▌   | 76000/115750 [06:16<02:31, 262.54 examples/s]Map (num_proc=4):  65%|██████▍   | 75000/115750 [06:18<02:56, 230.25 examples/s]Map (num_proc=4):  66%|██████▌   | 76000/115750 [06:18<02:58, 222.47 examples/s]Map (num_proc=4):  66%|██████▌   | 76000/115750 [06:19<02:17, 290.13 examples/s]Map (num_proc=4):  62%|██████▏   | 72000/115750 [06:19<02:45, 264.67 examples/s]Map (num_proc=4):  63%|██████▎   | 73000/115750 [06:23<05:10, 137.61 examples/s]Map (num_proc=4):  64%|██████▍   | 74000/115750 [06:23<03:33, 195.12 examples/s]Map (num_proc=4):  65%|██████▍   | 75000/115750 [06:24<02:39, 256.03 examples/s]Map (num_proc=4):  67%|██████▋   | 77000/115750 [06:26<03:34, 180.29 examples/s]Map (num_proc=4):  67%|██████▋   | 77000/115750 [06:27<03:55, 164.65 examples/s]Map (num_proc=4):  66%|██████▌   | 76000/115750 [06:28<02:33, 258.13 examples/s]Map (num_proc=4):  67%|██████▋   | 78000/115750 [06:30<03:14, 194.38 examples/s]Map (num_proc=4):  67%|██████▋   | 78000/115750 [06:31<03:24, 184.52 examples/s]Map (num_proc=4):  68%|██████▊   | 79000/115750 [06:33<02:36, 235.44 examples/s]Map (num_proc=4):  68%|██████▊   | 79000/115750 [06:33<02:46, 221.02 examples/s]Map (num_proc=4):  67%|██████▋   | 77000/115750 [06:34<04:28, 144.40 examples/s]Map (num_proc=4):  67%|██████▋   | 78000/115750 [06:34<03:05, 202.98 examples/s]Map (num_proc=4):  69%|██████▉   | 80000/115750 [06:35<02:13, 267.57 examples/s]Map (num_proc=4):  68%|██████▊   | 79000/115750 [06:37<02:40, 228.41 examples/s]Map (num_proc=4):  69%|██████▉   | 80000/115750 [06:39<02:47, 213.11 examples/s]Map (num_proc=4):  69%|██████▉   | 80000/115750 [06:39<02:04, 286.82 examples/s]Map (num_proc=4):  66%|██████▌   | 76000/115750 [06:39<02:33, 258.13 examples/s]Map (num_proc=4):  67%|██████▋   | 77000/115750 [06:44<04:47, 134.56 examples/s]Map (num_proc=4):  68%|██████▊   | 79000/115750 [06:45<02:41, 227.94 examples/s]Map (num_proc=4):  70%|██████▉   | 81000/115750 [06:45<03:06, 186.43 examples/s]Map (num_proc=4):  70%|██████▉   | 81000/115750 [06:47<03:28, 166.83 examples/s]Map (num_proc=4):  69%|██████▉   | 80000/115750 [06:49<02:26, 244.43 examples/s]Map (num_proc=4):  69%|██████▉   | 80000/115750 [06:49<02:04, 286.82 examples/s]Map (num_proc=4):  71%|███████   | 82000/115750 [06:50<02:54, 192.88 examples/s]Map (num_proc=4):  71%|███████   | 82000/115750 [06:51<03:05, 181.99 examples/s]Map (num_proc=4):  72%|███████▏  | 83000/115750 [06:51<02:08, 255.00 examples/s]Map (num_proc=4):  72%|███████▏  | 83000/115750 [06:54<02:33, 212.89 examples/s]Map (num_proc=4):  70%|██████▉   | 81000/115750 [06:54<04:01, 144.18 examples/s]Map (num_proc=4):  71%|███████   | 82000/115750 [06:54<02:45, 204.13 examples/s]Map (num_proc=4):  73%|███████▎  | 84000/115750 [06:55<01:58, 268.11 examples/s]Map (num_proc=4):  72%|███████▏  | 83000/115750 [06:58<02:29, 219.51 examples/s]Map (num_proc=4):  73%|███████▎  | 84000/115750 [06:59<01:50, 286.61 examples/s]Map (num_proc=4):  73%|███████▎  | 84000/115750 [06:59<02:34, 205.46 examples/s]Map (num_proc=4):  69%|██████▉   | 80000/115750 [06:59<02:26, 244.43 examples/s]Map (num_proc=4):  70%|██████▉   | 81000/115750 [07:04<04:02, 143.26 examples/s]Map (num_proc=4):  71%|███████   | 82000/115750 [07:04<02:53, 194.44 examples/s]Map (num_proc=4):  73%|███████▎  | 85000/115750 [07:05<02:41, 190.54 examples/s]Map (num_proc=4):  72%|███████▏  | 83000/115750 [07:05<02:15, 241.26 examples/s]Map (num_proc=4):  73%|███████▎  | 85000/115750 [07:07<03:07, 164.30 examples/s]Map (num_proc=4):  73%|███████▎  | 84000/115750 [07:09<02:02, 259.44 examples/s]Map (num_proc=4):  73%|███████▎  | 84000/115750 [07:09<01:50, 286.61 examples/s]Map (num_proc=4):  74%|███████▍  | 86000/115750 [07:09<02:31, 195.89 examples/s]Map (num_proc=4):  74%|███████▍  | 86000/115750 [07:11<02:44, 180.75 examples/s]Map (num_proc=4):  75%|███████▌  | 87000/115750 [07:11<01:52, 254.66 examples/s]Map (num_proc=4):  75%|███████▌  | 87000/115750 [07:13<02:16, 210.70 examples/s]Map (num_proc=4):  73%|███████▎  | 85000/115750 [07:14<03:32, 144.78 examples/s]Map (num_proc=4):  74%|███████▍  | 86000/115750 [07:14<02:28, 200.84 examples/s]Map (num_proc=4):  76%|███████▌  | 88000/115750 [07:15<01:43, 268.22 examples/s]Map (num_proc=4):  75%|███████▌  | 87000/115750 [07:17<02:08, 223.34 examples/s]Map (num_proc=4):  76%|███████▌  | 88000/115750 [07:18<02:16, 203.28 examples/s]Map (num_proc=4):  76%|███████▌  | 88000/115750 [07:19<01:38, 280.43 examples/s]Map (num_proc=4):  73%|███████▎  | 84000/115750 [07:19<02:02, 259.44 examples/s]Map (num_proc=4):  73%|███████▎  | 85000/115750 [07:24<03:42, 138.14 examples/s]Map (num_proc=4):  77%|███████▋  | 89000/115750 [07:24<02:19, 192.02 examples/s]Map (num_proc=4):  74%|███████▍  | 86000/115750 [07:25<02:36, 189.56 examples/s]Map (num_proc=4):  75%|███████▌  | 87000/115750 [07:25<01:51, 256.91 examples/s]Map (num_proc=4):  77%|███████▋  | 89000/115750 [07:27<02:46, 160.63 examples/s]Map (num_proc=4):  78%|███████▊  | 90000/115750 [07:29<02:08, 200.91 examples/s]Map (num_proc=4):  76%|███████▌  | 88000/115750 [07:29<01:38, 280.43 examples/s]Map (num_proc=4):  76%|███████▌  | 88000/115750 [07:29<01:46, 259.78 examples/s]Map (num_proc=4):  78%|███████▊  | 90000/115750 [07:30<02:21, 181.51 examples/s]Map (num_proc=4):  79%|███████▊  | 91000/115750 [07:31<01:36, 257.07 examples/s]Map (num_proc=4):  79%|███████▊  | 91000/115750 [07:33<01:56, 212.61 examples/s]Map (num_proc=4):  77%|███████▋  | 89000/115750 [07:33<03:02, 146.32 examples/s]Map (num_proc=4):  78%|███████▊  | 90000/115750 [07:34<02:06, 203.81 examples/s]Map (num_proc=4):  79%|███████▉  | 92000/115750 [07:34<01:25, 278.27 examples/s]Map (num_proc=4):  79%|███████▊  | 91000/115750 [07:37<01:51, 221.09 examples/s]Map (num_proc=4):  79%|███████▉  | 92000/115750 [07:38<01:23, 285.18 examples/s]Map (num_proc=4):  79%|███████▉  | 92000/115750 [07:38<02:00, 197.67 examples/s]Map (num_proc=4):  76%|███████▌  | 88000/115750 [07:39<01:46, 259.78 examples/s]Map (num_proc=4):  80%|████████  | 93000/115750 [07:43<01:54, 198.00 examples/s]Map (num_proc=4):  77%|███████▋  | 89000/115750 [07:44<03:14, 137.33 examples/s]Map (num_proc=4):  78%|███████▊  | 90000/115750 [07:45<02:14, 191.36 examples/s]Map (num_proc=4):  79%|███████▊  | 91000/115750 [07:45<01:32, 268.59 examples/s]Map (num_proc=4):  80%|████████  | 93000/115750 [07:47<02:25, 156.69 examples/s]Map (num_proc=4):  81%|████████  | 94000/115750 [07:49<01:50, 196.08 examples/s]Map (num_proc=4):  79%|███████▉  | 92000/115750 [07:49<01:23, 285.18 examples/s]Map (num_proc=4):  79%|███████▉  | 92000/115750 [07:50<01:35, 249.24 examples/s]Map (num_proc=4):  81%|████████  | 94000/115750 [07:50<02:00, 180.06 examples/s]Map (num_proc=4):  82%|████████▏ | 95000/115750 [07:53<01:38, 210.92 examples/s]Map (num_proc=4):  80%|████████  | 93000/115750 [07:53<02:35, 146.49 examples/s]Map (num_proc=4):  83%|████████▎ | 96000/115750 [07:53<01:09, 285.38 examples/s]Map (num_proc=4):  81%|████████  | 94000/115750 [07:54<01:49, 198.23 examples/s]Map (num_proc=4):  82%|████████▏ | 95000/115750 [07:57<01:31, 226.02 examples/s]Map (num_proc=4):  83%|████████▎ | 96000/115750 [07:58<01:06, 296.38 examples/s]Map (num_proc=4):  83%|████████▎ | 96000/115750 [07:58<01:35, 206.74 examples/s]Map (num_proc=4):  84%|████████▍ | 97000/115750 [08:03<01:29, 209.80 examples/s]Map (num_proc=4):  80%|████████  | 93000/115750 [08:04<02:41, 140.84 examples/s]Map (num_proc=4):  81%|████████  | 94000/115750 [08:05<01:54, 190.53 examples/s]Map (num_proc=4):  84%|████████▍ | 97000/115750 [08:06<01:59, 157.35 examples/s]Map (num_proc=4):  83%|████████▎ | 96000/115750 [08:09<01:06, 296.38 examples/s]Map (num_proc=4):  85%|████████▍ | 98000/115750 [08:09<01:35, 186.80 examples/s]Map (num_proc=4):  85%|████████▍ | 98000/115750 [08:09<01:34, 188.71 examples/s]Map (num_proc=4):  86%|████████▌ | 99000/115750 [08:10<01:05, 256.00 examples/s]Map (num_proc=4):  83%|████████▎ | 96000/115750 [08:10<01:18, 250.06 examples/s]Map (num_proc=4):  86%|████████▌ | 99000/115750 [08:12<01:17, 215.16 examples/s]Map (num_proc=4):  86%|████████▋ | 100000/115750 [08:13<00:52, 300.77 examples/s]Map (num_proc=4):  84%|████████▍ | 97000/115750 [08:13<02:10, 143.34 examples/s]Map (num_proc=4):  85%|████████▍ | 98000/115750 [08:14<01:29, 199.22 examples/s]Map (num_proc=4):  86%|████████▌ | 99000/115750 [08:17<01:16, 219.15 examples/s]Map (num_proc=4):  86%|████████▋ | 100000/115750 [08:17<00:51, 303.99 examples/s]Map (num_proc=4):  86%|████████▋ | 100000/115750 [08:18<01:22, 189.83 examples/s]Map (num_proc=4):  87%|████████▋ | 101000/115750 [08:22<01:11, 205.11 examples/s]Map (num_proc=4):  84%|████████▍ | 97000/115750 [08:25<02:04, 151.13 examples/s]Map (num_proc=4):  85%|████████▍ | 98000/115750 [08:25<01:28, 199.47 examples/s]Map (num_proc=4):  87%|████████▋ | 101000/115750 [08:26<01:32, 159.01 examples/s]Map (num_proc=4):  86%|████████▋ | 100000/115750 [08:29<00:51, 303.99 examples/s]Map (num_proc=4):  88%|████████▊ | 102000/115750 [08:29<01:13, 186.38 examples/s]Map (num_proc=4):  89%|████████▉ | 103000/115750 [08:29<00:49, 255.05 examples/s]Map (num_proc=4):  88%|████████▊ | 102000/115750 [08:30<01:16, 179.67 examples/s]Map (num_proc=4):  86%|████████▋ | 100000/115750 [08:30<01:03, 248.41 examples/s]Map (num_proc=4):  89%|████████▉ | 103000/115750 [08:32<00:57, 219.91 examples/s]Map (num_proc=4):  87%|████████▋ | 101000/115750 [08:33<01:41, 144.63 examples/s]Map (num_proc=4):  88%|████████▊ | 102000/115750 [08:33<01:08, 200.75 examples/s]Map (num_proc=4):  89%|████████▉ | 103000/115750 [08:36<00:56, 226.78 examples/s]Map (num_proc=4):  90%|████████▉ | 104000/115750 [08:37<00:37, 313.74 examples/s]Map (num_proc=4):  90%|████████▉ | 104000/115750 [08:39<01:04, 182.11 examples/s]Map (num_proc=4):  91%|█████████ | 105000/115750 [08:42<00:52, 206.53 examples/s]Map (num_proc=4):  87%|████████▋ | 101000/115750 [08:45<01:34, 155.93 examples/s]Map (num_proc=4):  88%|████████▊ | 102000/115750 [08:45<01:06, 206.31 examples/s]Map (num_proc=4):  89%|████████▉ | 103000/115750 [08:46<00:48, 264.86 examples/s]Map (num_proc=4):  91%|█████████ | 105000/115750 [08:46<01:01, 174.34 examples/s]Map (num_proc=4):  92%|█████████▏| 106000/115750 [08:48<00:51, 189.33 examples/s]Map (num_proc=4):  90%|████████▉ | 104000/115750 [08:49<00:37, 313.74 examples/s]Map (num_proc=4):  92%|█████████▏| 106000/115750 [08:50<00:50, 192.27 examples/s]Map (num_proc=4):  92%|█████████▏| 107000/115750 [08:50<00:36, 241.80 examples/s]Map (num_proc=4):  92%|█████████▏| 107000/115750 [08:51<00:36, 238.24 examples/s]Map (num_proc=4):  93%|█████████▎| 108000/115750 [08:51<00:24, 319.72 examples/s]Map (num_proc=4):  90%|████████▉ | 104000/115750 [08:51<00:50, 231.33 examples/s]Map (num_proc=4):  91%|█████████ | 105000/115750 [08:53<01:16, 141.03 examples/s]Map (num_proc=4):  92%|█████████▏| 107000/115750 [08:56<00:40, 218.43 examples/s]Map (num_proc=4):  93%|█████████▎| 108000/115750 [08:57<00:27, 280.65 examples/s]Map (num_proc=4):  93%|█████████▎| 108000/115750 [08:59<00:43, 178.80 examples/s]Map (num_proc=4):  94%|█████████▍| 109000/115750 [09:01<00:32, 210.51 examples/s]Map (num_proc=4):  91%|█████████ | 105000/115750 [09:05<01:14, 145.09 examples/s]Map (num_proc=4):  92%|█████████▏| 106000/115750 [09:05<00:48, 200.39 examples/s]Map (num_proc=4):  94%|█████████▍| 109000/115750 [09:06<00:42, 160.10 examples/s]Map (num_proc=4):  92%|█████████▏| 107000/115750 [09:06<00:33, 260.75 examples/s]Map (num_proc=4):  95%|█████████▌| 110000/115750 [09:08<00:30, 188.62 examples/s]Map (num_proc=4):  93%|█████████▎| 108000/115750 [09:09<00:27, 280.65 examples/s]Map (num_proc=4):  96%|█████████▌| 111000/115750 [09:09<00:19, 248.79 examples/s]Map (num_proc=4):  95%|█████████▌| 110000/115750 [09:09<00:31, 181.88 examples/s]Map (num_proc=4):  96%|█████████▌| 111000/115750 [09:10<00:20, 235.42 examples/s]Map (num_proc=4):  97%|█████████▋| 112000/115750 [09:11<00:11, 315.92 examples/s]Map (num_proc=4):  94%|█████████▍| 109000/115750 [09:13<00:45, 147.28 examples/s]Map (num_proc=4):  93%|█████████▎| 108000/115750 [09:13<00:35, 216.08 examples/s]Map (num_proc=4):  95%|█████████▌| 110000/115750 [09:13<00:28, 198.73 examples/s]Map (num_proc=4):  96%|█████████▌| 111000/115750 [09:16<00:21, 226.06 examples/s]Map (num_proc=4):  97%|█████████▋| 112000/115750 [09:17<00:12, 293.01 examples/s]Map (num_proc=4):  97%|█████████▋| 112000/115750 [09:18<00:21, 177.32 examples/s]Map (num_proc=4):  98%|█████████▊| 112937/115750 [09:19<00:12, 233.75 examples/s]Map (num_proc=4):  98%|█████████▊| 112938/115750 [09:24<00:17, 164.70 examples/s]Map (num_proc=4):  94%|█████████▍| 109000/115750 [09:25<00:46, 144.39 examples/s]Map (num_proc=4):  95%|█████████▌| 110000/115750 [09:26<00:29, 197.10 examples/s]Map (num_proc=4):  96%|█████████▌| 111000/115750 [09:26<00:17, 268.51 examples/s]Map (num_proc=4):  98%|█████████▊| 113874/115750 [09:26<00:09, 192.97 examples/s]Map (num_proc=4):  99%|█████████▉| 114812/115750 [09:27<00:03, 254.56 examples/s]Map (num_proc=4):  98%|█████████▊| 113876/115750 [09:27<00:10, 182.63 examples/s]Map (num_proc=4):  97%|█████████▋| 112000/115750 [09:29<00:12, 293.01 examples/s]Map (num_proc=4):  99%|█████████▉| 114813/115750 [09:29<00:04, 226.95 examples/s]Map (num_proc=4): 100%|██████████| 115750/115750 [09:29<00:00, 317.65 examples/s]Map (num_proc=4): 100%|██████████| 115750/115750 [09:29<00:00, 203.09 examples/s]
-Map (num_proc=4):  98%|█████████▊| 112938/115750 [09:31<00:18, 148.46 examples/s]Map (num_proc=4):  98%|█████████▊| 113876/115750 [09:31<00:09, 205.10 examples/s]Map (num_proc=4):  97%|█████████▋| 112000/115750 [09:33<00:17, 219.83 examples/s]Dataset({
-    features: ['conversation', 'input_ids', 'loss_mask'],
-    num_rows: 115750
-})
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Map (num_proc=4):  99%|█████████▉| 114813/115750 [09:34<00:04, 232.00 examples/s]Map (num_proc=4): 100%|██████████| 115750/115750 [09:35<00:00, 300.88 examples/s]Map (num_proc=4): 100%|██████████| 115750/115750 [09:35<00:00, 201.09 examples/s]
-Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.49s/it]Map (num_proc=4): 100%|██████████| 115750/115750 [09:37<00:00, 170.29 examples/s]Map (num_proc=4): 100%|██████████| 115750/115750 [09:37<00:00, 200.36 examples/s]
-Dataset({
-    features: ['conversation', 'input_ids', 'loss_mask'],
-    num_rows: 115750
-})
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.27s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.46s/it]
-Dataset({
-    features: ['conversation', 'input_ids', 'loss_mask'],
-    num_rows: 115750
-})
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.43s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.10s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.30s/it]
-Map (num_proc=4):  98%|█████████▊| 112937/115750 [09:43<00:18, 155.97 examples/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.45s/it]Map (num_proc=4):  98%|█████████▊| 113874/115750 [09:44<00:09, 206.97 examples/s]Map (num_proc=4):  99%|█████████▉| 114812/115750 [09:44<00:03, 284.01 examples/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.11s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.31s/it]
-Map (num_proc=4): 100%|██████████| 115750/115750 [09:51<00:00, 217.31 examples/s]Map (num_proc=4): 100%|██████████| 115750/115750 [09:52<00:00, 195.45 examples/s]
-Dataset({
-    features: ['conversation', 'input_ids', 'loss_mask'],
-    num_rows: 115750
-})
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.31s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.03s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:04<00:00,  2.22s/it]
-0	
-100	200	300	400	500	600	700	800	900	1000	
-1100	1200	1300	1400	1500	1600	1700	1800	1900	2000	
-2100	2200	2300	2400	2500	2600	2700	2800	2900	3000	
-3100	3200	3300	3400	3500	3600	3700	3800	3900	4000	
-4100	4200	4300	4400	4500	4600	4700	4800	4900	5000	
-5100	5200	5300	5400	5500	5600	5700	5800	5900	6000	
-6100	6200	6300	6400	6500	6600	6700	6800	6900	7000	
-7100	7200	7300	7400	7500	7600	7700	7800	7900	8000	
-8100	8200	8300	8400	8500	8600	8700	8800	8900	9000	
-9100	9200	9300	9400	9500	9600	9700	9800	9900	10000	
-10100	10200	10300	10400	10500	10600	10700	10800	10900	11000	
-11100	11200	11300	11400	11500	11600	11700	11800	11900	12000	
-12100	12200	12300	12400	12500	12600	12700	12800	12900	13000	
-13100	13200	13300	13400	13500	13600	13700	13800	13900	14000	
-14100	14200	14300	14400	14500	14600	14700	14800	14900	15000	
-15100	15200	15300	15400	15500	15600	15700	15800	15900	16000	
-16100	16200	16300	16400	16500	16600	16700	16800	16900	17000	
-17100	17200	17300	17400	17500	17600	17700	17800	17900	18000	
-18100	18200	18300	18400	18500	18600	18700	18800	18900	19000	
-19100	19200	19300	19400	19500	19600	19700	19800	19900	20000	
-20100	20200	20300	20400	20500	20600	20700	20800	20900	21000	
-21100	21200	21300	21400	21500	21600	21700	21800	21900	22000	
-22100	22200	22300	22400	22500	22600	22700	22800	22900	23000	
-23100	23200	23300	23400	23500	23600	23700	23800	23900	24000	
-24100	24200	24300	24400	24500	24600	24700	24800	24900	25000	
-25100	25200	25300	25400	25500	25600	25700	25800	25900	26000	
-26100	26200	26300	26400	26500	26600	26700	26800	26900	27000	
-27100	27200	27300	27400	27500	27600	27700	27800	27900	28000	
-28100	28200	28300	28400	28500	28600	28700	28800	28900	29000	
-29100	29200	29300	29400	29500	29600	29700	29800	29900	30000	
-30100	30200	30300	30400	30500	30600	30700	30800	30900	31000	
-31100	31200	31300	31400	31500	31600	31700	31800	31900	32000	
-32100	32200	32300	32400	32500	32600	32700	32800	32900	33000	
-33100	33200	33300	33400	33500	33600	33700	33800	33900	34000	
-34100	34200	34300	34400	34500	34600	34700	34800	34900	35000	
-35100	35200	35300	35400	35500	35600	35700	35800	35900	36000	
-36100	36200	36300	36400	36500	36600	36700	36800	36900	37000	
-37100	37200	37300	37400	37500	37600	37700	37800	37900	38000	
-38100	38200	38300	38400	38500	38600	38700	38800	38900	39000	
-39100	39200	39300	39400	39500	39600	39700	39800	39900	40000	
-40100	40200	40300	40400	40500	40600	40700	40800	40900	41000	
-41100	41200	41300	41400	41500	41600	41700	41800	41900	42000	
-42100	42200	42300	42400	42500	42600	42700	42800	42900	43000	
-43100	43200	43300	43400	43500	43600	43700	43800	43900	44000	
-44100	44200	44300	44400	44500	44600	44700	44800	44900	45000	
-45100	45200	45300	45400	45500	45600	45700	45800	45900	46000	
-46100	46200	46300	46400	46500	46600	46700	46800	46900	47000	
-47100	47200	47300	47400	47500	47600	47700	47800	47900	48000	
-48100	48200	48300	48400	48500	48600	48700	48800	48900	49000	
-49100	49200	49300	49400	49500	49600	49700	49800	49900	50000	
-50100	50200	50300	50400	50500	50600	50700	50800	50900	51000	
-51100	51200	51300	51400	51500	51600	51700	51800	51900	52000	
-52100	52200	52300	52400	52500	52600	52700	52800	52900	53000	
-53100	53200	53300	53400	53500	53600	53700	53800	53900	54000	
-54100	54200	54300	54400	54500	54600	54700	54800	54900	55000	
-55100	55200	55300	55400	55500	55600	55700	55800	55900	56000	
-56100	56200	56300	56400	56500	56600	56700	56800	56900	57000	
-57100	57200	57300	57400	57500	57600	57700	57800	57900	58000	
-58100	58200	58300	58400	58500	58600	58700	58800	58900	59000	
-59100	59200	59300	59400	59500	59600	59700	59800	59900	60000	
-60100	60200	60300	60400	60500	60600	60700	60800	60900	61000	
-61100	61200	61300	61400	61500	61600	61700	61800	61900	62000	
-62100	62200	62300	62400	62500	62600	62700	62800	62900	63000	
-63100	63200	63300	63400	63500	63600	63700	63800	63900	64000	
-64100	64200	64300	64400	64500	64600	64700	64800	64900	65000	
-65100	65200	65300	65400	65500	65600	65700	65800	65900	66000	
-66100	66200	66300	66400	66500	66600	66700	66800	66900	67000	
-67100	67200	67300	67400	67500	67600	67700	67800	67900	68000	
-68100	68200	68300	68400	68500	68600	68700	68800	68900	69000	
-69100	69200	69300	69400	69500	69600	69700	69800	69900	70000	
-70100	70200	70300	70400	70500	70600	70700	70800	70900	71000	
-71100	71200	71300	71400	71500	71600	71700	71800	71900	72000	
-72100	72200	72300	72400	72500	72600	72700	72800	72900	73000	
-73100	73200	73300	73400	73500	73600	73700	73800	73900	74000	
-74100	74200	74300	74400	74500	74600	74700	74800	74900	75000	
-75100	75200	75300	75400	75500	75600	75700	75800	75900	76000	
-76100	76200	76300	76400	76500	76600	76700	76800	76900	77000	
-77100	77200	77300	77400	77500	77600	77700	77800	77900	78000	
-78100	78200	78300	78400	78500	78600	78700	78800	78900	79000	
-79100	79200	79300	79400	79500	79600	79700	79800	79900	80000	
-80100	80200	80300	80400	80500	80600	80700	80800	80900	81000	
-81100	81200	81300	81400	81500	81600	81700	81800	81900	82000	
-82100	82200	82300	82400	82500	82600	82700	82800	82900	83000	
-83100	83200	83300	83400	83500	83600	83700	83800	83900	84000	
-84100	84200	84300	84400	84500	84600	84700	84800	84900	85000	
-85100	85200	85300	85400	85500	85600	85700	85800	85900	86000	
-86100	86200	86300	86400	86500	86600	86700	86800	86900	87000	
-87100	87200	87300	87400	87500	87600	87700	87800	87900	88000	
-88100	88200	88300	88400	88500	88600	88700	88800	88900	89000	
-89100	89200	89300	89400	89500	89600	89700	89800	89900	90000	
-90100	90200	90300	90400	90500	90600	90700	90800	90900	91000	
-91100	91200	91300	91400	91500	91600	91700	91800	91900	92000	
-92100	92200	92300	92400	92500	92600	92700	92800	92900	93000	
-93100	93200	93300	93400	93500	93600	93700	93800	93900	94000	
-94100	94200	94300	94400	94500	94600	94700	94800	94900	95000	
-95100	95200	95300	95400	95500	95600	95700	95800	95900	96000	
-96100	96200	96300	96400	96500	96600	96700	96800	96900	97000	
-97100	97200	97300	97400	97500	97600	97700	97800	97900	98000	
-98100	98200	98300	98400	98500	98600	98700	98800	98900	99000	
-99100	99200	99300	99400	99500	99600	99700	99800	99900	100000	
-100100	100200	100300	100400	100500	100600	100700	100800	100900	101000	
-101100	101200	101300	101400	101500	101600	101700	101800	101900	102000	
-102100	102200	102300	102400	102500	102600	102700	102800	102900	103000	
-103100	103200	103300	103400	103500	103600	103700	103800	103900	104000	
-104100	104200	104300	104400	104500	104600	104700	104800	104900	105000	
-105100	105200	105300	105400	105500	105600	105700	105800	105900	106000	
-106100	106200	106300	106400	106500	106600	106700	106800	106900	107000	
-107100	107200	107300	107400	107500	107600	107700	107800	107900	108000	
-108100	108200	108300	108400	108500	108600	108700	108800	108900	109000	
-109100	109200	109300	109400	109500	109600	109700	109800	109900	110000	
-110100	110200	110300	110400	110500	110600	110700	110800	110900	111000	
-111100	111200	111300	111400	111500	111600	111700	111800	111900	112000	
-112100	112200	112300	112400	112500	112600	112700	112800	112900	113000	
-113100	113200	113300	113400	113500	113600	113700	113800	113900	114000	
-114100	114200	114300	114400	114500	114600	114700	114800	114900	115000	
-115100	115200	115300	115400	115500	115600	115700	0	
-100	200	300	400	500	600	700	800	900	1000	
-1100	1200	1300	1400	1500	1600	1700	1800	1900	2000	
-2100	2200	2300	2400	2500	2600	2700	2800	2900	3000	
-3100	3200	3300	3400	3500	3600	3700	3800	3900	4000	
-4100	4200	4300	4400	4500	4600	4700	4800	4900	5000	
-5100	5200	5300	5400	5500	5600	5700	5800	5900	6000	
-6100	6200	6300	6400	6500	6600	6700	6800	6900	7000	
-7100	7200	7300	7400	7500	7600	7700	7800	7900	8000	
-8100	8200	8300	8400	8500	8600	8700	8800	8900	9000	
-9100	9200	9300	9400	9500	9600	9700	9800	9900	10000	
-10100	10200	10300	10400	10500	10600	10700	10800	10900	11000	
-11100	11200	11300	11400	11500	11600	11700	11800	11900	12000	
-12100	12200	12300	12400	12500	12600	12700	12800	12900	13000	
-13100	13200	13300	13400	13500	13600	13700	13800	13900	14000	
-14100	14200	14300	14400	14500	14600	14700	14800	14900	15000	
-15100	15200	15300	15400	15500	15600	15700	15800	15900	16000	
-16100	16200	16300	16400	16500	16600	16700	16800	16900	17000	
-17100	17200	17300	17400	17500	17600	17700	17800	17900	18000	
-18100	18200	18300	18400	18500	18600	18700	18800	18900	19000	
-19100	19200	19300	19400	19500	19600	19700	19800	19900	20000	
-20100	20200	20300	20400	20500	20600	20700	20800	20900	21000	
-21100	21200	21300	21400	21500	21600	21700	21800	21900	22000	
-22100	22200	22300	22400	22500	22600	22700	22800	22900	23000	
-23100	23200	23300	23400	23500	23600	23700	23800	23900	24000	
-24100	24200	24300	24400	24500	24600	24700	24800	24900	25000	
-25100	25200	25300	25400	25500	25600	25700	25800	25900	26000	
-26100	26200	26300	26400	26500	26600	26700	26800	26900	27000	
-27100	27200	27300	27400	27500	27600	27700	27800	27900	28000	
-28100	28200	28300	28400	28500	28600	28700	28800	28900	29000	
-29100	29200	29300	29400	29500	29600	29700	29800	29900	30000	
-30100	30200	30300	30400	30500	30600	30700	30800	30900	31000	
-31100	31200	31300	31400	31500	31600	31700	31800	31900	32000	
-32100	32200	32300	32400	32500	32600	32700	32800	32900	33000	
-33100	33200	33300	33400	33500	33600	33700	33800	33900	34000	
-34100	34200	34300	34400	34500	34600	34700	34800	34900	35000	
-35100	35200	35300	35400	35500	35600	35700	35800	35900	36000	
-36100	36200	36300	36400	36500	36600	36700	36800	36900	37000	
-37100	37200	37300	37400	37500	37600	37700	37800	37900	38000	
-38100	38200	38300	38400	38500	38600	38700	38800	38900	39000	
-39100	39200	39300	39400	39500	39600	39700	39800	39900	40000	
-40100	40200	40300	40400	40500	40600	40700	40800	40900	41000	
-41100	41200	41300	41400	41500	41600	41700	41800	41900	42000	
-42100	42200	42300	42400	42500	42600	42700	42800	42900	43000	
-43100	43200	43300	43400	43500	43600	43700	43800	43900	44000	
-44100	44200	44300	44400	44500	44600	44700	44800	44900	45000	
-45100	45200	45300	45400	45500	45600	45700	45800	45900	46000	
-46100	46200	46300	46400	46500	46600	46700	46800	46900	47000	
-47100	47200	47300	47400	47500	47600	47700	47800	47900	48000	
-48100	48200	48300	48400	48500	48600	48700	48800	48900	49000	
-49100	49200	49300	49400	49500	49600	49700	49800	49900	50000	
-50100	50200	50300	50400	50500	50600	50700	50800	50900	51000	
-51100	51200	51300	51400	51500	51600	51700	51800	51900	52000	
-52100	52200	52300	52400	52500	52600	52700	52800	52900	53000	
-53100	53200	53300	53400	53500	53600	53700	53800	53900	54000	
-54100	54200	54300	54400	54500	54600	54700	54800	54900	55000	
-55100	55200	55300	55400	55500	55600	55700	55800	55900	56000	
-56100	56200	56300	56400	56500	56600	56700	56800	56900	57000	
-57100	57200	57300	57400	57500	57600	57700	57800	57900	58000	
-58100	58200	58300	58400	58500	58600	58700	58800	58900	59000	
-59100	59200	59300	59400	59500	59600	59700	59800	59900	60000	
-60100	60200	60300	60400	60500	60600	60700	60800	60900	61000	
-61100	61200	61300	61400	61500	61600	61700	61800	61900	62000	
-62100	62200	62300	62400	62500	62600	62700	62800	62900	63000	
-63100	63200	63300	63400	63500	63600	63700	63800	63900	64000	
-64100	64200	64300	64400	64500	64600	64700	64800	64900	65000	
-65100	65200	65300	65400	65500	65600	65700	65800	65900	66000	
-66100	66200	66300	66400	66500	66600	66700	66800	66900	67000	
-67100	67200	67300	67400	67500	67600	67700	67800	67900	68000	
-68100	68200	68300	68400	68500	68600	68700	68800	68900	69000	
-69100	69200	69300	69400	69500	69600	69700	69800	69900	70000	
-70100	70200	70300	70400	70500	70600	70700	70800	70900	71000	
-71100	71200	71300	71400	71500	71600	71700	71800	71900	72000	
-72100	72200	72300	72400	72500	72600	72700	72800	72900	73000	
-73100	73200	73300	73400	73500	73600	73700	73800	73900	74000	
-74100	74200	74300	74400	74500	74600	74700	74800	74900	75000	
-75100	75200	75300	75400	75500	75600	75700	75800	75900	76000	
-76100	76200	76300	76400	76500	76600	76700	76800	76900	77000	
-77100	77200	77300	77400	77500	77600	77700	77800	77900	78000	
-78100	78200	78300	78400	78500	78600	78700	78800	78900	79000	
-79100	79200	79300	79400	79500	79600	79700	79800	79900	80000	
-80100	80200	80300	80400	80500	80600	80700	80800	80900	81000	
-81100	81200	81300	81400	81500	81600	81700	81800	81900	82000	
-82100	82200	82300	82400	82500	82600	82700	82800	82900	83000	
-83100	83200	83300	83400	83500	83600	83700	83800	83900	84000	
-84100	84200	84300	84400	84500	84600	84700	84800	84900	85000	
-85100	85200	85300	85400	85500	85600	85700	85800	85900	86000	
-86100	86200	86300	86400	86500	86600	86700	86800	86900	87000	
-87100	87200	87300	87400	87500	87600	87700	87800	87900	88000	
-88100	88200	88300	88400	88500	88600	88700	88800	88900	89000	
-89100	89200	89300	89400	89500	89600	89700	89800	89900	90000	
-90100	90200	90300	90400	90500	90600	90700	90800	90900	91000	
-91100	91200	91300	91400	91500	91600	91700	91800	91900	92000	
-92100	92200	92300	92400	92500	92600	92700	92800	92900	93000	
-93100	93200	93300	93400	93500	93600	93700	93800	93900	94000	
-94100	94200	94300	94400	94500	94600	94700	94800	94900	95000	
-95100	95200	95300	95400	95500	95600	95700	95800	95900	96000	
-96100	96200	96300	96400	96500	96600	96700	96800	96900	97000	
-97100	97200	97300	97400	97500	97600	97700	97800	97900	98000	
-98100	98200	98300	98400	98500	98600	98700	98800	98900	99000	
-99100	99200	99300	99400	99500	99600	99700	99800	99900	100000	
-100100	100200	100300	100400	100500	100600	100700	100800	100900	101000	
-101100	101200	101300	101400	101500	101600	101700	101800	101900	102000	
-102100	102200	102300	102400	102500	102600	102700	102800	102900	103000	
-103100	103200	103300	103400	103500	103600	103700	103800	103900	104000	
-104100	104200	104300	104400	104500	104600	104700	104800	104900	105000	
-105100	105200	105300	105400	105500	105600	105700	105800	105900	106000	
-106100	106200	106300	106400	106500	106600	106700	106800	106900	107000	
-107100	107200	107300	107400	107500	107600	107700	107800	107900	108000	
-108100	108200	108300	108400	108500	108600	108700	108800	108900	109000	
-109100	109200	109300	109400	109500	109600	109700	109800	109900	110000	
-110100	110200	110300	110400	110500	110600	110700	110800	110900	111000	
-111100	111200	111300	111400	111500	111600	111700	111800	111900	112000	
-112100	112200	112300	112400	112500	112600	112700	112800	112900	113000	
-113100	113200	113300	113400	113500	113600	113700	113800	113900	114000	
-114100	114200	114300	114400	114500	114600	114700	114800	114900	115000	
-115100	115200	115300	115400	115500	115600	115700	0	
-100	200	300	400	500	600	700	800	900	1000	
-1100	1200	1300	1400	1500	1600	1700	1800	1900	2000	
-2100	2200	2300	2400	2500	2600	2700	2800	2900	3000	
-3100	3200	3300	3400	3500	3600	3700	3800	3900	4000	
-4100	4200	4300	4400	4500	4600	4700	4800	4900	5000	
-5100	5200	5300	5400	5500	5600	5700	5800	5900	6000	
-6100	6200	6300	6400	6500	6600	6700	6800	6900	7000	
-7100	7200	7300	7400	7500	7600	7700	7800	7900	8000	
-8100	8200	8300	8400	8500	8600	8700	8800	8900	9000	
-9100	9200	9300	9400	9500	9600	9700	9800	9900	10000	
-10100	10200	10300	10400	10500	10600	10700	10800	10900	11000	
-11100	11200	11300	11400	11500	11600	11700	11800	11900	12000	
-12100	12200	12300	12400	12500	12600	12700	12800	12900	13000	
-13100	13200	13300	13400	13500	13600	13700	13800	13900	14000	
-14100	14200	14300	14400	14500	14600	14700	14800	14900	15000	
-15100	15200	15300	15400	15500	15600	15700	15800	15900	16000	
-16100	16200	16300	16400	16500	16600	16700	16800	16900	17000	
-17100	17200	17300	17400	17500	17600	17700	17800	17900	18000	
-18100	18200	18300	18400	18500	18600	18700	18800	18900	19000	
-19100	19200	19300	19400	19500	19600	19700	19800	19900	20000	
-20100	20200	20300	20400	20500	20600	20700	20800	20900	21000	
-21100	21200	21300	21400	21500	21600	21700	21800	21900	22000	
-22100	22200	22300	22400	22500	22600	22700	22800	22900	23000	
-23100	23200	23300	23400	23500	23600	23700	23800	23900	24000	
-24100	24200	24300	24400	24500	24600	24700	24800	24900	25000	
-25100	25200	25300	25400	25500	25600	25700	25800	25900	26000	
-26100	26200	26300	26400	26500	26600	26700	26800	26900	27000	
-27100	27200	27300	27400	27500	27600	27700	27800	27900	28000	
-28100	28200	28300	28400	28500	28600	28700	28800	28900	29000	
-29100	29200	29300	29400	29500	29600	29700	29800	29900	30000	
-30100	30200	30300	30400	30500	30600	30700	30800	30900	31000	
-31100	31200	31300	31400	31500	31600	31700	31800	31900	32000	
-32100	32200	32300	32400	32500	32600	32700	32800	32900	33000	
-33100	33200	33300	33400	33500	33600	33700	33800	33900	34000	
-34100	34200	34300	34400	34500	34600	34700	34800	34900	35000	
-35100	35200	35300	35400	35500	35600	35700	35800	35900	36000	
-36100	36200	36300	36400	36500	36600	36700	36800	36900	37000	
-37100	37200	37300	37400	37500	37600	37700	37800	37900	38000	
-38100	38200	38300	38400	38500	38600	38700	38800	38900	39000	
-39100	39200	39300	39400	39500	39600	39700	39800	39900	40000	
-40100	40200	40300	40400	40500	40600	40700	40800	40900	41000	
-41100	41200	41300	41400	41500	41600	41700	41800	41900	42000	
-42100	42200	42300	42400	42500	42600	42700	42800	42900	43000	
-43100	43200	43300	43400	43500	43600	43700	43800	43900	44000	
-44100	44200	44300	44400	44500	44600	44700	44800	44900	45000	
-45100	45200	45300	45400	45500	45600	45700	45800	45900	46000	
-46100	46200	46300	46400	46500	46600	46700	46800	46900	47000	
-47100	47200	47300	47400	47500	47600	47700	47800	47900	48000	
-48100	48200	48300	48400	48500	48600	48700	48800	48900	49000	
-49100	49200	49300	49400	49500	49600	49700	49800	49900	50000	
-50100	50200	50300	50400	50500	50600	50700	50800	50900	51000	
-51100	51200	51300	51400	51500	51600	51700	51800	51900	52000	
-52100	52200	52300	52400	52500	52600	52700	52800	52900	53000	
-53100	53200	53300	53400	53500	53600	53700	53800	53900	54000	
-54100	54200	54300	54400	54500	54600	54700	54800	54900	55000	
-55100	55200	55300	55400	55500	55600	55700	55800	55900	56000	
-56100	56200	56300	56400	56500	56600	56700	56800	56900	57000	
-57100	57200	57300	57400	57500	57600	57700	57800	57900	58000	
-58100	58200	58300	58400	58500	58600	58700	58800	58900	59000	
-59100	59200	59300	59400	59500	59600	59700	59800	59900	60000	
-60100	60200	60300	60400	60500	60600	60700	60800	60900	61000	
-61100	61200	61300	61400	61500	61600	61700	61800	61900	62000	
-62100	62200	62300	62400	62500	62600	62700	62800	62900	63000	
-63100	63200	63300	63400	63500	63600	63700	63800	63900	64000	
-64100	64200	64300	64400	64500	64600	64700	64800	64900	65000	
-65100	65200	65300	65400	65500	65600	65700	65800	65900	66000	
-66100	66200	66300	66400	66500	66600	66700	66800	66900	67000	
-67100	67200	67300	67400	67500	67600	67700	67800	67900	68000	
-68100	68200	68300	68400	68500	68600	68700	68800	68900	69000	
-69100	69200	69300	69400	69500	69600	69700	69800	69900	70000	
-70100	70200	70300	70400	70500	70600	70700	70800	70900	71000	
-71100	71200	71300	71400	71500	71600	71700	71800	71900	72000	
-72100	72200	72300	72400	72500	72600	72700	72800	72900	73000	
-73100	73200	73300	73400	73500	73600	73700	73800	73900	74000	
-74100	74200	74300	74400	74500	74600	74700	74800	74900	75000	
-75100	75200	75300	75400	75500	75600	75700	75800	75900	76000	
-76100	76200	76300	76400	76500	76600	76700	76800	76900	77000	
-77100	77200	77300	77400	77500	77600	77700	77800	77900	78000	
-78100	78200	78300	78400	78500	78600	78700	78800	78900	79000	
-79100	79200	79300	79400	79500	79600	79700	79800	79900	80000	
-80100	80200	80300	80400	80500	80600	80700	80800	80900	81000	
-81100	81200	81300	81400	81500	81600	81700	81800	81900	82000	
-82100	82200	82300	82400	82500	82600	82700	82800	82900	83000	
-83100	83200	83300	83400	83500	83600	83700	83800	83900	84000	
-84100	84200	84300	84400	84500	84600	84700	84800	84900	85000	
-85100	85200	85300	85400	85500	85600	85700	85800	85900	86000	
-86100	86200	86300	86400	86500	86600	86700	86800	86900	87000	
-87100	87200	87300	87400	87500	87600	87700	87800	87900	88000	
-88100	88200	88300	88400	88500	88600	88700	88800	88900	89000	
-89100	89200	89300	89400	89500	89600	89700	89800	89900	90000	
-90100	90200	90300	90400	90500	90600	90700	90800	90900	91000	
-91100	91200	91300	91400	91500	91600	91700	91800	91900	92000	
-92100	92200	92300	92400	92500	92600	92700	92800	92900	93000	
-93100	93200	93300	93400	93500	93600	93700	93800	93900	94000	
-94100	94200	94300	94400	94500	94600	94700	94800	94900	95000	
-95100	95200	95300	95400	95500	95600	95700	95800	95900	96000	
-96100	96200	96300	96400	96500	96600	96700	96800	96900	97000	
-97100	97200	97300	97400	97500	97600	97700	97800	97900	98000	
-98100	98200	98300	98400	98500	98600	98700	98800	98900	99000	
-99100	99200	99300	99400	99500	99600	99700	99800	99900	100000	
-100100	100200	100300	100400	100500	100600	100700	100800	100900	101000	
-101100	101200	101300	101400	101500	101600	101700	101800	101900	102000	
-102100	102200	102300	102400	102500	102600	102700	102800	102900	103000	
-103100	103200	103300	103400	103500	103600	103700	103800	103900	104000	
-104100	104200	104300	104400	104500	104600	104700	104800	104900	105000	
-105100	105200	105300	105400	105500	105600	105700	105800	105900	106000	
-106100	106200	106300	106400	106500	106600	106700	106800	106900	107000	
-107100	107200	107300	107400	107500	107600	107700	107800	107900	108000	
-108100	108200	108300	108400	108500	108600	108700	108800	108900	109000	
-109100	109200	109300	109400	109500	109600	109700	109800	109900	110000	
-110100	110200	110300	110400	110500	110600	110700	110800	110900	111000	
-111100	111200	111300	111400	111500	111600	111700	111800	111900	112000	
-112100	112200	112300	112400	112500	112600	112700	112800	112900	113000	
-113100	113200	113300	113400	113500	113600	113700	113800	113900	114000	
-114100	114200	114300	114400	114500	114600	114700	114800	114900	115000	
-115100	115200	115300	115400	115500	115600	115700	0	
-100	200	300	400	500	600	700	800	900	1000	
-1100	1200	1300	1400	1500	1600	1700	1800	1900	2000	
-2100	2200	2300	2400	2500	2600	2700	2800	2900	3000	
-3100	3200	3300	3400	3500	3600	3700	3800	3900	4000	
-4100	4200	4300	4400	4500	4600	4700	4800	4900	5000	
-5100	5200	5300	5400	5500	5600	5700	5800	5900	6000	
-6100	6200	6300	6400	6500	6600	6700	6800	6900	7000	
-7100	7200	7300	7400	7500	7600	7700	7800	7900	8000	
-8100	8200	8300	8400	8500	8600	8700	8800	8900	9000	
-9100	9200	9300	9400	9500	9600	9700	9800	9900	10000	
-10100	10200	10300	10400	10500	10600	10700	10800	10900	11000	
-11100	11200	11300	11400	11500	11600	11700	11800	11900	12000	
-12100	12200	12300	12400	12500	12600	12700	12800	12900	13000	
-13100	13200	13300	13400	13500	13600	13700	13800	13900	14000	
-14100	14200	14300	14400	14500	14600	14700	14800	14900	15000	
-15100	15200	15300	15400	15500	15600	15700	15800	15900	16000	
-16100	16200	16300	16400	16500	16600	16700	16800	16900	17000	
-17100	17200	17300	17400	17500	17600	17700	17800	17900	18000	
-18100	18200	18300	18400	18500	18600	18700	18800	18900	19000	
-19100	19200	19300	19400	19500	19600	19700	19800	19900	20000	
-20100	20200	20300	20400	20500	20600	20700	20800	20900	21000	
-21100	21200	21300	21400	21500	21600	21700	21800	21900	22000	
-22100	22200	22300	22400	22500	22600	22700	22800	22900	23000	
-23100	23200	23300	23400	23500	23600	23700	23800	23900	24000	
-24100	24200	24300	24400	24500	24600	24700	24800	24900	25000	
-25100	25200	25300	25400	25500	25600	25700	25800	25900	26000	
-26100	26200	26300	26400	26500	26600	26700	26800	26900	27000	
-27100	27200	27300	27400	27500	27600	27700	27800	27900	28000	
-28100	28200	28300	28400	28500	28600	28700	28800	28900	29000	
-29100	29200	29300	29400	29500	29600	29700	29800	29900	30000	
-30100	30200	30300	30400	30500	30600	30700	30800	30900	31000	
-31100	31200	31300	31400	31500	31600	31700	31800	31900	32000	
-32100	32200	32300	32400	32500	32600	32700	32800	32900	33000	
-33100	33200	33300	33400	33500	33600	33700	33800	33900	34000	
-34100	34200	34300	34400	34500	34600	34700	34800	34900	35000	
-35100	35200	35300	35400	35500	35600	35700	35800	35900	36000	
-36100	36200	36300	36400	36500	36600	36700	36800	36900	37000	
-37100	37200	37300	37400	37500	37600	37700	37800	37900	38000	
-38100	38200	38300	38400	38500	38600	38700	38800	38900	39000	
-39100	39200	39300	39400	39500	39600	39700	39800	39900	40000	
-40100	40200	40300	40400	40500	40600	40700	40800	40900	41000	
-41100	41200	41300	41400	41500	41600	41700	41800	41900	42000	
-42100	42200	42300	42400	42500	42600	42700	42800	42900	43000	
-43100	43200	43300	43400	43500	43600	43700	43800	43900	44000	
-44100	44200	44300	44400	44500	44600	44700	44800	44900	45000	
-45100	45200	45300	45400	45500	45600	45700	45800	45900	46000	
-46100	46200	46300	46400	46500	46600	46700	46800	46900	47000	
-47100	47200	47300	47400	47500	47600	47700	47800	47900	48000	
-48100	48200	48300	48400	48500	48600	48700	48800	48900	49000	
-49100	49200	49300	49400	49500	49600	49700	49800	49900	50000	
-50100	50200	50300	50400	50500	50600	50700	50800	50900	51000	
-51100	51200	51300	51400	51500	51600	51700	51800	51900	52000	
-52100	52200	52300	52400	52500	52600	52700	52800	52900	53000	
-53100	53200	53300	53400	53500	53600	53700	53800	53900	54000	
-54100	54200	54300	54400	54500	54600	54700	54800	54900	55000	
-55100	55200	55300	55400	55500	55600	55700	55800	55900	56000	
-56100	56200	56300	56400	56500	56600	56700	56800	56900	57000	
-57100	57200	57300	57400	57500	57600	57700	57800	57900	58000	
-58100	58200	58300	58400	58500	58600	58700	58800	58900	59000	
-59100	59200	59300	59400	59500	59600	59700	59800	59900	60000	
-60100	60200	60300	60400	60500	60600	60700	60800	60900	61000	
-61100	61200	61300	61400	61500	61600	61700	61800	61900	62000	
-62100	62200	62300	62400	62500	62600	62700	62800	62900	63000	
-63100	63200	63300	63400	63500	63600	63700	63800	63900	64000	
-64100	64200	64300	64400	64500	64600	64700	64800	64900	65000	
-65100	65200	65300	65400	65500	65600	65700	65800	65900	66000	
-66100	66200	66300	66400	66500	66600	66700	66800	66900	67000	
-67100	67200	67300	67400	67500	67600	67700	67800	67900	68000	
-68100	68200	68300	68400	68500	68600	68700	68800	68900	69000	
-69100	69200	69300	69400	69500	69600	69700	69800	69900	70000	
-70100	70200	70300	70400	70500	70600	70700	70800	70900	71000	
-71100	71200	71300	71400	71500	71600	71700	71800	71900	72000	
-72100	72200	72300	72400	72500	72600	72700	72800	72900	73000	
-73100	73200	73300	73400	73500	73600	73700	73800	73900	74000	
-74100	74200	74300	74400	74500	74600	74700	74800	74900	75000	
-75100	75200	75300	75400	75500	75600	75700	75800	75900	76000	
-76100	76200	76300	76400	76500	76600	76700	76800	76900	77000	
-77100	77200	77300	77400	77500	77600	77700	77800	77900	78000	
-78100	78200	78300	78400	78500	78600	78700	78800	78900	79000	
-79100	79200	79300	79400	79500	79600	79700	79800	79900	80000	
-80100	80200	80300	80400	80500	80600	80700	80800	80900	81000	
-81100	81200	81300	81400	81500	81600	81700	81800	81900	82000	
-82100	82200	82300	82400	82500	82600	82700	82800	82900	83000	
-83100	83200	83300	83400	83500	83600	83700	83800	83900	84000	
-84100	84200	84300	84400	84500	84600	84700	84800	84900	85000	
-85100	85200	85300	85400	85500	85600	85700	85800	85900	86000	
-86100	86200	86300	86400	86500	86600	86700	86800	86900	87000	
-87100	87200	87300	87400	87500	87600	87700	87800	87900	88000	
-88100	88200	88300	88400	88500	88600	88700	88800	88900	89000	
-89100	89200	89300	89400	89500	89600	89700	89800	89900	90000	
-90100	90200	90300	90400	90500	90600	90700	90800	90900	91000	
-91100	91200	91300	91400	91500	91600	91700	91800	91900	92000	
-92100	92200	92300	92400	92500	92600	92700	92800	92900	93000	
-93100	93200	93300	93400	93500	93600	93700	93800	93900	94000	
-94100	94200	94300	94400	94500	94600	94700	94800	94900	95000	
-95100	95200	95300	95400	95500	95600	95700	95800	95900	96000	
-96100	96200	96300	96400	96500	96600	96700	96800	96900	97000	
-97100	97200	97300	97400	97500	97600	97700	97800	97900	98000	
-98100	98200	98300	98400	98500	98600	98700	98800	98900	99000	
-99100	99200	99300	99400	99500	99600	99700	99800	99900	100000	
-100100	100200	100300	100400	100500	100600	100700	100800	100900	101000	
-101100	101200	101300	101400	101500	101600	101700	101800	101900	102000	
-102100	102200	102300	102400	102500	102600	102700	102800	102900	103000	
-103100	103200	103300	103400	103500	103600	103700	103800	103900	104000	
-104100	104200	104300	104400	104500	104600	104700	104800	104900	105000	
-105100	105200	105300	105400	105500	105600	105700	105800	105900	106000	
-106100	106200	106300	106400	106500	106600	106700	106800	106900	107000	
-107100	107200	107300	107400	107500	107600	107700	107800	107900	108000	
-108100	108200	108300	108400	108500	108600	108700	108800	108900	109000	
-109100	109200	109300	109400	109500	109600	109700	109800	109900	110000	
-110100	110200	110300	110400	110500	110600	110700	110800	110900	111000	
-111100	111200	111300	111400	111500	111600	111700	111800	111900	112000	
-112100	112200	112300	112400	112500	112600	112700	112800	112900	113000	
-113100	113200	113300	113400	113500	113600	113700	113800	113900	114000	
-114100	114200	114300	114400	114500	114600	114700	114800	114900	115000	
-115100	115200	115300	115400	115500	115600	115700	end time: Fri May 23 19:19:28 CST 2025

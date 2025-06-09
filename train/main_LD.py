@@ -1,7 +1,11 @@
 import argparse
 import random
 
+from loguru import logger
+
 parser = argparse.ArgumentParser()
+parser.add_argument('--project', type=str, default='LD')
+parser.add_argument('--name', type=str, default='HASS')
 parser.add_argument('--basepath', type=str, default=None)
 parser.add_argument('--configpath', type=str, default=None)
 parser.add_argument('--lr', type=float, default=3e-5)
@@ -53,7 +57,7 @@ train_config = {
     "b1": 0.9,
     "b2": 0.95,
     "grad_clip": 0.5,
-    "save_freq": 5
+    "save_freq": 1
 }
 import json
 import safetensors
@@ -86,7 +90,7 @@ from transformers import get_linear_schedule_with_warmup, AutoConfig
 if accelerator.is_main_process:
     import wandb
 
-    wandb.init(project="LD", mode="offline", config=train_config)
+    wandb.init(project=args.project, name=args.name, mode='offline', config=train_config)
 
 baseconfig = AutoConfig.from_pretrained(args.basepath)
 
@@ -125,23 +129,24 @@ def list_files(
 
     index_file_path = os.path.join(path, index_file_name)
     if os.path.exists(index_file_path):
+        logger.info('data index file exists.')
         with open(index_file_path, mode='r', encoding='utf-8') as reader:
             for line in reader:
                 file_path = line.strip()
                 datapath.append(file_path)
-        return datapath[:num]
+    else:
+        for root, _, files in os.walk(path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                datapath.append(file_path)
 
-    for root, _, files in os.walk(path):
-        for file in files:
-            file_path = os.path.join(root, file)
-            datapath.append(file_path)
+        random.seed(42)
+        random.shuffle(datapath)
+        with open(index_file_path, mode='w', encoding='utf-8') as writer:
+            for file_path in datapath:
+                writer.write(file_path + '\n')
 
-    random.seed(42)
-    random.shuffle(datapath)
-    with open(index_file_path, mode='w', encoding='utf-8') as writer:
-        for file_path in datapath:
-            writer.write(file_path + '\n')
-
+    logger.info(f'there are {len(datapath)} samples, select first {num}.')
     return datapath[:num]
 
 
@@ -517,7 +522,7 @@ for epoch in range(num_epochs + 1):
         print('Train Accuracy: {:.2f}%'.format(100 * correct / total))
         wandb.log({"train/epochacc": correct / total, "train/epochloss": epoch_loss})
 
-    if (epoch + 1) % train_config["save_freq"]:
+    if (epoch + 1) % train_config["save_freq"] == 0:
         top_3acc = [0 for _ in range(3)]
         correct = 0
         total = 0

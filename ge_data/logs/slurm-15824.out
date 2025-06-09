@@ -1,0 +1,111 @@
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2023 NVIDIA Corporation
+Built on Tue_Feb__7_19:32:13_PST_2023
+Cuda compilation tools, release 12.1, V12.1.66
+Build cuda_12.1.r12.1/compiler.32415258_0
+Python 3.11.11
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 68623 examples [00:04, 14983.06 examples/s]Generating train split: 68623 examples [00:04, 14519.40 examples/s]
+Successfully merged the following splits: ['train']
+Total examples in merged dataset: 68623
+Successfully merged the following splits: ['train']
+Total examples in merged dataset: 68623
+Map (num_proc=4):   0%|          | 0/17000 [00:00<?, ? examples/s]Successfully merged the following splits: ['train']
+Total examples in merged dataset: 68623
+Successfully merged the following splits: ['train']
+Total examples in merged dataset: 68623
+Map (num_proc=4):   0%|          | 0/17000 [00:00<?, ? examples/s]Map (num_proc=4):   0%|          | 0/17000 [00:00<?, ? examples/s]Map (num_proc=4):   0%|          | 0/17000 [00:00<?, ? examples/s]Map (num_proc=4):   6%|▌         | 1000/17000 [00:21<05:36, 47.58 examples/s]Map (num_proc=4):   6%|▌         | 1000/17000 [00:21<05:36, 47.49 examples/s]Map (num_proc=4):   6%|▌         | 1000/17000 [00:21<05:41, 46.89 examples/s]Map (num_proc=4):  12%|█▏        | 2000/17000 [00:21<02:13, 112.75 examples/s]Map (num_proc=4):  12%|█▏        | 2000/17000 [00:21<02:13, 112.45 examples/s]Map (num_proc=4):  12%|█▏        | 2000/17000 [00:21<02:14, 111.48 examples/s]Map (num_proc=4):   6%|▌         | 1000/17000 [00:21<05:48, 45.96 examples/s]Map (num_proc=4):  24%|██▎       | 4000/17000 [00:21<00:54, 239.74 examples/s]Map (num_proc=4):  18%|█▊        | 3000/17000 [00:21<01:09, 200.18 examples/s]Map (num_proc=4):  18%|█▊        | 3000/17000 [00:22<01:11, 196.15 examples/s]Map (num_proc=4):  18%|█▊        | 3000/17000 [00:22<01:11, 194.81 examples/s]Map (num_proc=4):  24%|██▎       | 4000/17000 [00:22<00:41, 315.05 examples/s]Map (num_proc=4):  24%|██▎       | 4000/17000 [00:22<00:42, 304.16 examples/s]Map (num_proc=4):  24%|██▎       | 4000/17000 [00:34<00:41, 315.05 examples/s]Map (num_proc=4):  24%|██▎       | 4000/17000 [00:34<00:42, 304.16 examples/s]Map (num_proc=4):  24%|██▎       | 4000/17000 [00:34<01:06, 196.15 examples/s]Map (num_proc=4):  24%|██▎       | 4000/17000 [00:34<00:54, 239.74 examples/s]Map (num_proc=4):  29%|██▉       | 5000/17000 [00:42<01:35, 125.22 examples/s]Map (num_proc=4):  29%|██▉       | 5000/17000 [00:42<01:44, 114.32 examples/s]Map (num_proc=4):  35%|███▌      | 6000/17000 [00:42<01:02, 174.61 examples/s]Map (num_proc=4):  29%|██▉       | 5000/17000 [00:42<01:52, 106.34 examples/s]Map (num_proc=4):  35%|███▌      | 6000/17000 [00:43<01:10, 156.33 examples/s]Map (num_proc=4):  29%|██▉       | 5000/17000 [00:43<01:53, 105.65 examples/s]Map (num_proc=4):  41%|████      | 7000/17000 [00:43<00:45, 217.69 examples/s]Map (num_proc=4):  41%|████      | 7000/17000 [00:43<00:42, 235.77 examples/s]Map (num_proc=4):  35%|███▌      | 6000/17000 [00:43<01:09, 158.00 examples/s]Map (num_proc=4):  35%|███▌      | 6000/17000 [00:43<01:10, 155.91 examples/s]Map (num_proc=4):  47%|████▋     | 8000/17000 [00:43<00:29, 301.63 examples/s]Map (num_proc=4):  41%|████      | 7000/17000 [00:43<00:43, 232.28 examples/s]Map (num_proc=4):  47%|████▋     | 8000/17000 [00:43<00:30, 296.84 examples/s]Map (num_proc=4):  47%|████▋     | 8000/17000 [00:43<00:28, 314.70 examples/s]Map (num_proc=4):  47%|████▋     | 8000/17000 [00:54<00:30, 296.84 examples/s]Map (num_proc=4):  47%|████▋     | 8000/17000 [00:54<00:38, 232.28 examples/s]Map (num_proc=4):  47%|████▋     | 8000/17000 [00:54<00:28, 314.70 examples/s]Map (num_proc=4):  47%|████▋     | 8000/17000 [00:54<00:29, 301.63 examples/s]Map (num_proc=4):  53%|█████▎    | 9000/17000 [01:02<01:04, 124.23 examples/s]Map (num_proc=4):  53%|█████▎    | 9000/17000 [01:03<01:04, 123.82 examples/s]Map (num_proc=4):  59%|█████▉    | 10000/17000 [01:03<00:39, 175.05 examples/s]Map (num_proc=4):  53%|█████▎    | 9000/17000 [01:03<01:01, 129.61 examples/s]Map (num_proc=4):  59%|█████▉    | 10000/17000 [01:03<00:42, 166.65 examples/s]Map (num_proc=4):  59%|█████▉    | 10000/17000 [01:04<00:39, 175.51 examples/s]Map (num_proc=4):  53%|█████▎    | 9000/17000 [01:04<00:57, 138.07 examples/s]Map (num_proc=4):  65%|██████▍   | 11000/17000 [01:04<00:24, 240.84 examples/s]Map (num_proc=4):  59%|█████▉    | 10000/17000 [01:04<00:37, 184.41 examples/s]Map (num_proc=4):  65%|██████▍   | 11000/17000 [01:04<00:24, 249.05 examples/s]Map (num_proc=4):  65%|██████▍   | 11000/17000 [01:04<00:26, 227.23 examples/s]Map (num_proc=4):  65%|██████▍   | 11000/17000 [01:04<00:25, 233.98 examples/s]Map (num_proc=4):  71%|███████   | 12000/17000 [01:04<00:15, 316.62 examples/s]Map (num_proc=4):  71%|███████   | 12000/17000 [01:04<00:15, 321.55 examples/s]Map (num_proc=4):  71%|███████   | 12000/17000 [01:04<00:15, 330.56 examples/s]Map (num_proc=4):  71%|███████   | 12000/17000 [01:05<00:15, 317.62 examples/s]Map (num_proc=4):  71%|███████   | 12000/17000 [01:14<00:15, 316.62 examples/s]Map (num_proc=4):  76%|███████▋  | 13000/17000 [01:24<00:32, 122.93 examples/s]Map (num_proc=4):  76%|███████▋  | 13000/17000 [01:24<00:32, 123.48 examples/s]Map (num_proc=4):  76%|███████▋  | 13000/17000 [01:24<00:31, 126.08 examples/s]Map (num_proc=4):  71%|███████   | 12000/17000 [01:24<00:15, 330.56 examples/s]Map (num_proc=4):  82%|████████▏ | 14000/17000 [01:24<00:17, 172.92 examples/s]Map (num_proc=4):  76%|███████▋  | 13000/17000 [01:24<00:31, 127.56 examples/s]Map (num_proc=4):  82%|████████▏ | 14000/17000 [01:25<00:17, 174.52 examples/s]Map (num_proc=4):  82%|████████▏ | 14000/17000 [01:25<00:17, 171.32 examples/s]Map (num_proc=4):  88%|████████▊ | 15000/17000 [01:25<00:09, 218.98 examples/s]Map (num_proc=4):  94%|█████████▍| 16000/17000 [01:25<00:03, 285.45 examples/s]Map (num_proc=4):  88%|████████▊ | 15000/17000 [01:25<00:08, 231.30 examples/s]Map (num_proc=4):  94%|█████████▍| 16000/17000 [01:25<00:03, 311.40 examples/s]Map (num_proc=4):  88%|████████▊ | 15000/17000 [01:26<00:08, 234.20 examples/s]Map (num_proc=4):  94%|█████████▍| 16000/17000 [01:26<00:03, 321.95 examples/s]Map (num_proc=4):  94%|█████████▍| 16000/17000 [01:26<00:03, 305.88 examples/s]Map (num_proc=4):  96%|█████████▌| 16250/17000 [01:29<00:03, 243.81 examples/s]Map (num_proc=4):  96%|█████████▌| 16250/17000 [01:29<00:03, 246.87 examples/s]Map (num_proc=4):  97%|█████████▋| 16500/17000 [01:29<00:02, 236.99 examples/s]Map (num_proc=4):  97%|█████████▋| 16500/17000 [01:30<00:01, 252.70 examples/s]Map (num_proc=4):  99%|█████████▊| 16750/17000 [01:30<00:01, 247.56 examples/s]Map (num_proc=4):  97%|█████████▋| 16500/17000 [01:30<00:02, 242.94 examples/s]Map (num_proc=4):  97%|█████████▋| 16500/17000 [01:30<00:02, 244.40 examples/s]Map (num_proc=4):  99%|█████████▊| 16750/17000 [01:30<00:00, 275.51 examples/s]Map (num_proc=4): 100%|██████████| 17000/17000 [01:30<00:00, 271.08 examples/s]Map (num_proc=4): 100%|██████████| 17000/17000 [01:30<00:00, 285.59 examples/s]Map (num_proc=4): 100%|██████████| 17000/17000 [01:30<00:00, 187.10 examples/s]
+Map (num_proc=4): 100%|██████████| 17000/17000 [01:30<00:00, 186.96 examples/s]
+Map (num_proc=4):  99%|█████████▊| 16750/17000 [01:31<00:00, 271.08 examples/s]Map (num_proc=4): 100%|██████████| 17000/17000 [01:31<00:00, 299.26 examples/s]Map (num_proc=4): 100%|██████████| 17000/17000 [01:31<00:00, 185.66 examples/s]
+Map (num_proc=4): 100%|██████████| 17000/17000 [01:31<00:00, 277.61 examples/s]Map (num_proc=4): 100%|██████████| 17000/17000 [01:31<00:00, 185.37 examples/s]
+Dataset({
+    features: ['conversation', 'input_ids', 'loss_mask'],
+    num_rows: 17000
+})
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Dataset({
+    features: ['conversation', 'input_ids', 'loss_mask'],
+    num_rows: 17000
+})
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Dataset({
+    features: ['conversation', 'input_ids', 'loss_mask'],
+    num_rows: 17000
+})
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Dataset({
+    features: ['conversation', 'input_ids', 'loss_mask'],
+    num_rows: 17000
+})
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.81s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.87s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.82s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.82s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.40s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.61s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.41s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.62s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.43s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.65s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.41s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.63s/it]
+0	
+100	200	300	400	500	600	700	800	900	1000	
+1100	1200	1300	1400	1500	1600	1700	1800	1900	2000	
+2100	2200	2300	2400	2500	2600	2700	2800	2900	3000	
+3100	3200	3300	3400	3500	3600	3700	3800	3900	4000	
+4100	4200	4300	4400	4500	4600	4700	4800	4900	5000	
+5100	5200	5300	5400	5500	5600	5700	5800	5900	6000	
+6100	6200	6300	6400	6500	6600	6700	6800	6900	7000	
+7100	7200	7300	7400	7500	7600	7700	7800	7900	8000	
+8100	8200	8300	8400	8500	8600	8700	8800	8900	9000	
+9100	9200	9300	9400	9500	9600	9700	9800	9900	10000	
+10100	10200	10300	10400	10500	10600	10700	10800	10900	11000	
+11100	11200	11300	11400	11500	11600	11700	11800	11900	12000	
+12100	12200	12300	12400	12500	12600	12700	12800	12900	13000	
+13100	13200	13300	13400	13500	13600	13700	13800	13900	14000	
+14100	14200	14300	14400	14500	14600	14700	14800	14900	15000	
+15100	15200	15300	15400	15500	15600	15700	15800	15900	16000	
+16100	16200	16300	16400	16500	16600	16700	16800	16900	0	
+100	200	300	400	500	600	700	800	900	1000	
+1100	1200	1300	1400	1500	1600	1700	1800	1900	2000	
+2100	2200	2300	2400	2500	2600	2700	2800	2900	3000	
+3100	3200	3300	3400	3500	3600	3700	3800	3900	4000	
+4100	4200	4300	4400	4500	4600	4700	4800	4900	5000	
+5100	5200	5300	5400	5500	5600	5700	5800	5900	6000	
+6100	6200	6300	6400	6500	6600	6700	6800	6900	7000	
+7100	7200	7300	7400	7500	7600	7700	7800	7900	8000	
+8100	8200	8300	8400	8500	8600	8700	8800	8900	9000	
+9100	9200	9300	9400	9500	9600	9700	9800	9900	10000	
+10100	10200	10300	10400	10500	10600	10700	10800	10900	11000	
+11100	11200	11300	11400	11500	11600	11700	11800	11900	12000	
+12100	12200	12300	12400	12500	12600	12700	12800	12900	13000	
+13100	13200	13300	13400	13500	13600	13700	13800	13900	14000	
+14100	14200	14300	14400	14500	14600	14700	14800	14900	15000	
+15100	15200	15300	15400	15500	15600	15700	15800	15900	16000	
+16100	16200	16300	16400	16500	16600	16700	16800	16900	0	
+100	200	300	400	500	600	700	800	900	1000	
+1100	1200	1300	1400	1500	1600	1700	1800	1900	2000	
+2100	2200	2300	2400	2500	2600	2700	2800	2900	3000	
+3100	3200	3300	3400	3500	3600	3700	3800	3900	4000	
+4100	4200	4300	4400	4500	4600	4700	4800	4900	5000	
+5100	5200	5300	5400	5500	5600	5700	5800	5900	6000	
+6100	6200	6300	6400	6500	6600	6700	6800	6900	7000	
+7100	7200	7300	7400	7500	7600	7700	7800	7900	8000	
+8100	8200	8300	8400	8500	8600	8700	8800	8900	9000	
+9100	9200	9300	9400	9500	9600	9700	9800	9900	10000	
+10100	10200	10300	10400	10500	10600	10700	10800	10900	11000	
+11100	11200	11300	11400	11500	11600	11700	11800	11900	12000	
+12100	12200	12300	12400	12500	12600	12700	12800	12900	13000	
+13100	13200	13300	13400	13500	13600	13700	13800	13900	14000	
+14100	14200	14300	14400	14500	14600	14700	14800	14900	15000	
+15100	15200	15300	15400	15500	15600	15700	15800	15900	16000	
+16100	16200	16300	16400	16500	16600	16700	16800	16900	0	
+100	200	300	400	500	600	700	800	900	1000	
+1100	1200	1300	1400	1500	1600	1700	1800	1900	2000	
+2100	2200	2300	2400	2500	2600	2700	2800	2900	3000	
+3100	3200	3300	3400	3500	3600	3700	3800	3900	4000	
+4100	4200	4300	4400	4500	4600	4700	4800	4900	5000	
+5100	5200	5300	5400	5500	5600	5700	5800	5900	6000	
+6100	6200	6300	6400	6500	6600	6700	6800	6900	7000	
+7100	7200	7300	7400	7500	7600	7700	7800	7900	8000	
+8100	8200	8300	8400	8500	8600	8700	8800	8900	9000	
+9100	9200	9300	9400	9500	9600	9700	9800	9900	10000	
+10100	10200	10300	10400	10500	10600	10700	10800	10900	11000	
+11100	11200	11300	11400	11500	11600	11700	11800	11900	12000	
+12100	12200	12300	12400	12500	12600	12700	12800	12900	13000	
+13100	13200	13300	13400	13500	13600	13700	13800	13900	14000	
+14100	14200	14300	14400	14500	14600	14700	14800	14900	15000	
+15100	15200	15300	15400	15500	15600	15700	15800	15900	16000	
+16100	16200	16300	16400	16500	16600	16700	16800	16900	CUDA_VISIBLE_DEVICES=0 python ge_data_all_llama2chat.py --start 0 --end 17000 --index 0 --outdir /home/dalhxwlyjsuo_20T/LD_train_data/llama2-7b/ShareGPT_68000 --data_path /home/dalhxwlyjsuo/criait_liuf/zmc_data/ShareGPT_V4.3_unfiltered_cleaned_split.json --model_path /home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf --dataset_name ShareGPT
+CUDA_VISIBLE_DEVICES=1 python ge_data_all_llama2chat.py --start 17000 --end 34000 --index 1 --outdir /home/dalhxwlyjsuo_20T/LD_train_data/llama2-7b/ShareGPT_68000 --data_path /home/dalhxwlyjsuo/criait_liuf/zmc_data/ShareGPT_V4.3_unfiltered_cleaned_split.json --model_path /home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf --dataset_name ShareGPT
+CUDA_VISIBLE_DEVICES=2 python ge_data_all_llama2chat.py --start 34000 --end 51000 --index 2 --outdir /home/dalhxwlyjsuo_20T/LD_train_data/llama2-7b/ShareGPT_68000 --data_path /home/dalhxwlyjsuo/criait_liuf/zmc_data/ShareGPT_V4.3_unfiltered_cleaned_split.json --model_path /home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf --dataset_name ShareGPT
+CUDA_VISIBLE_DEVICES=3 python ge_data_all_llama2chat.py --start 51000 --end 68000 --index 3 --outdir /home/dalhxwlyjsuo_20T/LD_train_data/llama2-7b/ShareGPT_68000 --data_path /home/dalhxwlyjsuo/criait_liuf/zmc_data/ShareGPT_V4.3_unfiltered_cleaned_split.json --model_path /home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf --dataset_name ShareGPT

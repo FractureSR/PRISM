@@ -168,7 +168,7 @@ def get_model_answers(
         tree_choices,
 ):
     #temperature = 0.0
-
+    """
     model = EaModel.from_pretrained(
         base_model_path=base_model_path,
         ea_model_path=ea_model_path,
@@ -176,6 +176,16 @@ def get_model_answers(
         low_cpu_mem_usage=True,
         # load_in_8bit=True,
         device_map="auto"
+    )
+    """
+    from LD.large_drafter import LDModel
+    model = LDModel.from_pretrained(
+        base_model_path=base_model_path,
+        ea_model_path=ea_model_path,
+        torch_dtype=torch.float16,
+        low_cpu_mem_usage=True,
+        # load_in_8bit=True,
+        device_map="auto",
     )
 
     tokenizer = model.get_tokenizer()

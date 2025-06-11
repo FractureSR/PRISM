@@ -1,10 +1,11 @@
 import json
 import argparse
 
+from loguru import logger
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_file", type=str)
 args = parser.parse_args()
-
 
 f = open(args.input_file, 'r')
 lines = f.readlines()
@@ -18,4 +19,4 @@ for line in lines:
 
 avg_accept_length /= len(lines)
 
-print("acceptance length:", avg_accept_length)
+logger.info(f'[input_file = {args.input_file}, acceptance_length = {avg_accept_length:.5f}]')

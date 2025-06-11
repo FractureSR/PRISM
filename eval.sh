@@ -1,59 +1,66 @@
-pip install --upgrade pip
-pip install setuptools==69.5.1
-pip install -r requirements.txt --use-pep517
+#!/bin/bash
 
-## hass
+#SBATCH -p vip_gpu_01
+#SBATCH --gpus=1
 
-CUDA_VISIBLE_DEVICES=0 python -m evaluation.gen_ea_answer_llama2chat \
---ea-model-path \
---base-model-path \
---model-id llama2-chat-7b_hass \
---bench-name mt_bench \
---temperature 0 \
---seed 42
+module load anaconda/2024.10 cuda/12.1
+source activate LD
 
-CUDA_VISIBLE_DEVICES=1 python -m evaluation.gen_ea_answer_llama2chat \
---ea-model-path \
---base-model-path \
---model-id llama2-chat-7b_hass \
---bench-name mt_bench \
---temperature 1 \
---seed 42
+python -V
+nvcc -V
 
-## baseline
+export PYTHONPATH=$(pwd):${PYTHONPATH}
 
-CUDA_VISIBLE_DEVICES=2 python -m evaluation.gen_baseline_answer_llama2chat \
---ea-model-path \
---base-model-path \
---model-id llama2-chat-7b_naive\
---bench-name mt_bench \
---temperature 0 \
---seed 42
+PROJECT=llama2-7b
+NAME=Eagle2-800k
 
-CUDA_VISIBLE_DEVICES=3 python -m evaluation.gen_baseline_answer_llama2chat \
---ea-model-path \
---base-model-path \
---model-id llama2-chat-7b_naive \
---bench-name mt_bench \
---temperature 1 \
---seed 42
+EA_MODEL_DIR=/home/dalhxwlyjsuo_20T/LD_checkpoints/${PROJECT}/${NAME}
+EA_CONFIG_PATH=train/LD_llama_2_7B_config.json
+BASE_MODEL_PATH=/home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf
 
-## acceptance length
+echo "start time: $(date)"
 
-python -m evaluation.acceptance_length \
---input_file mt_bench/llama2-chat-7b_hass-temperature-0.0.jsonl
+for iter in {0..15}
+do
+  echo "iter: ${iter}"
 
-python -m evaluation.acceptance_length \
---input_file mt_bench/llama2-chat-7b_hass-temperature-1.0.jsonl
+  EA_MODEL_PATH=${EA_MODEL_DIR}/state_${iter}
+  cp ${EA_CONFIG_PATH} ${EA_MODEL_PATH}/config.json
 
-## speedup ratio
+  for bench_name in "mt_bench" "humaneval" "gsm8k" "alpaca" "sum" "qa"
+  do
+    echo "bench_name: ${bench_name}"
 
-python -m evaluation.speed \
---model_path \
---baseline_json mt_bench/llama2-chat-7b_naive-temperature-0.0.jsonl \
---hass_json mt_bench/llama2-chat-7b_hass-temperature-0.0.jsonl
+    for temperature in "0.0" "1.0"
+    do
+      echo "temperature: ${temperature}"
 
-python -m evaluation.speed \
---model_path \
---baseline_json mt_bench/llama2-chat-7b_naive-temperature-1.0.jsonl \
---hass_json mt_bench/llama2-chat-7b_hass-temperature-1.0.jsonl
+      CUDA_VISIBLE_DEVICES=0 python evaluation/gen_ea_answer_llama2chat.py \
+        --ea-model-path ${EA_MODEL_PATH} \
+        --base-model-path ${BASE_MODEL_PATH} \
+        --model-id ${PROJECT}/${NAME} \
+        --bench-name ${bench_name} \
+        --total-token 60 \
+        --depth 5 \
+        --top-k 10 \
+        --temperature ${temperature}
+
+      CUDA_VISIBLE_DEVICES=0 python evaluation/gen_baseline_answer_llama2chat.py \
+        --ea-model-path ${EA_MODEL_PATH} \
+        --base-model-path ${BASE_MODEL_PATH} \
+        --model-id ${PROJECT}/Naive \
+        --bench-name ${bench_name} \
+        --temperature ${temperature}
+
+      python evaluation/acceptance_length.py \
+        --input_file ${bench_name}/${PROJECT}/${NAME}-temperature-${temperature}.jsonl
+
+      python evaluation/speed.py \
+        --model_path ${BASE_MODEL_PATH} \
+        --baseline_json ${bench_name}/${PROJECT}/Naive-temperature-${temperature}.jsonl \
+        --hass_json ${bench_name}/${PROJECT}/${NAME}-temperature-${temperature}.jsonl
+    done
+  done
+done
+
+echo "end time: $(date)"

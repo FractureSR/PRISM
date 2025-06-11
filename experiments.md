@@ -1,6 +1,6 @@
-# llama2-7b
+# Large Drafter, LD
 
-Data distribution:
+## llama2-7b
 
 | Data Num. | ShareGPT | UltraChat | OpenThoughts2 |
 | --------- | -------- | --------- | ------------- |
@@ -14,9 +14,24 @@ Data distribution:
 - batch_size_per_gpu: 2
 - learning_rate: 3e-5
 
-## Eagle2
+### Eagle2
 
-**acceptance length $\tau$**
+#### config
+
+```json
+{
+  "eagle_config": {
+    "num_hidden_layers": 1
+  },
+  "num_steps": 1,
+  "num_step_models": 1,
+  "step_mapping": {
+    "0": 0
+  }
+}
+```
+
+#### acceptance length
 
 `temperature = 0`
 
@@ -38,9 +53,214 @@ Data distribution:
 | 600k (epoch=20) |          |           |       |        |        |               |      |
 | 800k (epoch=15) |          |           |       |        |        |               |      |
 
-## HASS
+#### speedup ratio
 
+`temperature = 0`
 
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
 
-## LD
+`temperature = 1`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+### HASS-1
+
+#### config
+
+```json
+{
+  "eagle_config": {
+    "num_hidden_layers": 1
+  },
+  "num_steps": 3,
+  "num_step_models": 1,
+  "step_mapping": {
+    "0": 0,
+    "1": 0,
+    "2": 0
+  }
+}
+```
+
+#### acceptance length
+
+`temperature = 0`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+`temperature = 1`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+#### speedup ratio
+
+`temperature = 0`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+`temperature = 1`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+### HASS-2
+
+#### config
+
+```json
+{
+  "eagle_config": {
+    "num_hidden_layers": 2
+  },
+  "num_steps": 3,
+  "num_step_models": 1,
+  "step_mapping": {
+    "0": 0,
+    "1": 0,
+    "2": 0
+  }
+}
+```
+
+#### acceptance length
+
+`temperature = 0`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+`temperature = 1`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+#### speedup ratio
+
+`temperature = 0`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+`temperature = 1`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+### LD
+
+#### config
+
+```json
+{
+  "eagle_config": {
+    "num_hidden_layers": 1
+  },
+  "num_steps": 3,
+  "num_step_models": 2,
+  "step_mapping": {
+    "0": 0,
+    "1": 1,
+    "2": 1
+  }
+}
+```
+
+#### acceptance length
+
+`temperature = 0`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+`temperature = 1`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+#### speedup ratio
+
+`temperature = 0`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
+
+`temperature = 1`
+
+| Data Num.       | MT-bench | HumanEval | GSM8K | Alpaca | CNN/DM | Natural Ques. | Mean |
+| --------------- | -------- | --------- | ----- | ------ | ------ | ------------- | ---- |
+| 100k (epoch=40) |          |           |       |        |        |               |      |
+| 200k (epoch=30) |          |           |       |        |        |               |      |
+| 400k (epoch=25) |          |           |       |        |        |               |      |
+| 600k (epoch=20) |          |           |       |        |        |               |      |
+| 800k (epoch=15) |          |           |       |        |        |               |      |
 

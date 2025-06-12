@@ -23,10 +23,12 @@
     "use_cache": false,
     "vocab_size": 32000
   },
-  "num_steps": 1,
+  "num_steps": 3,
   "num_step_models": 1,
   "step_mapping": {
-    "0": 0
+    "0": 0,
+    "1": 0,
+    "2": 0
   },
   "use_adapter": false
 }

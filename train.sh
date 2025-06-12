@@ -15,7 +15,7 @@ export PYTHONPATH=$(pwd):${PYTHONPATH}
 export WANDB_API_KEY=05ac0c7fac19bec004160369c32723326fa8a618
 
 PROJECT=LD-llama2-7b
-NAME=Eagle2-800k
+NAME=HASS-1-800k
 
 LARGE_PATH=/home/dalhxwlyjsuo_20T
 BASE_PATH=/home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf
@@ -33,7 +33,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 accelerate launch --mixed_precision=bf16 tr
     --bs 2 \
     --topk 10 \
     --topk_w 0 \
-    --forward_num_total 1 \
+    --forward_num_total 3 \
     --data_num 800000
 
 echo "end time: $(date)"

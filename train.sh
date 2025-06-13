@@ -15,10 +15,11 @@ export PYTHONPATH=$(pwd):${PYTHONPATH}
 export WANDB_API_KEY=05ac0c7fac19bec004160369c32723326fa8a618
 
 PROJECT=LD-llama2-7b
-NAME=HASS-1-800k
+NAME=LD-800k
 
 LARGE_PATH=/home/dalhxwlyjsuo_20T
 BASE_PATH=/home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf
+CONFIG_PATH=train/llama2-7b/LD_config.json
 
 echo "start time: $(date)"
 
@@ -28,7 +29,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 accelerate launch --mixed_precision=bf16 tr
     --basepath ${BASE_PATH} \
     --tmpdir ${LARGE_PATH}/LD_train_data/llama2-7b \
     --cpdir ${LARGE_PATH}/LD_checkpoints/llama2-7b/${NAME} \
-    --configpath train/LD_llama_2_7B_config.json \
+    --configpath ${CONFIG_PATH} \
     --epoch 15 \
     --bs 2 \
     --topk 10 \

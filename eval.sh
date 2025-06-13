@@ -12,10 +12,10 @@ nvcc -V
 export PYTHONPATH=$(pwd):${PYTHONPATH}
 
 PROJECT=llama2-7b
-NAME=Eagle2-800k
+NAME=LD-800k
 
 EA_MODEL_DIR=/home/dalhxwlyjsuo_20T/LD_checkpoints/${PROJECT}/${NAME}
-EA_CONFIG_PATH=train/LD_llama_2_7B_config.json
+EA_CONFIG_PATH=train/llama2-7b/LD_config.json
 BASE_MODEL_PATH=/home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf
 
 echo "start time: $(date)"
@@ -52,13 +52,10 @@ do
         --bench-name ${bench_name} \
         --temperature ${temperature}
 
-      python evaluation/acceptance_length.py \
-        --input_file ${bench_name}/${PROJECT}/${NAME}-temperature-${temperature}.jsonl
-
-      python evaluation/speed.py \
+      python evaluation/summary.py \
         --model_path ${BASE_MODEL_PATH} \
         --baseline_json ${bench_name}/${PROJECT}/Naive-temperature-${temperature}.jsonl \
-        --hass_json ${bench_name}/${PROJECT}/${NAME}-temperature-${temperature}.jsonl
+        --LD_json ${bench_name}/${PROJECT}/${NAME}-temperature-${temperature}.jsonl
     done
   done
 done

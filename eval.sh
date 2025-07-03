@@ -56,6 +56,9 @@ do
         --model_path ${BASE_MODEL_PATH} \
         --baseline_json ${bench_name}/${PROJECT}/Naive-temperature-${temperature}.jsonl \
         --LD_json ${bench_name}/${PROJECT}/${NAME}-temperature-${temperature}.jsonl
+
+      python evaluation/conditional_accept_rate.py \
+        --input_file ${bench_name}/${PROJECT}/${NAME}-temperature-${temperature}.jsonl
     done
   done
 done

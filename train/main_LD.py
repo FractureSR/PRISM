@@ -382,6 +382,7 @@ with open(train_config["config_path"]) as f:
     config = json.load(f)
 assert config.get("use_adapter", False) == args.use_adapter
 model = LargeDrafter(config, load_emb=True, path=args.basepath)
+logger.info(model)
 
 if args.ckpt_path is not None:
     ea_model_path = args.ckpt_path

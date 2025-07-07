@@ -22,6 +22,8 @@ parser.add_argument('--data_num', type=int, default=68000)
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--use_adapter', action='store_true')
 parser.add_argument('--train_LD', action='store_true')
+parser.add_argument('--hass_path', type=str, default=None)
+parser.add_argument('--v_w', type=float, default=1.0)
 
 args = parser.parse_args()
 
@@ -40,7 +42,7 @@ train_config = {
     "num_warmup_steps": warm_steps,
     "total_steps": total_steps,
     "p_w": 0.1,
-    "v_w": 1.0,
+    "v_w": args.v_w,
     "topk_w": args.topk_w,
     "head_w": 0.1,
     "num_workers": 2,
@@ -381,7 +383,7 @@ if accelerator.is_main_process:
 with open(train_config["config_path"]) as f:
     config = json.load(f)
 assert config.get("use_adapter", False) == args.use_adapter
-model = LargeDrafter(config, load_emb=True, path=args.basepath)
+model = LargeDrafter(config, load_emb=True, path=args.basepath, hass_path=args.hass_path)
 logger.info(model)
 
 if args.ckpt_path is not None:

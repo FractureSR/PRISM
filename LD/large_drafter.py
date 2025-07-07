@@ -1,4 +1,5 @@
 # implements the Large Drafter
+import copy
 import json
 import torch
 from torch import nn
@@ -44,6 +45,7 @@ class LargeDrafter(Model):
             depth=5,
             top_k=8,
             threshold=1.0,
+            hass_path: str = None
     ):
         eagle_config = EConfig(**config["eagle_config"])
         super().__init__(
@@ -95,6 +97,12 @@ class LargeDrafter(Model):
                     bias=bias,
                 )
             )
+
+        if hass_path:
+            self.load_state_dict(torch.load(hass_path, map_location='cpu', weights_only=True), strict=False)
+            for step in range(1, self.num_step_models):
+                self.stepModels[step] = copy.deepcopy(self.stepModels[0])
+                self.stepFCs[step] = copy.deepcopy(self.stepFCs[0])
 
         # replace
         self.current_step = 0

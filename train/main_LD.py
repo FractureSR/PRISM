@@ -460,8 +460,7 @@ for epoch in range(num_epochs + 1):
                     q_hidden_states = torch.cat([q_hidden_states, new_q_hidden_states], dim=0)
                     ### q_hidden_states always maintains the hidden states of different generation steps
 
-                if not args.train_LD:
-                    q_hidden_states = q_hidden_states.detach()
+                q_hidden_states = q_hidden_states.detach()
                 ### see here, the gradient is detached
 
                 if not args.use_adapter:

@@ -33,12 +33,12 @@ exps = {
             [4.86165, 4.94343, 5.04385, 5.06115, 5.09524]
         ],
         'HASS-2': [
-            [4.91999, np.nan, np.nan, np.nan, np.nan],
-            [4.65474, np.nan, np.nan, np.nan, np.nan]
+            [4.9113, 5.19081, np.nan, np.nan, np.nan],
+            [4.71352, 4.90956, np.nan, np.nan, np.nan]
         ],
         'LD': [
-            [4.72376, np.nan, np.nan, np.nan, np.nan],
-            [4.5262, np.nan, np.nan, np.nan, np.nan]
+            [4.72376, 4.97735, np.nan, 5.14218, np.nan],
+            [4.5262, 4.8009, np.nan, 4.97107, np.nan]
         ]
     },
     'HumanEval': {
@@ -51,12 +51,12 @@ exps = {
             [5.37265, 5.587, 5.66884, 5.64579, 5.58696]
         ],
         'HASS-2': [
-            [5.58743, np.nan, np.nan, np.nan, np.nan],
-            [5.22287, np.nan, np.nan, np.nan, np.nan]
+            [5.63561, 5.86103, np.nan, np.nan, np.nan],
+            [5.27732, 5.5318, np.nan, np.nan, np.nan]
         ],
         'LD': [
-            [5.41697, np.nan, np.nan, np.nan, np.nan],
-            [5.17176, np.nan, np.nan, np.nan, np.nan]
+            [5.41697, 5.67674, np.nan, 5.85458, np.nan],
+            [5.17176, 5.30286, np.nan, 5.48945, np.nan]
         ]
     },
     'GSM8K': {
@@ -69,12 +69,12 @@ exps = {
             [5.17258, 5.32093, 5.24608, 5.38297, 5.31655]
         ],
         'HASS-2': [
-            [4.97048, np.nan, np.nan, np.nan, np.nan],
-            [4.89504, np.nan, np.nan, np.nan, np.nan]
+            [4.89362, 5.24609, np.nan, np.nan, np.nan],
+            [4.90676, 5.25429, np.nan, np.nan, np.nan]
         ],
         'LD': [
-            [4.79334, np.nan, np.nan, np.nan, np.nan],
-            [4.7594, np.nan, np.nan, np.nan, np.nan]
+            [4.79334, 5.06666, np.nan, 5.29949, np.nan],
+            [4.7594, 5.07371, np.nan, 5.23089, np.nan]
         ]
     },
     'Alpaca': {
@@ -87,12 +87,12 @@ exps = {
             [4.77251, 4.94477, 5.03474, 5.18521, 5.14378]
         ],
         'HASS-2': [
-            [4.71984, np.nan, np.nan, np.nan, np.nan],
-            [4.6133, np.nan, np.nan, np.nan, np.nan]
+            [4.73942, 5.02261, np.nan, np.nan, np.nan],
+            [4.54586, 4.86426, np.nan, np.nan, np.nan]
         ],
         'LD': [
-            [4.59303, np.nan, np.nan, np.nan, np.nan],
-            [4.4966, np.nan, np.nan, np.nan, np.nan]
+            [4.59303, 4.88052, np.nan, 5.10804, np.nan],
+            [4.4966, 4.77051, np.nan, 4.88588, np.nan]
         ]
     },
     'CNN/DM': {
@@ -105,12 +105,12 @@ exps = {
             [4.44409, 4.61786, 4.67893, 4.76209, 4.72477]
         ],
         'HASS-2': [
-            [4.49193, np.nan, np.nan, np.nan, np.nan],
-            [4.28667, np.nan, np.nan, np.nan, np.nan]
+            [4.50159, 4.79532, np.nan, np.nan, np.nan],
+            [4.27233, 4.5571, np.nan, np.nan, np.nan]
         ],
         'LD': [
-            [4.37033, np.nan, np.nan, np.nan, np.nan],
-            [4.08461, np.nan, np.nan, np.nan, np.nan]
+            [4.37033, 4.60186, np.nan, 4.79576, np.nan],
+            [4.08461, 4.37658, np.nan, 4.52514, np.nan]
         ]
     },
     'Natural Ques.': {
@@ -123,12 +123,12 @@ exps = {
             [4.45015, 4.55391, 4.69417, 4.74354, 4.7457]
         ],
         'HASS-2': [
-            [4.27417, np.nan, np.nan, np.nan, np.nan],
-            [4.15626, np.nan, np.nan, np.nan, np.nan]
+            [4.2854, 4.56277, np.nan, np.nan, np.nan],
+            [4.16904, 4.45552, np.nan, np.nan, np.nan]
         ],
         'LD': [
-            [4.12356, np.nan, np.nan, np.nan, np.nan],
-            [4.01658, np.nan, np.nan, np.nan, np.nan]
+            [4.12356, 4.39569, np.nan, 4.6079, np.nan],
+            [4.01658, 4.18008, np.nan, 4.47593, np.nan]
         ]
     }
 }

@@ -23,6 +23,7 @@ parser.add_argument('--debug', action='store_true')
 parser.add_argument('--use_adapter', action='store_true')
 parser.add_argument('--train_LD', action='store_true')
 parser.add_argument('--hass_path', type=str, default=None)
+parser.add_argument('--p_w', type=float, default=0.1)
 parser.add_argument('--v_w', type=float, default=1.0)
 
 args = parser.parse_args()
@@ -41,7 +42,7 @@ train_config = {
     # Depending on your data and model size, the larger the model, the higher the sample efficiency. We recommend setting it between 20-40.
     "num_warmup_steps": warm_steps,
     "total_steps": total_steps,
-    "p_w": 0.1,
+    "p_w": args.p_w,
     "v_w": args.v_w,
     "topk_w": args.topk_w,
     "head_w": 0.1,
@@ -460,7 +461,8 @@ for epoch in range(num_epochs + 1):
                     q_hidden_states = torch.cat([q_hidden_states, new_q_hidden_states], dim=0)
                     ### q_hidden_states always maintains the hidden states of different generation steps
 
-                q_hidden_states = q_hidden_states.detach()
+                if not args.train_LD:
+                    q_hidden_states = q_hidden_states.detach()
                 ### see here, the gradient is detached
 
                 if not args.use_adapter:

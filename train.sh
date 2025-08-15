@@ -35,6 +35,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 accelerate launch --mixed_precision=bf16 tr
     --topk 10 \
     --topk_w 0 \
     --forward_num_total 3 \
-    --data_num 800000
+    --data_num 800000 \
+    --train_LD
 
 echo "end time: $(date)"

@@ -242,11 +242,10 @@ class InferLargeDrafter(InferModel):
 
         # replace
         self.current_step = 0
-        del self.layers
-        self.layers = self.stepModels[self.step_mapping[str(self.current_step)]]
-        del self.fc
-        self.fc = self.stepFCs[self.step_mapping[str(self.current_step)]]
-        self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
+        self.layers = nn.ModuleList([InferLlamaDecoderLayerMoE(eagle_config, index, moe_config)
+                                     for index in range(eagle_config.num_hidden_layers)])
+        self.fc = nn.Linear(2 * eagle_config.hidden_size, eagle_config.hidden_size, bias=bias)
+        self.stepAdapter = nn.Linear(eagle_config.hidden_size, eagle_config.hidden_size, bias=bias)
 
     def forward(
             self,

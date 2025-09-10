@@ -46,7 +46,7 @@ train_config = {
     "v_w": args.v_w,
     "topk_w": args.topk_w,
     "head_w": 0.1,
-    "num_workers": 2,
+    "num_workers": 8,
     "embeding": True,
     "act": "No",
     "data_noise": True,

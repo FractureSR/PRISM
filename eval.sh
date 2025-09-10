@@ -1,26 +1,22 @@
 #!/bin/bash
-
-#SBATCH -p vip_gpu_01
-#SBATCH --gpus=1
-
-module load anaconda/2024.10 cuda/12.1
-source activate LD
-
-python -V
-nvcc -V
+#SBATCH -J LD_eval_model
+#SBATCH -p gpu
+#SBATCH -N 1
+#SBATCH -n 16
+#SBATCH --gres=gpu:1
 
 export PYTHONPATH=$(pwd):${PYTHONPATH}
 
-PROJECT=llama2-7b
-NAME=LD-800k
+PROJECT=llama3-8b
+NAME=Eagle2-100k
 
-EA_MODEL_DIR=/home/dalhxwlyjsuo_20T/LD_checkpoints/${PROJECT}/${NAME}
-EA_CONFIG_PATH=train/llama2-7b/LD_config.json
-BASE_MODEL_PATH=/home/dalhxwlyjsuo/criait_liuf/wxl_model/Llama-2-7b-chat-hf
+EA_MODEL_DIR=checkpoints/${PROJECT}/${NAME}
+EA_CONFIG_PATH=train/llama3-8b/Eagle2_config.json
+BASE_MODEL_PATH=/mnt/inaisfs/data/home/liuf_criait/data/model/Llama-3-8B-Instruct
 
 echo "start time: $(date)"
 
-for iter in {0..15}
+for iter in {39..39}
 do
   echo "iter: ${iter}"
 
@@ -35,7 +31,7 @@ do
     do
       echo "temperature: ${temperature}"
 
-      CUDA_VISIBLE_DEVICES=0 python evaluation/gen_ea_answer_llama2chat.py \
+      CUDA_VISIBLE_DEVICES=0 python evaluation/gen_ea_answer_llama3chat.py \
         --ea-model-path ${EA_MODEL_PATH} \
         --base-model-path ${BASE_MODEL_PATH} \
         --model-id ${PROJECT}/${NAME} \
@@ -45,12 +41,12 @@ do
         --top-k 10 \
         --temperature ${temperature}
 
-      CUDA_VISIBLE_DEVICES=0 python evaluation/gen_baseline_answer_llama2chat.py \
-        --ea-model-path ${EA_MODEL_PATH} \
-        --base-model-path ${BASE_MODEL_PATH} \
-        --model-id ${PROJECT}/Naive \
-        --bench-name ${bench_name} \
-        --temperature ${temperature}
+#      CUDA_VISIBLE_DEVICES=0 python evaluation/gen_baseline_answer_llama3chat.py \
+#        --ea-model-path ${EA_MODEL_PATH} \
+#        --base-model-path ${BASE_MODEL_PATH} \
+#        --model-id ${PROJECT}/Naive \
+#        --bench-name ${bench_name} \
+#        --temperature ${temperature}
 
       python evaluation/summary.py \
         --model_path ${BASE_MODEL_PATH} \

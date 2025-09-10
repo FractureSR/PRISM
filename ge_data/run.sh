@@ -2,14 +2,14 @@
 #SBATCH -J LD_train_data
 #SBATCH -p gpu
 #SBATCH -N 1
-#SBATCH -n 64
+#SBATCH -n 128
 #SBATCH --gres=gpu:8
 
 SCRIPT=ge_data_all_llama3.py
 
-OUTPUT_DIR=train_data/llama3-8b
+OUTPUT_DIR=llama3-8b
 DATA_DIR=/mnt/inaisfs/data/home/liuf_criait/data/dataset
-MODEL_DIR=/mnt/inaisfs/data/home/liuf_criait/data/model/Llama-3.1-8B-Instruct
+MODEL_DIR=/mnt/inaisfs/data/home/liuf_criait/data/model/Llama-3-8B-Instruct
 
 echo "start time: $(date)"
 
@@ -37,7 +37,7 @@ python allocation.py \
     --data_path ${DATA_DIR}/OpenThoughts2-1M \
     --model_path ${MODEL_DIR} \
     --dataset_name OpenThoughts2 \
-    --num_rows 269000 \
+    --num_rows 369000 \
     --num_gpus 8
 
 echo "end time: $(date)"

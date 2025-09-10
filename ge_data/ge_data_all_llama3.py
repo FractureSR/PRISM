@@ -85,7 +85,7 @@ def build_dataset_rank(tokenizer):
 
     ds = merged_dataset
 
-    # ds = ds.shuffle(seed=42)
+    ds = ds.shuffle(seed=42)
     ds1 = ds.select(range(args.start, args.end))
     original_columns1 = ds1.column_names
     num_proc = 4

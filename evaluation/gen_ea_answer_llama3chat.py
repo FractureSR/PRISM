@@ -3,15 +3,14 @@
 Usage:
 python3 gen_model_answer.py --model-path lmsys/fastchat-t5-3b-v1.0 --model-id fastchat-t5-3b-v1.0
 """
+
 import argparse
 import json
 import os
+
 script_dir = os.path.dirname(__file__)
 parent_dir = os.path.dirname(script_dir)
-#os.environ["CUDA_VISIBLE_DEVICES"] = "7"
-from accelerate.utils import set_seed
-set_seed(0)
-
+# os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 import time
 
 import shortuuid
@@ -19,9 +18,9 @@ from fastchat.llm_judge.common import load_questions
 from tqdm import tqdm
 
 from model.ea_model import EaModel
+from LD.large_drafter import LDModel
 from model.kv_cache import initialize_past_key_values
 from model.utils import *
-
 
 import random
 import torch
@@ -29,11 +28,11 @@ import numpy as np
 
 
 def setup_seed(seed):
-     torch.manual_seed(seed)
-     torch.cuda.manual_seed_all(seed)
-     np.random.seed(seed)
-     random.seed(seed)
-     torch.backends.cudnn.deterministic = True
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.backends.cudnn.deterministic = True
 
 
 def run_eval(
@@ -109,6 +108,7 @@ def get_model_answers(
 ):
     # temperature = 0.0
 
+    """
     model = EaModel.from_pretrained(
         base_model_path=base_model_path,
         ea_model_path=ea_model_path,
@@ -119,6 +119,18 @@ def get_model_answers(
         low_cpu_mem_usage=True,
         # load_in_8bit=True,
         device_map="auto"
+    )
+    """
+    model = LDModel.from_pretrained(
+        base_model_path=base_model_path,
+        ea_model_path=ea_model_path,
+        total_token=args.total_token,
+        depth=args.depth,
+        top_k=args.top_k,
+        torch_dtype=torch.float16,
+        low_cpu_mem_usage=True,
+        # load_in_8bit=True,
+        device_map="auto",
     )
 
     tokenizer = model.get_tokenizer()
@@ -159,7 +171,7 @@ def get_model_answers(
                 tokenize=False,
                 add_generation_prompt=True,
             )
-            input_ids = tokenizer([prompt],add_special_tokens=False,).input_ids
+            input_ids = tokenizer([prompt], add_special_tokens=False, ).input_ids
 
             # try:
             torch.cuda.synchronize()
@@ -203,8 +215,6 @@ def get_model_answers(
                 else:
                     output = output.replace(special_token, "")
             output = output.strip()
-
-
 
             turns.append(output)
             idxs.append(int(idx))
@@ -297,7 +307,8 @@ def get_model_answers(
                     "content": output
                 })
             # torch.cuda.empty_cache()
-            choices.append({"index": i, "turns": turns, "idxs": idxs, "new_tokens": new_tokens, "wall_time": wall_time, "accept_length": accept_length_lists})
+            choices.append({"index": i, "turns": turns, "idxs": idxs, "new_tokens": new_tokens, "wall_time": wall_time,
+                            "accept_length": accept_length_lists})
 
         # Dump answers
         os.makedirs(os.path.dirname(answer_file), exist_ok=True)

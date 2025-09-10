@@ -75,5 +75,6 @@ if __name__ == '__main__':
     temperature = args.LD_json.split('-temperature-')[1][0]
     table = PrettyTable()
     table.field_names = ['Temperature', 'Benchmark', 'Speedup Ratio', 'Acceptance Length']
-    table.add_row([temperature, benchmark, speedup_ratio(), acceptance_length()])
+    # table.add_row([temperature, benchmark, speedup_ratio(), acceptance_length()])
+    table.add_row([temperature, benchmark, '-', acceptance_length()])
     print(table)

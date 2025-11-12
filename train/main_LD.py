@@ -93,7 +93,7 @@ from transformers import get_linear_schedule_with_warmup, AutoConfig
 if accelerator.is_main_process:
     import wandb
 
-    wandb.init(project=args.project, name=args.name, mode='offline', config=train_config)
+    wandb.init(entity='ciai-llm', project=args.project, name=args.name, mode='offline', config=train_config)
 
 baseconfig = AutoConfig.from_pretrained(args.basepath)
 
@@ -457,7 +457,7 @@ for epoch in range(num_epochs + 1):
                     ### then an additional dimension is added
                 else:
                     new_q_hidden_states = torch.cat([q_hidden_states[-1][:, :1, :], predict[:, :-1, :]], dim=1)[None, :,
-                                          :, :]
+                    :, :]
                     q_hidden_states = torch.cat([q_hidden_states, new_q_hidden_states], dim=0)
                     ### q_hidden_states always maintains the hidden states of different generation steps
 
@@ -555,10 +555,10 @@ for epoch in range(num_epochs + 1):
                                                    q_hidden_states=q_hidden_states)
                     if q_hidden_states is None:
                         q_hidden_states = torch.cat([data["hidden_states"][:, :1, :], predict[:, :-1, :]], dim=1)[None,
-                                          :, :, :]
+                        :, :, :]
                     else:
                         new_q_hidden_states = torch.cat([q_hidden_states[-1][:, :1, :], predict[:, :-1, :]], dim=1)[
-                                              None, :, :, :]
+                            None, :, :, :]
                         q_hidden_states = torch.cat([q_hidden_states, new_q_hidden_states], dim=0)
 
                 target_head = head(data["target"])

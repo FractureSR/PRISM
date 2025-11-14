@@ -37,7 +37,7 @@ python allocation.py \
     --data_path ${DATA_DIR}/OpenThoughts2-1M \
     --model_path ${MODEL_DIR} \
     --dataset_name OpenThoughts2 \
-    --num_rows 369000 \
+    --num_rows 269000 \
     --num_gpus 8
 
 echo "end time: $(date)"

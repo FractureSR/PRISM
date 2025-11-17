@@ -1,5 +1,5 @@
 import argparse
-import random
+import re
 
 from loguru import logger
 
@@ -65,9 +65,9 @@ train_config = {
 import json
 import safetensors
 from safetensors import safe_open
-# from transformers import AutoModelForCausalLM, AutoTokenizer,AutoModelForSequenceClassification
+from datasets import load_dataset, concatenate_datasets
+from transformers import AutoModelForCausalLM, AutoTokenizer
 import os
-# os.environ["CUDA_VISIBLE_DEVICES"] = "0,1
 import torch
 
 torch.backends.cuda.matmul.allow_tf32 = True
@@ -75,18 +75,17 @@ from accelerate import Accelerator
 from accelerate.utils import set_seed
 
 set_seed(0)
-accelerator = Accelerator(mixed_precision='bf16',
-                          gradient_accumulation_steps=train_config["gradient_accumulation_steps"])
-# from model.cnets_hass import Model
-# from model.configs import EConfig
+accelerator = Accelerator(
+    mixed_precision='bf16',
+    gradient_accumulation_steps=train_config["gradient_accumulation_steps"]
+)
 from LD.large_drafter import LargeDrafter
 
 from typing import Any, Dict, List
 
 from torch import nn, optim
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 from tqdm import tqdm
-# import accelerate
 import numpy as np
 from transformers import get_linear_schedule_with_warmup, AutoConfig
 
@@ -121,139 +120,6 @@ head.eval()
 
 for param in head.parameters():
     param.requires_grad = False
-
-
-def list_files(
-        path: str,
-        index_file_name: str = 'index.txt',
-        num: int = 800000
-):
-    datapath = []
-
-    index_file_path = os.path.join(path, index_file_name)
-    if os.path.exists(index_file_path):
-        logger.info('data index file exists.')
-        with open(index_file_path, mode='r', encoding='utf-8') as reader:
-            for line in reader:
-                file_path = line.strip()
-                datapath.append(file_path)
-    else:
-        for root, _, files in os.walk(path):
-            for file in files:
-                file_path = os.path.join(root, file)
-                datapath.append(file_path)
-
-        random.seed(42)
-        random.shuffle(datapath)
-        with open(index_file_path, mode='w', encoding='utf-8') as writer:
-            for file_path in datapath:
-                writer.write(file_path + '\n')
-
-    logger.info(f'there are {len(datapath)} samples, select first {num}.')
-    return datapath[:num]
-
-
-class AddGaussianNoise:
-    def __init__(self, mean=0.0, std=0.0):
-        self.mean = mean
-        self.std = std
-
-    def __call__(self, data):
-        tensor = data["hidden_state_big"]
-        noise = torch.randn(tensor.size()) * self.std + self.mean
-        noisy_tensor = tensor + noise
-        data["hidden_state_big"] = noisy_tensor
-        return data
-
-
-class AddUniformNoise:
-    def __init__(self, std=0.0):
-        self.std = std
-
-    def __call__(self, data):
-        tensor = data["hidden_state_big"]
-        noise = (torch.rand_like(tensor) - 0.5) * self.std * 512 / tensor.shape[1]
-        noisy_tensor = tensor + noise
-        data["hidden_state_big"] = noisy_tensor
-        return data
-
-
-class CustomDataset(Dataset):
-    def __init__(self, datapath, transform=None):
-        self.data = datapath
-        self.transform = transform
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, index):
-        # try:
-        data = torch.load(self.data[index])
-        new_data = {}
-        hidden_state = data['hidden_state'][:train_config["max_len"]][None, :]
-        input_ids = data['input_ids'][:train_config["max_len"]][None, :]
-        loss_mask = data["loss_mask"][:train_config["max_len"]][None, :]
-
-        length = hidden_state.shape[1]
-        # length_q = data['query_ids'].shape[1]
-        attention_mask = [1] * length
-        loss_mask = loss_mask[0].tolist()
-        loss_mask[-1] = 0
-
-        input_ids_target = input_ids[:, 1:]
-        zeropadding = torch.tensor([[0]])
-        input_ids_target = torch.cat((input_ids_target, zeropadding), dim=1)
-
-        target = hidden_state[:, 1:, :]
-        zeropadding = torch.zeros(1, 1, target.shape[2])
-        target = torch.cat((target, zeropadding), dim=1)
-        loss_mask[-1] = 0
-        new_data["attention_mask"] = attention_mask
-        new_data["loss_mask"] = loss_mask
-        new_data["target"] = target
-        new_data["hidden_state_big"] = hidden_state
-        new_data["input_ids"] = input_ids_target
-
-        if self.transform:
-            new_data = self.transform(new_data)
-
-        return new_data
-
-
-class DataCollatorWithPadding:
-
-    def paddingtensor(self, intensors, N):
-        B, n, S = intensors.shape
-        # padding_tensor = torch.zeros(B, N - n, S,dtype=intensors.dtype)
-        padding_tensor = torch.zeros(B, N - n, S)
-        outtensors = torch.cat((intensors, padding_tensor), dim=1)
-        return outtensors
-
-    def paddingtensor2D(self, intensors, N):
-        B, n = intensors.shape
-        padding_tensor = torch.zeros(B, N - n, dtype=intensors.dtype)
-        outtensors = torch.cat((intensors, padding_tensor), dim=1)
-        return outtensors
-
-    def __call__(self, features: List[Dict[str, Any]]) -> Dict[str, Any]:
-        max_length = max(item['hidden_state_big'].shape[1] for item in features)
-        batch_input_ids = torch.cat([self.paddingtensor2D(item['input_ids'], max_length) for item in features])
-        batch_hidden_states = torch.cat([self.paddingtensor(item['hidden_state_big'], max_length) for item in features])
-        batch_target = torch.cat([self.paddingtensor(item['target'], max_length) for item in features])
-        batch_loss_mask = torch.tensor(
-            [item['loss_mask'] + [0] * (max_length - len(item['loss_mask'])) for item in features])
-        batch_attention_mask = torch.tensor(
-            [item['attention_mask'] + [0] * (max_length - len(item['attention_mask'])) for item in features])
-        # batch_loss_mask = torch.ones_like(batch_loss_mask)
-        # batch_attention_mask=torch.ones_like(batch_attention_mask)
-        batch = {
-            "input_ids": batch_input_ids,
-            "hidden_states": batch_hidden_states,
-            "target": batch_target,
-            "attention_mask": batch_attention_mask,
-            "loss_mask": batch_loss_mask,
-        }
-        return batch
 
 
 def top_accuracy(output, target, topk=(1,)):
@@ -338,9 +204,9 @@ def getkacc(model, data, head, max_length=5):
         generate_ids = outs[:, pre_len:]
         for bid in range(bs):
             for k in range(max_length):
-                if loss_mask[bid, pre_len + k] == 0:
-                    break
                 if pre_len + k >= seq_len:
+                    break
+                if loss_mask[bid, pre_len + k] == 0:
                     break
                 total[k] += 1
                 if generate_ids[bid, k] == target_ids[bid, pre_len + k - 1]:
@@ -354,38 +220,233 @@ def getkacc(model, data, head, max_length=5):
     return acc
 
 
-if train_config["data_noise"]:
-    if train_config["noise"] == "uniform":
-        aug = AddUniformNoise(std=train_config["std"])
-    else:
-        aug = AddGaussianNoise(mean=train_config["mean"], std=train_config["std"])
-else:
-    aug = None
+# =================
+#      DATASET
+# =================
+SEED = 42
 
-datapath = list_files(train_config["datapath"], num=train_config["data_num"])
+dataset_info = {
+    "ShareGPT": {
+        "conv_key": "conversations",
+        "role_key": "from",
+        "content_key": "value"
+    },
+    "UltraChat": {
+        "conv_key": "messages",
+        "role_key": "role",
+        "content_key": "content"
+    },
+    "OpenThoughts2": {
+        "conv_key": "conversations",
+        "role_key": "from",
+        "content_key": "value"
+    }
+}
 
-traindatapath = datapath[:int(len(datapath) * 0.95)]
-testdatapath = datapath[int(len(datapath) * 0.95):]
 
-traindataset = CustomDataset(traindatapath, transform=aug)
-testdataset = CustomDataset(testdatapath)
-train_loader = DataLoader(traindataset, batch_size=train_config["bs"], shuffle=True,
-                          collate_fn=DataCollatorWithPadding(), num_workers=train_config["num_workers"],
-                          pin_memory=True)
-test_loader = DataLoader(testdataset, batch_size=train_config["bs"], shuffle=False,
-                         collate_fn=DataCollatorWithPadding(), num_workers=train_config["num_workers"], pin_memory=True)
+def build_dataset_rank(tokenizer, dataset, name: str, num_proc: int = 16):
+    info = dataset_info[name]
+
+    def preprocess_function(examples):
+        new_examples = {
+            "input_ids": [],
+            "loss_mask": [],
+            "attention_mask": []
+        }
+        for i in range(len(examples[info["conv_key"]])):
+            messages = [
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  "
+                        "Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. "
+                        "Please ensure that your responses are socially unbiased and positive in nature.\n\n"
+                        "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. "
+                        "If you don't know the answer to a question, please don't share false information."
+                    )
+                }
+            ]
+
+            convroles = ["user", "assistant"]
+            if name == "ShareGPT":
+                roles = {"human": convroles[0], "gpt": convroles[1]}
+            else:
+                roles = {"user": convroles[0], "assistant": convroles[1]}
+
+            source = examples[info["conv_key"]][i]
+            if roles[source[0][info["role_key"]]] != "user":
+                # Skip the first one if it is not from human
+                source = source[1:]
+
+            for j, sentence in enumerate(source):
+                role = roles[sentence[info["role_key"]]]
+                assert role == convroles[j % 2], f"{i}"
+                content = sentence[info["content_key"]]
+
+                if name == "OpenThoughts2" and role == "assistant":
+                    content = re.sub(
+                        r"<think>.*?</think>", "", content, flags=re.DOTALL
+                    ).strip()
+
+                messages.append(
+                    {"role": role, "content": content}
+                )
+
+            conversation = tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=False
+            )
+
+            if not tokenizer.pad_token_id:
+                tokenizer.pad_token_id = tokenizer.unk_token_id
+
+            input_ids = tokenizer(
+                conversation,
+                return_tensors="pt",
+                truncation=True,
+                max_length=train_config["max_len"],
+                add_special_tokens=False
+            ).input_ids[0]
+            loss_mask = torch.ones_like(input_ids)
+            # print(i)
+
+            sep = "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+
+            total_len = len(input_ids)
+
+            sep2 = "<|eot_id|><|start_header_id|>user<|end_header_id|>"
+            turns = conversation.split(sep2)
+
+            turns[1] = turns[0] + sep2 + turns[1]
+            turns = turns[1:]
+
+            cur_len = 1
+            loss_mask[:cur_len] = 0
+            for i, turn in enumerate(turns):
+                if turn == "":
+                    break
+                turn_len = len(tokenizer(turn).input_ids)
+
+                parts = turn.split(sep)
+                if len(parts) != 2:
+                    break
+                parts[0] += sep
+                # "-2" is hardcoded for the Llama tokenizer to make the offset correct.
+                instruction_len = len(tokenizer(parts[0]).input_ids) - 1
+
+                # Ignore the user instructions
+                if i == 0:
+                    loss_mask[cur_len: cur_len + instruction_len - 2] = 0
+                else:
+                    loss_mask[cur_len - 3: cur_len + instruction_len + 1] = 0
+                cur_len += turn_len
+                if i != 0:
+                    cur_len += 3
+
+            loss_mask[cur_len:] = 0
+            attention_mask = torch.ones_like(loss_mask)
+
+            new_examples["input_ids"].append(input_ids[None, :])
+            new_examples["loss_mask"].append(loss_mask[None, :])
+            new_examples["attention_mask"].append(attention_mask[None, :])
+
+        return new_examples
+
+    dataset = dataset.map(
+        preprocess_function,
+        batched=True,
+        num_proc=num_proc,
+        remove_columns=dataset.column_names,
+        load_from_cache_file=False
+    )
+
+    dataset.set_format(type="torch")
+    return dataset
+
+
+class DataCollatorWithPadding:
+    def paddingtensor(self, intensors, N):
+        B, n, S = intensors.shape
+        # padding_tensor = torch.zeros(B, N - n, S,dtype=intensors.dtype)
+        padding_tensor = torch.zeros(B, N - n, S, dtype=intensors.dtype)
+        outtensors = torch.cat((intensors, padding_tensor), dim=1)
+        return outtensors
+
+    def paddingtensor2D(self, intensors, N):
+        B, n = intensors.shape
+        padding_tensor = torch.zeros(B, N - n, dtype=intensors.dtype)
+        outtensors = torch.cat((intensors, padding_tensor), dim=1)
+        return outtensors
+
+    def __call__(self, features: List[Dict[str, Any]]) -> Dict[str, Any]:
+        max_length = max(item['input_ids'].shape[1] for item in features)
+        batch_input_ids = torch.cat([self.paddingtensor2D(item['input_ids'], max_length) for item in features])
+        batch_attention_mask = torch.cat(
+            [self.paddingtensor2D(item['attention_mask'], max_length) for item in features])
+        batch_loss_mask = torch.cat(
+            [self.paddingtensor2D(item['loss_mask'], max_length) for item in features])
+
+        batch = {
+            "input_ids": batch_input_ids,
+            "attention_mask": batch_attention_mask,
+            "loss_mask": batch_loss_mask,
+        }
+        return batch
+
+
+tokenizer = AutoTokenizer.from_pretrained(args.basepath)
+datapath = train_config["datapath"]
+
+# ShareGPT
+dataset_0 = load_dataset('json', data_files=f'{datapath}/ShareGPT_V4.3_unfiltered_cleaned_split.json')
+dataset_0 = dataset_0['train'].shuffle(seed=SEED).select(range(68000))
+dataset_0 = build_dataset_rank(tokenizer, dataset_0, name='ShareGPT')
+
+# UltraChat
+dataset_1 = load_dataset(f'{datapath}/ultrachat_200k')
+dataset_1 = concatenate_datasets(
+    [dataset_1['train_sft'], dataset_1['train_gen']]).shuffle(seed=SEED).select(range(463000))
+dataset_1 = build_dataset_rank(tokenizer, dataset_1, name='UltraChat')
+
+# OpenThoughts2
+dataset_2 = load_dataset(f'{datapath}/OpenThoughts2-1M')
+dataset_2 = dataset_2['train'].shuffle(seed=SEED).select(range(269000))
+dataset_2 = build_dataset_rank(tokenizer, dataset_2, name='OpenThoughts2')
+
+dataset = concatenate_datasets([dataset_0, dataset_1, dataset_2]).shuffle(seed=SEED).select(range(args.data_num))
+dataset = dataset.train_test_split(train_size=0.95, seed=SEED)
+
+train_dataset = dataset['train']
+test_dataset = dataset['test']
+
+train_loader = DataLoader(
+    train_dataset, batch_size=train_config["bs"], shuffle=True,
+    num_workers=train_config["num_workers"], pin_memory=True,
+    collate_fn=DataCollatorWithPadding()
+)
+test_loader = DataLoader(
+    test_dataset, batch_size=train_config["bs"], shuffle=False,
+    num_workers=train_config["num_workers"], pin_memory=True,
+    collate_fn=DataCollatorWithPadding()
+)
+
+target_model = AutoModelForCausalLM.from_pretrained(args.basepath, torch_dtype=torch.float16)
+target_model.eval()
+for param in target_model.parameters():
+    param.requires_grad = False
 
 if accelerator.is_main_process:
     if not os.path.exists(args.cpdir):
         os.makedirs(args.cpdir)
 
-# config = EConfig.from_pretrained(train_config["config_path"])
-# model = Model(config, load_emb=True, path=args.basepath)
 with open(train_config["config_path"]) as f:
     config = json.load(f)
 assert config.get("use_adapter", False) == args.use_adapter
+
 model = LargeDrafter(config, load_emb=True, path=args.basepath, hass_path=args.hass_path)
-logger.info(model)
+if accelerator.is_main_process:
+    logger.info(model)
 
 if args.ckpt_path is not None:
     ea_model_path = args.ckpt_path
@@ -410,17 +471,45 @@ if is_warmup:
     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=num_warmup_steps,
                                                 num_training_steps=total_steps)
 
-    model, head, optimizer, train_loader, test_loader, scheduler = accelerator.prepare(
-        model, head, optimizer, train_loader, test_loader, scheduler
+    model, head, target_model, optimizer, train_loader, test_loader, scheduler = accelerator.prepare(
+        model, head, target_model, optimizer, train_loader, test_loader, scheduler
     )
 else:
-    model, head, optimizer, train_loader, test_loader = accelerator.prepare(
-        model, head, optimizer, train_loader, test_loader
+    model, head, target_model, optimizer, train_loader, test_loader = accelerator.prepare(
+        model, head, target_model, optimizer, train_loader, test_loader
     )
 
 # work-around: DDP 不支持 嵌套地gradient checkpoint计算
 model._set_static_graph()
 unwarped_model = accelerator.unwrap_model(model)
+
+
+@torch.no_grad()
+def data_prepare(input_ids, attention_mask, loss_mask):
+    def padding(tensor, left=True):
+        zeropadding = torch.zeros_like(tensor[:, -1:])
+        if left:
+            tensor = torch.cat((zeropadding, tensor[:, :-1]), dim=1)
+        else:
+            tensor = torch.cat((tensor[:, 1:], zeropadding), dim=1)
+        return tensor
+
+    outs = target_model(input_ids=input_ids, attention_mask=attention_mask, output_hidden_states=True)
+    hidden_states = outs.hidden_states[-1]
+
+    input_ids = padding(input_ids, left=False)
+
+    target = hidden_states
+    target = padding(target, left=False)
+
+    return {
+        "hidden_states": hidden_states,
+        "input_ids": input_ids,
+        "attention_mask": attention_mask,
+        "target": target,
+        "loss_mask": loss_mask
+    }
+
 
 for epoch in range(num_epochs + 1):
     top_3acc = [0 for _ in range(3)]
@@ -436,8 +525,11 @@ for epoch in range(num_epochs + 1):
 
         with accelerator.accumulate(model):
             optimizer.zero_grad()
+
+            data = data_prepare(data["input_ids"], data["attention_mask"], data["loss_mask"])
             hidden_states, input_ids, attention_mask, target, loss_mask = data["hidden_states"], data["input_ids"], \
                 data["attention_mask"], data["target"], data["loss_mask"][..., None]
+
             loss = 0
             with torch.no_grad():
                 target_head = head(target)
@@ -539,6 +631,8 @@ for epoch in range(num_epochs + 1):
 
             if args.debug and batch_idx > 10:
                 break
+
+            data = data_prepare(data["input_ids"], data["attention_mask"], data["loss_mask"])
 
             with torch.no_grad():
                 if batch_idx < 1:

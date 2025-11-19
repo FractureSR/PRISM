@@ -1,4 +1,3 @@
-# implements the Large Drafter
 import copy
 import json
 import torch
@@ -59,11 +58,8 @@ class LargeDrafter(Model):
             threshold=threshold,
         )
 
-        # define step models and step fcs and step adapters
         self.num_steps = config["num_steps"]  # the logical number of step models
-        self.num_step_models = config[
-            "num_step_models"
-        ]  # the physical number of step models
+        self.num_step_models = config["num_step_models"]  # the physical number of step models
         self.step_mapping = config["step_mapping"]  # the map of steps to step models
 
         self.stepModels = nn.ModuleList()
@@ -88,15 +84,16 @@ class LargeDrafter(Model):
             )
 
         self.use_adapter = config.get("use_adapter", False)
-        self.stepAdapters = nn.ModuleList()
-        for _ in range(self.num_step_models):
-            self.stepAdapters.append(
-                nn.Linear(
-                    eagle_config.hidden_size,
-                    eagle_config.hidden_size,
-                    bias=bias,
+        if self.use_adapter:
+            self.stepAdapters = nn.ModuleList()
+            for _ in range(self.num_step_models):
+                self.stepAdapters.append(
+                    nn.Linear(
+                        eagle_config.hidden_size,
+                        eagle_config.hidden_size,
+                        bias=bias,
+                    )
                 )
-            )
 
         if hass_path:
             self.load_state_dict(torch.load(hass_path, map_location='cpu', weights_only=True), strict=False)
@@ -110,7 +107,8 @@ class LargeDrafter(Model):
         self.layers = self.stepModels[self.step_mapping[str(self.current_step)]]
         del self.fc
         self.fc = self.stepFCs[self.step_mapping[str(self.current_step)]]
-        self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
+        if self.use_adapter:
+            self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
 
     def forward(
             self,
@@ -127,7 +125,6 @@ class LargeDrafter(Model):
             std=None,
             q_hidden_states=None,
     ):
-        # mainly deal with the logic to switch the step models and adapters
         results = super().forward(
             hidden_states,
             input_ids,
@@ -148,7 +145,6 @@ class LargeDrafter(Model):
         else:
             output_hidden_states = results
 
-        # use the adapter to adapt the hidden states
         if self.use_adapter:
             sample_hidden_states = self.stepAdapter(output_hidden_states)
         else:
@@ -166,15 +162,15 @@ class LargeDrafter(Model):
             self.current_step += 1
             self.layers = self.stepModels[self.step_mapping[str(self.current_step)]]
             self.fc = self.stepFCs[self.step_mapping[str(self.current_step)]]
-            self.stepAdapter = self.stepAdapters[
-                self.step_mapping[str(self.current_step)]
-            ]
+            if self.use_adapter:
+                self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
 
     def reset_step(self):
         self.current_step = 0
         self.layers = self.stepModels[self.step_mapping[str(self.current_step)]]
         self.fc = self.stepFCs[self.step_mapping[str(self.current_step)]]
-        self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
+        if self.use_adapter:
+            self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
 
 
 class InferLargeDrafter(InferModel):
@@ -201,11 +197,8 @@ class InferLargeDrafter(InferModel):
             threshold=threshold,
         )
 
-        # define step models and step fcs and step adapters
         self.num_steps = config["num_steps"]  # the logical number of step models
-        self.num_step_models = config[
-            "num_step_models"
-        ]  # the physical number of step models
+        self.num_step_models = config["num_step_models"]  # the physical number of step models
         self.step_mapping = config["step_mapping"]  # the map of steps to step models
 
         self.stepModels = nn.ModuleList()
@@ -230,22 +223,24 @@ class InferLargeDrafter(InferModel):
             )
 
         self.use_adapter = config.get("use_adapter", False)
-        self.stepAdapters = nn.ModuleList()
-        for _ in range(self.num_step_models):
-            self.stepAdapters.append(
-                nn.Linear(
-                    eagle_config.hidden_size,
-                    eagle_config.hidden_size,
-                    bias=bias,
+        if self.use_adapter:
+            self.stepAdapters = nn.ModuleList()
+            for _ in range(self.num_step_models):
+                self.stepAdapters.append(
+                    nn.Linear(
+                        eagle_config.hidden_size,
+                        eagle_config.hidden_size,
+                        bias=bias,
+                    )
                 )
-            )
 
         # replace
         self.current_step = 0
         self.layers = nn.ModuleList([InferLlamaDecoderLayerMoE(eagle_config, index, moe_config)
                                      for index in range(eagle_config.num_hidden_layers)])
         self.fc = nn.Linear(2 * eagle_config.hidden_size, eagle_config.hidden_size, bias=bias)
-        self.stepAdapter = nn.Linear(eagle_config.hidden_size, eagle_config.hidden_size, bias=bias)
+        if self.use_adapter:
+            self.stepAdapter = nn.Linear(eagle_config.hidden_size, eagle_config.hidden_size, bias=bias)
 
     def forward(
             self,
@@ -261,7 +256,6 @@ class InferLargeDrafter(InferModel):
             return_dict: Optional[bool] = None,
             std=None,
     ):
-        # mainly deal with the logic to switch the step models and adapters
         results = super().forward(
             hidden_states,
             input_ids,
@@ -281,7 +275,6 @@ class InferLargeDrafter(InferModel):
         else:
             output_hidden_states = results
 
-        # use the adapter to adapt the hidden states
         if self.use_adapter:
             sample_hidden_states = self.stepAdapter(output_hidden_states)
         else:
@@ -299,15 +292,15 @@ class InferLargeDrafter(InferModel):
             self.current_step += 1
             self.layers = self.stepModels[self.step_mapping[str(self.current_step)]]
             self.fc = self.stepFCs[self.step_mapping[str(self.current_step)]]
-            self.stepAdapter = self.stepAdapters[
-                self.step_mapping[str(self.current_step)]
-            ]
+            if self.use_adapter:
+                self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
 
     def reset_step(self):
         self.current_step = 0
         self.layers = self.stepModels[self.step_mapping[str(self.current_step)]]
         self.fc = self.stepFCs[self.step_mapping[str(self.current_step)]]
-        self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
+        if self.use_adapter:
+            self.stepAdapter = self.stepAdapters[self.step_mapping[str(self.current_step)]]
 
     @torch.no_grad()
     def topK_genrate(self, hidden_states, input_ids, head, logits_processor):
@@ -568,6 +561,6 @@ class LDModel(EaModel):
         else:
             self.ea_layer.diff_device = False
 
-        self.ea_layer.load_state_dict(ea_layer_state_dict, strict=True)
+        self.ea_layer.load_state_dict(ea_layer_state_dict, strict=False)
         self.ea_layer.to(self.base_model.dtype).to(device)
         self.ea_layer.init_tree()

@@ -2,6 +2,8 @@ import json
 import argparse
 from copy import deepcopy
 
+from prettytable import PrettyTable
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_file", type=str)
 args = parser.parse_args()
@@ -38,9 +40,14 @@ while max_acl >= 0:
         cum_counter[i] += rep_counter[max_acl]
     max_acl -= 1
 
-print(rep_counter)
-print(cum_counter)
-for i in range(len(cum_counter) - 1):
-    print(f"conditional accept rate at position {i + 1} = {cum_counter[i + 1] / cum_counter[i]:.5f}")
+print(f"average acceptance length = {avg_accept_length:.5f}")
+print(f"rep_counter = {rep_counter}")
+print(f"cum_counter = {cum_counter}")
 
-print(f"acceptance length = {avg_accept_length:.5f}")
+table = PrettyTable()
+table.border = False
+table.field_names = ['Position', 'Acceptance Rate']
+for i in range(len(cum_counter) - 1):
+    rate = cum_counter[i + 1] / cum_counter[i]
+    table.add_row([f"{i + 1}", f"{rate:.5f}"])
+print(f"\n{table}\n")

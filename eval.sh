@@ -8,10 +8,12 @@
 export PYTHONPATH=$(pwd):${PYTHONPATH}
 
 PROJECT=llama3-8b
-NAME=Eagle2-100k
+
+MODEL=HASS-3
+NAME=${MODEL}-100k
 
 EA_MODEL_DIR=checkpoints/${PROJECT}/${NAME}
-EA_CONFIG_PATH=train/llama3-8b/Eagle2_config.json
+EA_CONFIG_PATH=train/llama3-8b/${MODEL}_config.json
 BASE_MODEL_PATH=/mnt/inaisfs/data/home/liuf_criait/data/model/Llama-3-8B-Instruct
 
 echo "start time: $(date)"

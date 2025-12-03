@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J LD_train_data
+#SBATCH -J DATA
 #SBATCH -p gpu
 #SBATCH -N 1
 #SBATCH -n 128

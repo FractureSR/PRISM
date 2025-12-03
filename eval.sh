@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J LD_eval_model
+#SBATCH -J PRISM
 #SBATCH -p gpu
 #SBATCH -N 1
 #SBATCH -n 16
@@ -9,7 +9,7 @@ export PYTHONPATH=$(pwd):${PYTHONPATH}
 
 PROJECT=llama3-8b
 
-MODEL=HASS-3
+MODEL=Eagle2
 NAME=${MODEL}-100k
 
 EA_MODEL_DIR=checkpoints/${PROJECT}/${NAME}

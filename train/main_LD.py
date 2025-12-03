@@ -21,10 +21,11 @@ parser.add_argument('--ckpt_path', type=str, default=None)
 parser.add_argument('--data_num', type=int, default=68000)
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--use_adapter', action='store_true')
-parser.add_argument('--train_LD', action='store_true')
+parser.add_argument('--detach', action='store_true')
 parser.add_argument('--hass_path', type=str, default=None)
 parser.add_argument('--p_w', type=float, default=0.1)
 parser.add_argument('--v_w', type=float, default=1.0)
+parser.add_argument('--max_len', type=int, default=2048)
 
 args = parser.parse_args()
 
@@ -54,7 +55,7 @@ train_config = {
     "mean": 0.0,
     "std": 0.2,
     "residual": "true,norm",
-    "max_len": 2048,
+    "max_len": args.max_len,
     # During training, truncating the training sequences means that the larger the setting, the more training data is used, and the better the effect, but it also consumes more VRAM.
     "config_path": args.configpath,
     "b1": 0.9,
@@ -62,10 +63,11 @@ train_config = {
     "grad_clip": 0.5,
     "save_freq": 1
 }
+
 import json
 import safetensors
 from safetensors import safe_open
-# from transformers import AutoModelForCausalLM, AutoTokenizer,AutoModelForSequenceClassification
+
 import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = "0,1
 import torch
@@ -74,11 +76,12 @@ torch.backends.cuda.matmul.allow_tf32 = True
 from accelerate import Accelerator
 from accelerate.utils import set_seed
 
-set_seed(0)
-accelerator = Accelerator(mixed_precision='bf16',
-                          gradient_accumulation_steps=train_config["gradient_accumulation_steps"])
-# from model.cnets_hass import Model
-# from model.configs import EConfig
+set_seed(42)
+accelerator = Accelerator(
+    mixed_precision='bf16',
+    gradient_accumulation_steps=train_config["gradient_accumulation_steps"]
+)
+
 from LD.large_drafter import LargeDrafter
 
 from typing import Any, Dict, List
@@ -86,7 +89,7 @@ from typing import Any, Dict, List
 from torch import nn, optim
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
-# import accelerate
+
 import numpy as np
 from transformers import get_linear_schedule_with_warmup, AutoConfig
 
@@ -153,31 +156,6 @@ def list_files(
     return datapath[:num]
 
 
-class AddGaussianNoise:
-    def __init__(self, mean=0.0, std=0.0):
-        self.mean = mean
-        self.std = std
-
-    def __call__(self, data):
-        tensor = data["hidden_state_big"]
-        noise = torch.randn(tensor.size()) * self.std + self.mean
-        noisy_tensor = tensor + noise
-        data["hidden_state_big"] = noisy_tensor
-        return data
-
-
-class AddUniformNoise:
-    def __init__(self, std=0.0):
-        self.std = std
-
-    def __call__(self, data):
-        tensor = data["hidden_state_big"]
-        noise = (torch.rand_like(tensor) - 0.5) * self.std * 512 / tensor.shape[1]
-        noisy_tensor = tensor + noise
-        data["hidden_state_big"] = noisy_tensor
-        return data
-
-
 class CustomDataset(Dataset):
     def __init__(self, datapath, transform=None):
         self.data = datapath
@@ -190,7 +168,9 @@ class CustomDataset(Dataset):
         # try:
         data = torch.load(self.data[index])
         new_data = {}
+
         hidden_state = data['hidden_state'][:train_config["max_len"]][None, :]
+        target = data['target'][:train_config["max_len"]][None, :]
         input_ids = data['input_ids'][:train_config["max_len"]][None, :]
         loss_mask = data["loss_mask"][:train_config["max_len"]][None, :]
 
@@ -204,14 +184,15 @@ class CustomDataset(Dataset):
         zeropadding = torch.tensor([[0]])
         input_ids_target = torch.cat((input_ids_target, zeropadding), dim=1)
 
-        target = hidden_state[:, 1:, :]
+        target = target[:, 1:, :]
         zeropadding = torch.zeros(1, 1, target.shape[2])
         target = torch.cat((target, zeropadding), dim=1)
         loss_mask[-1] = 0
+
         new_data["attention_mask"] = attention_mask
         new_data["loss_mask"] = loss_mask
         new_data["target"] = target
-        new_data["hidden_state_big"] = hidden_state
+        new_data["hidden_state"] = hidden_state
         new_data["input_ids"] = input_ids_target
 
         if self.transform:
@@ -236,9 +217,9 @@ class DataCollatorWithPadding:
         return outtensors
 
     def __call__(self, features: List[Dict[str, Any]]) -> Dict[str, Any]:
-        max_length = max(item['hidden_state_big'].shape[1] for item in features)
+        max_length = max(item['hidden_state'].shape[1] for item in features)
         batch_input_ids = torch.cat([self.paddingtensor2D(item['input_ids'], max_length) for item in features])
-        batch_hidden_states = torch.cat([self.paddingtensor(item['hidden_state_big'], max_length) for item in features])
+        batch_hidden_states = torch.cat([self.paddingtensor(item['hidden_state'], max_length) for item in features])
         batch_target = torch.cat([self.paddingtensor(item['target'], max_length) for item in features])
         batch_loss_mask = torch.tensor(
             [item['loss_mask'] + [0] * (max_length - len(item['loss_mask'])) for item in features])
@@ -320,9 +301,11 @@ def getkacc(model, data, head, max_length=5):
         return input_ids
 
     hidden_states = data["hidden_states"]
+    hidden_states = model.module.fusion_layer(hidden_states)
     input_ids = data["input_ids"]
     loss_mask = data["loss_mask"]
     target = data["target"]
+
     total = [0 for _ in range(max_length)]
     correct = [0 for _ in range(max_length)]
     bs, seq_len = hidden_states.shape[0], hidden_states.shape[1]
@@ -354,20 +337,12 @@ def getkacc(model, data, head, max_length=5):
     return acc
 
 
-if train_config["data_noise"]:
-    if train_config["noise"] == "uniform":
-        aug = AddUniformNoise(std=train_config["std"])
-    else:
-        aug = AddGaussianNoise(mean=train_config["mean"], std=train_config["std"])
-else:
-    aug = None
-
 datapath = list_files(train_config["datapath"], num=train_config["data_num"])
 
 traindatapath = datapath[:int(len(datapath) * 0.95)]
 testdatapath = datapath[int(len(datapath) * 0.95):]
 
-traindataset = CustomDataset(traindatapath, transform=aug)
+traindataset = CustomDataset(traindatapath)
 testdataset = CustomDataset(testdatapath)
 train_loader = DataLoader(traindataset, batch_size=train_config["bs"], shuffle=True,
                           collate_fn=DataCollatorWithPadding(), num_workers=train_config["num_workers"],
@@ -379,13 +354,13 @@ if accelerator.is_main_process:
     if not os.path.exists(args.cpdir):
         os.makedirs(args.cpdir)
 
-# config = EConfig.from_pretrained(train_config["config_path"])
-# model = Model(config, load_emb=True, path=args.basepath)
 with open(train_config["config_path"]) as f:
     config = json.load(f)
 assert config.get("use_adapter", False) == args.use_adapter
+
 model = LargeDrafter(config, load_emb=True, path=args.basepath, hass_path=args.hass_path)
-logger.info(model)
+if accelerator.is_main_process:
+    logger.info(model)
 
 if args.ckpt_path is not None:
     ea_model_path = args.ckpt_path
@@ -444,10 +419,12 @@ for epoch in range(num_epochs + 1):
                 target_p = nn.Softmax(dim=2)(target_head)
                 target_p = target_p.detach()
 
+            hidden_states = model.module.fusion_layer(hidden_states)
             q_hidden_states = None  ### q hidden states is used to store past step's hidden states
             unwarped_model.reset_step()
             for forward_idx in range(args.forward_num_total):  ### forward for multiple times
                 assert forward_idx == unwarped_model.current_step
+
                 predict, sample_hidden = model(hidden_states, input_ids, attention_mask,
                                                q_hidden_states=q_hidden_states)  ### for me. just enable the model to switch paratmers is enough
 
@@ -461,9 +438,8 @@ for epoch in range(num_epochs + 1):
                     q_hidden_states = torch.cat([q_hidden_states, new_q_hidden_states], dim=0)
                     ### q_hidden_states always maintains the hidden states of different generation steps
 
-                if not args.train_LD:
+                if args.detach:
                     q_hidden_states = q_hidden_states.detach()
-                ### see here, the gradient is detached
 
                 if not args.use_adapter:
                     vloss, ploss, topk_loss, out_head = compute_loss(target, target_p, predict, loss_mask)
@@ -473,12 +449,7 @@ for epoch in range(num_epochs + 1):
                     "topk_w"] * topk_loss
                 loss += total_loss
 
-                if not args.train_LD:
-                    accelerator.backward(total_loss)
-
-            # in LD train, loss is backwarded after all forward steps is done
-            if args.train_LD:
-                accelerator.backward(loss)
+            accelerator.backward(loss)
 
             accelerator.clip_grad_value_(model.parameters(), train_config["grad_clip"])
             optimizer.step()
@@ -546,15 +517,17 @@ for epoch in range(num_epochs + 1):
                     for i in range(len(acces)):
                         k_acc[i].append(acces[i])
 
+                hidden_states = model.module.fusion_layer(data["hidden_states"])
                 q_hidden_states = None
                 unwarped_model.reset_step()
                 for forward_idx in range(args.forward_num_total):
                     assert forward_idx == unwarped_model.current_step
-                    predict, sample_hidden = model(data["hidden_states"], input_ids=data["input_ids"],
+
+                    predict, sample_hidden = model(hidden_states, input_ids=data["input_ids"],
                                                    attention_mask=data["attention_mask"],
                                                    q_hidden_states=q_hidden_states)
                     if q_hidden_states is None:
-                        q_hidden_states = torch.cat([data["hidden_states"][:, :1, :], predict[:, :-1, :]], dim=1)[None,
+                        q_hidden_states = torch.cat([hidden_states[:, :1, :], predict[:, :-1, :]], dim=1)[None,
                         :, :, :]
                     else:
                         new_q_hidden_states = torch.cat([q_hidden_states[-1][:, :1, :], predict[:, :-1, :]], dim=1)[

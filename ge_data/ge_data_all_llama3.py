@@ -232,14 +232,17 @@ bigmodel.eval()
 @torch.no_grad()
 def ge(data):
     input_ids = data["input_ids"]
-    outs_big = bigmodel(input_ids.cuda(), output_hidden_states=True)
-    hidden_state_big = outs_big.hidden_states[-1]
-    max_prob_tokens_big = torch.argmax(outs_big.logits, dim=-1)
-    probs = torch.softmax(outs_big.logits, dim=-1)
-    maxp = probs[0].max(dim=1).values
+    outputs = bigmodel(input_ids.cuda(), output_hidden_states=True)
+
+    hidden_state = torch.cat([
+        outputs.hidden_states[3], outputs.hidden_states[17], outputs.hidden_states[30]
+    ], dim=-1)
+    target = outputs.hidden_states[-1]
+
     td = {
         "input_ids": input_ids.cpu()[0],
-        "hidden_state": hidden_state_big.cpu()[0],
+        "hidden_state": hidden_state.cpu()[0],
+        "target": target.cpu()[0],
         "loss_mask": data["loss_mask"].cpu()[0]
     }
     return td

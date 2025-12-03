@@ -58,6 +58,10 @@ class LargeDrafter(Model):
             threshold=threshold,
         )
 
+        self.fusion_layer = nn.Linear(
+            eagle_config.hidden_size * 3, eagle_config.hidden_size, bias=bias
+        )
+
         self.num_steps = config["num_steps"]  # the logical number of step models
         self.num_step_models = config["num_step_models"]  # the physical number of step models
         self.step_mapping = config["step_mapping"]  # the map of steps to step models
@@ -195,6 +199,10 @@ class InferLargeDrafter(InferModel):
             depth=depth,
             top_k=top_k,
             threshold=threshold,
+        )
+
+        self.fusion_layer = nn.Linear(
+            eagle_config.hidden_size * 3, eagle_config.hidden_size, bias=bias
         )
 
         self.num_steps = config["num_steps"]  # the logical number of step models

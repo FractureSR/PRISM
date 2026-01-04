@@ -166,7 +166,6 @@ class EaModel(nn.Module):
             output_orig=False,
             position_ids=None,
     ):
-
         with torch.inference_mode():
             # Pass input through the base model
             outputs = self.base_model.model(
@@ -174,10 +173,15 @@ class EaModel(nn.Module):
                 attention_mask=attention_mask,
                 past_key_values=past_key_values,
                 position_ids=position_ids,
+                output_hidden_states=True
             )
             if output_orig:
-                orig = self.base_model.lm_head(outputs[0])
-            hidden_states = outputs[0]
+                orig = self.base_model.lm_head(outputs.last_hidden_state)
+
+            hidden_states = torch.cat([
+                outputs.hidden_states[3], outputs.hidden_states[17], outputs.hidden_states[30]
+            ], dim=-1)
+            hidden_states = self.ea_layer.fusion_layer(hidden_states)
 
         if output_orig:
             return outputs, orig, hidden_states

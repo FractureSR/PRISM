@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J PRISM
+#SBATCH -J HASS
 #SBATCH -p gpu
 #SBATCH -N 1
 #SBATCH -n 128
@@ -17,7 +17,7 @@ export WANDB_API_KEY=05ac0c7fac19bec004160369c32723326fa8a618
 PART=llama3-8b
 PROJECT=LD-${PART}
 
-MODEL=HASS-1
+MODEL=HASS
 NAME=${MODEL}-100k
 
 DATA_PATH=/mnt/inaisfs/data/home/liuf_criait/data

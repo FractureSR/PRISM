@@ -17,7 +17,7 @@ export WANDB_API_KEY=05ac0c7fac19bec004160369c32723326fa8a618
 PART=llama3-8b
 PROJECT=LD-${PART}
 
-MODEL=LD-3
+MODEL=PRISM
 NAME=${MODEL}-100k
 
 DATA_PATH=/mnt/inaisfs/data/home/liuf_criait/data
@@ -33,7 +33,7 @@ accelerate launch train/main_LD.py \
     --tmpdir ${DATA_PATH}/dataset \
     --cpdir checkpoints/${PART}/${NAME} \
     --configpath ${CONFIG_PATH} \
-    --epoch 8 \
+    --epoch 10 \
     --bs 1 \
     --topk 10 \
     --topk_w 0 \
@@ -41,7 +41,7 @@ accelerate launch train/main_LD.py \
     --data_num 100000 \
     --lr 1e-5 \
     --train_LD \
-    --hass_path checkpoints/${PART}/HASS-1-100k/state_39/pytorch_model.bin \
+    --hass_path checkpoints/${PART}/HASS-100k/state_39/pytorch_model.bin \
     --v_w 0
 
 echo "end time: $(date)"

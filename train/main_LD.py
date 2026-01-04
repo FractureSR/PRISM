@@ -21,7 +21,7 @@ parser.add_argument('--ckpt_path', type=str, default=None)
 parser.add_argument('--data_num', type=int, default=68000)
 parser.add_argument('--debug', action='store_true')
 parser.add_argument('--use_adapter', action='store_true')
-parser.add_argument('--train_LD', action='store_true')
+parser.add_argument('--detach', action='store_true')
 parser.add_argument('--hass_path', type=str, default=None)
 parser.add_argument('--p_w', type=float, default=0.1)
 parser.add_argument('--v_w', type=float, default=1.0)
@@ -62,6 +62,7 @@ train_config = {
     "grad_clip": 0.5,
     "save_freq": 1
 }
+
 import json
 import safetensors
 from safetensors import safe_open
@@ -74,7 +75,7 @@ torch.backends.cuda.matmul.allow_tf32 = True
 from accelerate import Accelerator
 from accelerate.utils import set_seed
 
-set_seed(0)
+set_seed(42)
 accelerator = Accelerator(
     mixed_precision='bf16',
     gradient_accumulation_steps=train_config["gradient_accumulation_steps"]
@@ -186,9 +187,11 @@ def getkacc(model, data, head, max_length=5):
         return input_ids
 
     hidden_states = data["hidden_states"]
+    hidden_states = model.module.fusion_layer(hidden_states)
     input_ids = data["input_ids"]
     loss_mask = data["loss_mask"]
     target = data["target"]
+
     total = [0 for _ in range(max_length)]
     correct = [0 for _ in range(max_length)]
     bs, seq_len = hidden_states.shape[0], hidden_states.shape[1]
@@ -494,12 +497,14 @@ def data_prepare(input_ids, attention_mask, loss_mask):
             tensor = torch.cat((tensor[:, 1:], zeropadding), dim=1)
         return tensor
 
-    outs = target_model(input_ids=input_ids, attention_mask=attention_mask, output_hidden_states=True)
-    hidden_states = outs.hidden_states[-1]
+    outputs = target_model(input_ids=input_ids, attention_mask=attention_mask, output_hidden_states=True)
+    hidden_states = torch.cat([
+        outputs.hidden_states[3], outputs.hidden_states[17], outputs.hidden_states[30]
+    ], dim=-1)
 
     input_ids = padding(input_ids, left=False)
 
-    target = hidden_states
+    target = outputs.hidden_states[-1]
     target = padding(target, left=False)
 
     return {
@@ -536,10 +541,12 @@ for epoch in range(num_epochs + 1):
                 target_p = nn.Softmax(dim=2)(target_head)
                 target_p = target_p.detach()
 
+            hidden_states = model.module.fusion_layer(hidden_states)
             q_hidden_states = None  ### q hidden states is used to store past step's hidden states
             unwarped_model.reset_step()
             for forward_idx in range(args.forward_num_total):  ### forward for multiple times
                 assert forward_idx == unwarped_model.current_step
+
                 predict, sample_hidden = model(hidden_states, input_ids, attention_mask,
                                                q_hidden_states=q_hidden_states)  ### for me. just enable the model to switch paratmers is enough
 
@@ -553,9 +560,8 @@ for epoch in range(num_epochs + 1):
                     q_hidden_states = torch.cat([q_hidden_states, new_q_hidden_states], dim=0)
                     ### q_hidden_states always maintains the hidden states of different generation steps
 
-                if not args.train_LD:
+                if args.detach:
                     q_hidden_states = q_hidden_states.detach()
-                ### see here, the gradient is detached
 
                 if not args.use_adapter:
                     vloss, ploss, topk_loss, out_head = compute_loss(target, target_p, predict, loss_mask)
@@ -565,12 +571,7 @@ for epoch in range(num_epochs + 1):
                     "topk_w"] * topk_loss
                 loss += total_loss
 
-                if not args.train_LD:
-                    accelerator.backward(total_loss)
-
-            # in LD train, loss is backwarded after all forward steps is done
-            if args.train_LD:
-                accelerator.backward(loss)
+            accelerator.backward(loss)
 
             accelerator.clip_grad_value_(model.parameters(), train_config["grad_clip"])
             optimizer.step()
@@ -640,15 +641,17 @@ for epoch in range(num_epochs + 1):
                     for i in range(len(acces)):
                         k_acc[i].append(acces[i])
 
+                hidden_states = model.module.fusion_layer(data["hidden_states"])
                 q_hidden_states = None
                 unwarped_model.reset_step()
                 for forward_idx in range(args.forward_num_total):
                     assert forward_idx == unwarped_model.current_step
-                    predict, sample_hidden = model(data["hidden_states"], input_ids=data["input_ids"],
+
+                    predict, sample_hidden = model(hidden_states, input_ids=data["input_ids"],
                                                    attention_mask=data["attention_mask"],
                                                    q_hidden_states=q_hidden_states)
                     if q_hidden_states is None:
-                        q_hidden_states = torch.cat([data["hidden_states"][:, :1, :], predict[:, :-1, :]], dim=1)[None,
+                        q_hidden_states = torch.cat([hidden_states[:, :1, :], predict[:, :-1, :]], dim=1)[None,
                         :, :, :]
                     else:
                         new_q_hidden_states = torch.cat([q_hidden_states[-1][:, :1, :], predict[:, :-1, :]], dim=1)[

@@ -2,6 +2,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 config = {
+    'HASS-1': {
+        'color': '#1f77b4',
+        'marker': 'o'
+    },
+    'HASS-2': {
+        'color': '#9467bd',
+        'marker': 'v'
+    },
     "HASS-3": {
         "color": "#ff7f0e",
         "marker": "s"
@@ -12,7 +20,7 @@ config = {
     },
     "PRISM": {
         "color": "#d62728",
-        "marker": "D"
+        "marker": "*"
     }
 }
 
@@ -20,6 +28,14 @@ xticks = ["100k", "200k", "400k", "600k", "800k"]
 
 exps = {
     "MT-bench": {
+        "HASS-1": np.array([
+            [4.65840, 4.78146, 4.88533, 4.92224, 4.94916],
+            [4.32679, 4.39275, 4.47149, 4.58964, 4.53607]
+        ]),
+        "HASS-2": np.array([
+            [4.42466, 4.69870, 4.69870, 4.69870, 4.69870],
+            [4.11945, 4.28524, 4.28524, 4.28524, 4.28524]
+        ]),
         "HASS-3": np.array([
             [4.56893, 4.96362, 5.15366, 5.20137, 5.24480],
             [4.13570, 4.47675, 4.68349, 4.76328, 4.80118]
@@ -34,6 +50,14 @@ exps = {
         ])
     },
     "HumanEval": {
+        "HASS-1": np.array([
+            [5.62106, 5.78474, 5.84373, 5.90184, 5.89876],
+            [5.35828, 5.45787, 5.59145, 5.55664, 5.59962]
+        ]),
+        "HASS-2": np.array([
+            [5.29363, 5.61373, 5.61373, 5.61373, 5.61373],
+            [5.12036, 5.38707, 5.38707, 5.38707, 5.38707]
+        ]),
         "HASS-3": np.array([
             [5.57321, 5.83132, 6.06818, 6.09143, 6.12733],
             [5.32623, 5.66073, 5.81162, 5.82378, 5.85317]
@@ -48,6 +72,14 @@ exps = {
         ])
     },
     "GSM8K": {
+        "HASS-1": np.array([
+            [5.34545, 5.43475, 5.52197, 5.57795, 5.62539],
+            [5.14849, 5.21478, 5.31959, 5.38968, 5.40697]
+        ]),
+        "HASS-2": np.array([
+            [5.03031, 5.37250, 5.37250, 5.37250, 5.37250],
+            [4.81316, 5.17645, 5.17645, 5.17645, 5.17645]
+        ]),
         "HASS-3": np.array([
             [5.14749, 5.64556, 5.83745, 5.91626, 5.91216],
             [4.87022, 5.42925, 5.66350, 5.68835, 5.74633]
@@ -62,6 +94,14 @@ exps = {
         ])
     },
     "Alpaca": {
+        "HASS-1": np.array([
+            [4.80779, 4.98708, 5.13525, 5.09008, 5.09730],
+            [4.46411, 4.71002, 4.72297, 4.87121, 4.74604]
+        ]),
+        "HASS-2": np.array([
+            [4.60427, 4.87609, 4.87609, 4.87609, 4.87609],
+            [4.29678, 4.68564, 4.68564, 4.68564, 4.68564]
+        ]),
         "HASS-3": np.array([
             [4.78656, 5.17630, 5.43573, 5.44340, 5.43318],
             [4.40090, 4.84232, 5.05960, 5.06703, 5.09216]
@@ -76,6 +116,14 @@ exps = {
         ])
     },
     "CNN/DM": {
+        "HASS-1": np.array([
+            [4.36982, 4.53280, 4.67901, 4.67512, 4.64654],
+            [4.02909, 4.21652, 4.27908, 4.33923, 4.26335]
+        ]),
+        "HASS-2": np.array([
+            [4.00994, 4.34696, 4.34696, 4.34696, 4.34696],
+            [3.71553, 4.04118, 4.04118, 4.04118, 4.04118]
+        ]),
         "HASS-3": np.array([
             [4.15562, 4.66771, 4.94444, 4.88727, 5.13111],
             [3.86624, 4.25736, 4.54411, 4.43344, 4.61062]
@@ -90,6 +138,14 @@ exps = {
         ])
     },
     "Natural Ques.": {
+        "HASS-1": np.array([
+            [3.86946, 4.07623, 4.12755, 4.16449, 4.12784],
+            [3.65147, 3.66539, 3.86571, 3.87656, 3.84909]
+        ]),
+        "HASS-2": np.array([
+            [3.56975, 3.82747, 3.82747, 3.82747, 3.82747],
+            [3.28490, 3.59254, 3.59254, 3.59254, 3.59254]
+        ]),
         "HASS-3": np.array([
             [3.63343, 4.09168, 4.32561, 4.28565, 4.33502],
             [3.46048, 3.75132, 4.02459, 4.15171, 4.04818]
@@ -105,37 +161,40 @@ exps = {
     }
 }
 
-means = {
-    "HASS-3": np.zeros((2, 5)),
-    "EAGLE3": np.zeros((2, 5)),
-    "PRISM": np.zeros((2, 5))
-}
-
+# calculate
+means = {}
 for results in exps.values():
     for model, values in results.items():
+        if model not in means:
+            means[model] = np.zeros((2, 5))
+
         means[model] += values / 6.0
 
+# draw
 for temperature in [0, 1]:
     plt.figure(figsize=(11, 7))
 
+    legends = []
     for model, values in means.items():
         plt.plot(
             range(1, 6),
             values[temperature],
             color=config[model]["color"],
             marker=config[model]["marker"],
+            markersize=9,
             linestyle="-" if temperature == 0 else ":"
         )
+        legends.append(model)
 
     plt.grid()
-    plt.legend(["HASS-3", "EAGLE3", "PRISM"], loc="lower right", fontsize=12)
+    plt.legend(legends, loc="lower right", fontsize=12)
     plt.title(f"Temperature = {temperature}", fontsize=18)
 
     plt.xticks(range(1, 6), xticks, fontsize=12)
     plt.xlabel("Train Data Volume", fontsize=15)
 
     if temperature == 0:
-        plt.yticks(np.arange(4.6, 5.7, 0.1), fontsize=12)
+        plt.yticks(np.arange(4.5, 5.7, 0.1), fontsize=12)
     else:
-        plt.yticks(np.arange(4.3, 5.4, 0.1), fontsize=12)
+        plt.yticks(np.arange(4.2, 5.4, 0.1), fontsize=12)
     plt.ylabel("Acceptance Length", fontsize=15)

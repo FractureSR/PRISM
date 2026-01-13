@@ -3,24 +3,24 @@ from matplotlib import pyplot as plt
 
 config = {
     "EAGLE2": {
-        "color": "#1f77b4",
+        "color": "#8c564b",
         "marker": "o"
     },
     "HASS": {
-        "color": "#ff7f0e",
-        "marker": "s"
+        "color": "#1f77b4",
+        "marker": "v"
     },
     "EAGLE3": {
         "color": "#2ca02c",
-        "marker": "^"
+        "marker": "d"
     },
     "PRISM": {
         "color": "#d62728",
-        "marker": "D"
+        "marker": "P"
     }
 }
 
-xticks = ["Pos.1", "Pos.2", "Pos.3", "Pos.4", "Pos.5", "Pos.6"]
+xticks = ["1", "2", "3", "4", "5", "6"]
 
 exps = {
     "MT-bench": {
@@ -133,33 +133,39 @@ exps = {
     }
 }
 
-means = {
-    "EAGLE2": np.zeros((2, 6)),
-    "HASS": np.zeros((2, 6)),
-    "EAGLE3": np.zeros((2, 6)),
-    "PRISM": np.zeros((2, 6))
-}
+pos = 6
 
+# calculate
+means = {}
 for results in exps.values():
     for model, values in results.items():
-        means[model] += values / 6.0
+        if model not in means:
+            means[model] = np.zeros((2, pos))
 
+        means[model] += values[:, :pos] / 6.0
+
+# draw
 for temperature in [0, 1]:
-    plt.figure(figsize=(11, 7))
+    plt.figure(figsize=(pos + 1, 7))
 
     legends = []
     for model, values in means.items():
         plt.plot(
-            range(1, 7),
+            range(1, pos + 1),
             values[temperature],
             color=config[model]["color"],
             marker=config[model]["marker"],
+            markersize=9,
             linestyle="-" if temperature == 0 else ":"
         )
-        legends.append(f"{model} (t={temperature})")
+        legends.append(model)
 
     plt.grid()
-    plt.legend(legends, loc="upper right", fontsize=11)
-    plt.xticks(range(1, 7), xticks, fontsize=13)
-    plt.yticks(np.arange(0.6, 1.01, 0.05), fontsize=13)
-    plt.ylabel("Acceptance Rate", fontsize=17)
+    plt.legend(legends, loc="lower left", fontsize=12)
+    plt.title(f"Temperature = {temperature}", fontsize=18)
+
+    plt.xticks(range(1, pos + 1), xticks[:pos], fontsize=12)
+    plt.xlabel("Position No.", fontsize=15)
+
+    plt.yticks(np.arange(0.70, 1.01, 0.05), fontsize=12)
+    plt.ylabel("Acceptance Rate", fontsize=18)

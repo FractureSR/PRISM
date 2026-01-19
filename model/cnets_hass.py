@@ -110,7 +110,6 @@ def apply_rotary_pos_emb(q, k, cos, sin, position_ids):
     return q_embed, k_embed
 
 
-
 class LlamaRotaryEmbedding(torch.nn.Module):
     def __init__(self, dim, max_position_embeddings=2048, base=10000, device=None):
         super().__init__()
@@ -542,8 +541,21 @@ class Model(nn.Module):
         self.fc = nn.Linear(2 * config.hidden_size, config.hidden_size, bias=bias)
         self.act = ACT2FN[config.hidden_act]
         self.logsoftmax = nn.LogSoftmax(dim=-1)
+
+        self.lm_head = nn.Linear(config.hidden_size, 32000, bias=False)
+
         for param in self.embed_tokens.parameters():
             param.requires_grad = False
+
+    def scandata(self) -> None:
+        if not os.path.exists("cache.pt"):
+            raise FileNotFoundError("cache.pt does not exist")
+        else:
+            cache = torch.load("cache.pt")
+            d2t = cache["d2t"]
+            t2d = cache["t2d"]
+        self.register_buffer("d2t", d2t)
+        self.register_buffer("t2d", t2d)
 
     def init_tree(self):
         self.tree_mask_init = torch.eye(self.top_k, device=self.embed_tokens.weight.device)[None, None]

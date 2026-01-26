@@ -11,12 +11,11 @@ nvcc -V
 python -V
 
 export PYTHONPATH=$(pwd):${PYTHONPATH}
-export WANDB_API_KEY=05ac0c7fac19bec004160369c32723326fa8a618
 
 PART=llama3-8b
 PROJECT=LD-${PART}
 
-MODEL=HASS
+MODEL=sHASS
 NAME=${MODEL}-100k
 
 DATA_PATH=/mnt/inaisfs/data/home/liuf_criait/data

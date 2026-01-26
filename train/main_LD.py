@@ -8,7 +8,7 @@ parser.add_argument('--project', type=str, default='LD')
 parser.add_argument('--name', type=str, default='HASS')
 parser.add_argument('--basepath', type=str, default=None)
 parser.add_argument('--configpath', type=str, default=None)
-parser.add_argument('--lr', type=float, default=3e-5)
+parser.add_argument('--lr', type=float, default=5e-5)
 parser.add_argument('--bs', type=int, default=4)
 parser.add_argument('--gradient-accumulation-steps', type=int, default=1)
 parser.add_argument('--tmpdir', type=str, default=None)
@@ -255,18 +255,18 @@ def top_accuracy(output, target, topk=(1,)):
         return res
 
 
-def compute_loss(lm_head, target, target_p, predict, loss_mask):
-    out_head = lm_head(predict)
+def compute_loss(model, target, target_p, predict, loss_mask):
+    out_head = model.lm_head(model.norm(predict))
     out_logp = nn.LogSoftmax(dim=2)(out_head)
 
     plogp = target_p * out_logp
-    ploss = -torch.sum(torch.sum(loss_mask * plogp, 2)) / (loss_mask.sum() + 1e-5)
+    ploss = -torch.mean(torch.sum(loss_mask * plogp, 2))
 
     vloss = criterion(predict, target)
-    vloss = torch.sum(torch.mean(loss_mask * vloss, 2)) / (loss_mask.sum() + 1e-5)
+    vloss = torch.mean(torch.mean(loss_mask * vloss, 2))
 
     topk_mask = torch.topk(target_p, k=args.topk, dim=2).indices
-    topk_loss = -torch.sum(torch.sum(loss_mask * plogp.gather(dim=2, index=topk_mask), 2)) / (loss_mask.sum() + 1e-5)
+    topk_loss = -torch.mean(torch.sum(loss_mask * plogp.gather(dim=2, index=topk_mask), 2))
 
     return vloss, ploss, topk_loss, out_head
 
@@ -449,10 +449,10 @@ for epoch in range(num_epochs + 1):
                     q_hidden_states = q_hidden_states.detach()
 
                 if not args.use_adapter:
-                    vloss, ploss, topk_loss, out_head = compute_loss(model.module.lm_head, target, target_p, predict,
+                    vloss, ploss, topk_loss, out_head = compute_loss(model.module, target, target_p, predict,
                                                                      loss_mask)
                 else:
-                    vloss, ploss, topk_loss, out_head = compute_loss(model.module.lm_head, target, target_p,
+                    vloss, ploss, topk_loss, out_head = compute_loss(model.module, target, target_p,
                                                                      sample_hidden, loss_mask)
                 total_loss = train_config["v_w"] * vloss + train_config["p_w"] * ploss + train_config[
                     "topk_w"] * topk_loss
@@ -557,10 +557,10 @@ for epoch in range(num_epochs + 1):
                 target_p = target_p.detach()
 
                 if not args.use_adapter:
-                    vloss, ploss, topk_loss, out_head = compute_loss(model.module.lm_head, data["target"], target_p,
+                    vloss, ploss, topk_loss, out_head = compute_loss(model.module, data["target"], target_p,
                                                                      predict, loss_mask)
                 else:
-                    vloss, ploss, topk_loss, out_head = compute_loss(model.module.lm_head, data["target"], target_p,
+                    vloss, ploss, topk_loss, out_head = compute_loss(model.module, data["target"], target_p,
                                                                      sample_hidden, loss_mask)
 
                 loss = train_config["v_w"] * vloss + train_config["p_w"] * ploss + train_config["topk_w"] * topk_loss

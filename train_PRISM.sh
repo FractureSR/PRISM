@@ -11,12 +11,11 @@ nvcc -V
 python -V
 
 export PYTHONPATH=$(pwd):${PYTHONPATH}
-export WANDB_API_KEY=05ac0c7fac19bec004160369c32723326fa8a618
 
 PART=llama3-8b
 PROJECT=LD-${PART}
 
-MODEL=PRISM
+MODEL=sPRISM
 NAME=${MODEL}-100k
 
 DATA_PATH=/mnt/inaisfs/data/home/liuf_criait/data
@@ -38,8 +37,8 @@ accelerate launch train/main_LD.py \
     --topk_w 0 \
     --forward_num_total 3 \
     --data_num 100000 \
-    --lr 1e-5 \
-    --hass_path checkpoints/${PART}/HASS-100k/state_39/pytorch_model.bin \
+    --lr 2e-5 \
+    --hass_path checkpoints/${PART}/sHASS-100k/state_39/pytorch_model.bin \
     --v_w 0
 
 echo "end time: $(date)"

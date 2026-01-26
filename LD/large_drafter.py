@@ -348,7 +348,7 @@ class InferLargeDrafter(InferModel):
         last_hidden = out_hidden[:, -1]
 
         if not self.use_adapter:
-            last_headout = head(last_hidden)
+            last_headout = self.lm_head(self.norm(last_hidden))
         else:
             sample_hidden = sample_hidden[:, -1, :]
             last_headout = head(sample_hidden)
@@ -359,8 +359,8 @@ class InferLargeDrafter(InferModel):
         scores = topk_p[0]
         scores_list.append(scores[None])
         parents_list.append(torch.zeros(1, dtype=torch.long, device=scores.device))
-        ss_token.append(topk_index)
-        input_ids = topk_index
+        ss_token.append(topk_index + self.d2t[topk_index])
+        input_ids = topk_index + self.d2t[topk_index]
         input_hidden = last_hidden[None].repeat(1, top_k, 1)
         tree_mask = self.tree_mask_init
         topk_cs_index = torch.arange(top_k, device=self.embed_tokens.weight.device)
@@ -387,7 +387,7 @@ class InferLargeDrafter(InferModel):
             parents_list.append(parents)
 
             if not self.use_adapter:
-                last_headout = head(out_hidden[0])
+                last_headout = self.lm_head(self.norm(out_hidden[0]))
             else:
                 last_headout = head(sample_hidden[0])
 
@@ -411,7 +411,8 @@ class InferLargeDrafter(InferModel):
             input_ids = topk_index.view(-1)[topk_cs_index][None]
             # print(input_ids.equal(input_ids0))
 
-            ss_token.append(topk_index)
+            input_ids = input_ids + self.d2t[input_ids]
+            ss_token.append(topk_index + self.d2t[topk_index])
             scores_list.append(cu_scores)
             tree_mask = torch.cat(
                 (tree_mask[:, :, out_ids], self.tree_mask_init), dim=3

@@ -542,6 +542,7 @@ class Model(nn.Module):
         self.act = ACT2FN[config.hidden_act]
         self.logsoftmax = nn.LogSoftmax(dim=-1)
 
+        self.norm = LlamaRMSNorm(config.hidden_size, eps=config.rms_norm_eps)
         self.lm_head = nn.Linear(config.hidden_size, 32000, bias=False)
 
         for param in self.embed_tokens.parameters():

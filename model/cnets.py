@@ -512,6 +512,7 @@ class Model(nn.Module):
         self.act = ACT2FN[config.hidden_act]
         self.logsoftmax = nn.LogSoftmax(dim=-1)
 
+        self.norm = LlamaRMSNorm(config.hidden_size, eps=config.rms_norm_eps)
         self.lm_head = nn.Linear(config.hidden_size, 32000, bias=False)
         d2t = torch.zeros(32000, dtype=torch.long)
         t2d = torch.zeros(self.vocab_size, dtype=torch.bool)
@@ -693,7 +694,7 @@ class Model(nn.Module):
         self.stable_kv = past_key_values
         last_hidden = out_hidden[:, -1]
 
-        last_headout = self.lm_head(last_hidden)
+        last_headout = head(last_hidden)
 
         last_p = self.logsoftmax(last_headout)
         top = torch.topk(last_p, top_k, dim=-1)
@@ -701,8 +702,8 @@ class Model(nn.Module):
         scores = topk_p[0]
         scores_list.append(scores[None])
         parents_list.append(torch.zeros(1, dtype=torch.long, device=scores.device))
-        ss_token.append(topk_index + self.d2t[topk_index])
-        input_ids = topk_index + self.d2t[topk_index]
+        ss_token.append(topk_index)
+        input_ids = topk_index
         input_hidden = last_hidden[None].repeat(1, top_k, 1)
         tree_mask = self.tree_mask_init
         topk_cs_index = torch.arange(top_k, device=self.embed_tokens.weight.device)
@@ -723,7 +724,7 @@ class Model(nn.Module):
             parents = (topk_cs_index + bias)
             parents_list.append(parents)
 
-            last_headout = self.lm_head(out_hidden[0])
+            last_headout = head(out_hidden[0])
             last_p = self.logsoftmax(last_headout)
 
             top = torch.topk(last_p, top_k, dim=-1)
@@ -744,8 +745,7 @@ class Model(nn.Module):
             input_ids = topk_index.view(-1)[topk_cs_index][None]
             # print(input_ids.equal(input_ids0))
 
-            input_ids = input_ids + self.d2t[input_ids]
-            ss_token.append(topk_index + self.d2t[topk_index])
+            ss_token.append(topk_index)
             scores_list.append(cu_scores)
             tree_mask = torch.cat((tree_mask[:, :, out_ids], self.tree_mask_init), dim=3)
 

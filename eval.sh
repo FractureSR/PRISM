@@ -9,8 +9,8 @@ export PYTHONPATH=$(pwd):${PYTHONPATH}
 
 PROJECT=llama3-8b
 
-MODEL=PRISM
-NAME=${MODEL}-800k
+MODEL=sHASS
+NAME=${MODEL}-100k
 
 EA_MODEL_DIR=checkpoints/${PROJECT}/${NAME}
 EA_CONFIG_PATH=train/llama3-8b/${MODEL}_config.json
@@ -18,12 +18,11 @@ BASE_MODEL_PATH=/mnt/inaisfs/data/home/liuf_criait/data/model/Llama-3-8B-Instruc
 
 echo "start time: $(date)"
 
-for iter in {0..0}
+for iter in {39..39}
 do
   echo "iter: ${iter}"
 
-  # EA_MODEL_PATH=${EA_MODEL_DIR}/state_${iter}
-  EA_MODEL_PATH=${EA_MODEL_DIR}
+  EA_MODEL_PATH=${EA_MODEL_DIR}/state_${iter}
   cp ${EA_CONFIG_PATH} ${EA_MODEL_PATH}/config.json
 
   for bench_name in "mt_bench" "humaneval" "gsm8k" "alpaca" "sum" "qa"

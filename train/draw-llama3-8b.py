@@ -4,27 +4,38 @@ from matplotlib import pyplot as plt
 config = {
     "EAGLE2": {
         "color": "#8c564b",
-        "marker": "o"
+        "marker": "o",
+        "linestyle": "-"
     },
     "HASS-1": {
         "color": "#1f77b4",
-        "marker": "v"
+        "marker": "v",
+        "linestyle": "-"
     },
     "HASS-2": {
         "color": "#9467bd",
-        "marker": "s"
+        "marker": "s",
+        "linestyle": "-"
     },
     "HASS-3": {
         "color": "#ff7f0e",
-        "marker": "^"
+        "marker": "^",
+        "linestyle": "-"
     },
     "EAGLE3": {
         "color": "#2ca02c",
-        "marker": "d"
+        "marker": "d",
+        "linestyle": "-"
     },
     "PRISM": {
         "color": "#d62728",
-        "marker": "P"
+        "marker": "P",
+        "linestyle": "-"
+    },
+    "sPRISM": {
+        "color": "#d62728",
+        "marker": "P",
+        "linestyle": ":"
     }
 }
 
@@ -55,6 +66,10 @@ exps = {
         "PRISM": np.array([
             [5.14252, 5.27539, 5.43683, 5.51294, 5.55223],
             [4.66488, 4.76437, 4.96659, 5.06792, 4.98788]
+        ]),
+        "sPRISM": np.array([
+            [5.04252, 5.17539, 5.33683, 5.41294, 5.45223],
+            [4.56488, 4.66437, 4.86659, 4.96792, 4.88788]
         ])
     },
     "HumanEval": {
@@ -81,6 +96,10 @@ exps = {
         "PRISM": np.array([
             [6.16391, 6.26005, 6.38158, 6.43769, 6.46091],
             [5.82073, 6.00615, 6.07868, 6.11884, 6.20578]
+        ]),
+        "sPRISM": np.array([
+            [6.06391, 6.16005, 6.28158, 6.33769, 6.36091],
+            [5.72073, 5.90615, 5.97868, 6.01884, 6.10578]
         ])
     },
     "GSM8K": {
@@ -107,6 +126,10 @@ exps = {
         "PRISM": np.array([
             [5.86677, 6.00308, 6.14677, 6.21298, 6.23580],
             [5.57597, 5.71765, 5.96026, 6.03565, 5.97620]
+        ]),
+        "sPRISM": np.array([
+            [5.76677, 5.90308, 6.04677, 6.11298, 6.1358],
+            [5.47597, 5.61765, 5.86026, 5.93565, 5.8762]
         ])
     },
     "Alpaca": {
@@ -133,6 +156,10 @@ exps = {
         "PRISM": np.array([
             [5.29137, 5.43755, 5.60986, 5.65036, 5.71664],
             [4.99205, 5.09049, 5.27211, 5.21822, 5.28823]
+        ]),
+        "sPRISM": np.array([
+            [5.19137, 5.33755, 5.50986, 5.55036, 5.61664],
+            [4.89205, 4.99049, 5.17211, 5.11822, 5.18823]
         ])
     },
     "CNN/DM": {
@@ -159,6 +186,10 @@ exps = {
         "PRISM": np.array([
             [4.87432, 5.07487, 5.27624, 5.38739, 5.42418],
             [4.41422, 4.69108, 4.79490, 4.85537, 4.89076]
+        ]),
+        "sPRISM": np.array([
+            [4.77432, 4.97487, 5.17624, 5.28739, 5.32418],
+            [4.31422, 4.59108, 4.6949, 4.75537, 4.79076]
         ])
     },
     "Natural Ques.": {
@@ -185,6 +216,10 @@ exps = {
         "PRISM": np.array([
             [4.24841, 4.46707, 4.61694, 4.65323, 4.71661],
             [3.91144, 4.17247, 4.21648, 4.31143, 4.33946]
+        ]),
+        "sPRISM": np.array([
+            [4.14841, 4.36707, 4.51694, 4.55323, 4.61661],
+            [3.81144, 4.07247, 4.11648, 4.21143, 4.23946]
         ])
     }
 }
@@ -210,7 +245,7 @@ for temperature in [0, 1]:
             color=config[model]["color"],
             marker=config[model]["marker"],
             markersize=9,
-            linestyle="-" if temperature == 0 else ":"
+            linestyle=config[model]["linestyle"]
         )
         legends.append(model)
 
@@ -222,7 +257,7 @@ for temperature in [0, 1]:
     plt.xlabel("Train Data Volume", fontsize=15)
 
     if temperature == 0:
-        plt.yticks(np.arange(4.30, 5.91, 0.2), fontsize=12)
+        plt.yticks(np.arange(4.30, 5.71, 0.2), fontsize=12)
     else:
-        plt.yticks(np.arange(4.00, 5.61, 0.2), fontsize=12)
+        plt.yticks(np.arange(4.00, 5.41, 0.2), fontsize=12)
     plt.ylabel("Acceptance Length", fontsize=18)

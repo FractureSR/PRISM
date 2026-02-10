@@ -44,7 +44,9 @@ class LargeDrafter(Model):
             depth=5,
             top_k=8,
             threshold=1.0,
-            hass_path: str = None
+            hass_path: str = None,
+            prism_path: str = None,
+            sparse_lm_head = None
     ):
         eagle_config = EConfig(**config["eagle_config"])
         super().__init__(
@@ -56,6 +58,7 @@ class LargeDrafter(Model):
             depth=depth,
             top_k=top_k,
             threshold=threshold,
+            sparse_lm_head=sparse_lm_head
         )
 
         self.fusion_layer = nn.Linear(
@@ -104,6 +107,14 @@ class LargeDrafter(Model):
             for step in range(1, self.num_step_models):
                 self.stepModels[step] = copy.deepcopy(self.stepModels[0])
                 self.stepFCs[step] = copy.deepcopy(self.stepFCs[0])
+
+        if prism_path:
+            self.load_state_dict(torch.load(prism_path, map_location='cpu', weights_only=True), strict=False)
+            for name, param in self.named_parameters():
+                if "norm" in name or "lm_head" in name:
+                    param.requires_grad = True
+                else:
+                    param.requires_grad = False
 
         # replace
         self.current_step = 0

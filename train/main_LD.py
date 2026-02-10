@@ -23,6 +23,7 @@ parser.add_argument('--debug', action='store_true')
 parser.add_argument('--use_adapter', action='store_true')
 parser.add_argument('--detach', action='store_true')
 parser.add_argument('--hass_path', type=str, default=None)
+parser.add_argument('--prism_path', type=str, default=None)
 parser.add_argument('--p_w', type=float, default=0.1)
 parser.add_argument('--v_w', type=float, default=1.0)
 parser.add_argument('--max_len', type=int, default=2048)
@@ -124,6 +125,9 @@ head.eval()
 
 for param in head.parameters():
     param.requires_grad = False
+
+t2d = torch.load("cache.pt")["t2d"]
+sparse_lm_head = tensor[t2d]
 
 
 def list_files(
@@ -358,7 +362,8 @@ with open(train_config["config_path"]) as f:
     config = json.load(f)
 assert config.get("use_adapter", False) == args.use_adapter
 
-model = LargeDrafter(config, load_emb=True, path=args.basepath, hass_path=args.hass_path)
+model = LargeDrafter(config, load_emb=True, path=args.basepath, hass_path=args.hass_path,
+                     prism_path=args.prism_path, sparse_lm_head=sparse_lm_head)
 model.scandata()
 if accelerator.is_main_process:
     logger.info(model)

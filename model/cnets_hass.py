@@ -499,7 +499,8 @@ def len_list(x, n):
 
 
 class Model(nn.Module):
-    def __init__(self, config, load_emb=False, path=None, bias=True, total_tokens=63, depth=5, top_k=8, threshold=1.0):
+    def __init__(self, config, load_emb=False, path=None, bias=True, total_tokens=63, depth=5, top_k=8, threshold=1.0,
+                 sparse_lm_head=None):
         super().__init__()
 
         self.gradient_checkpointing = True
@@ -544,6 +545,7 @@ class Model(nn.Module):
 
         self.norm = LlamaRMSNorm(config.hidden_size, eps=config.rms_norm_eps)
         self.lm_head = nn.Linear(config.hidden_size, 32000, bias=False)
+        self.lm_head.weight.data = copy.deepcopy(sparse_lm_head)
 
         for param in self.embed_tokens.parameters():
             param.requires_grad = False

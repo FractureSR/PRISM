@@ -37,7 +37,7 @@ def main():
     # data
     parser.add_argument('--dataset_name', type=str, default='ShareGPT')
     parser.add_argument('--num_rows', type=int, default=68000)
-    parser.add_argument('--num_gpus', type=int, default=4)
+    parser.add_argument('--num_gpus', type=int, default=2)
 
     args = parser.parse_args()
 
@@ -55,8 +55,10 @@ def main():
     for index in range(num_gpus):
         start, end = intervals[index]
 
+        cuda = "0,1,2,3" if index == 0 else "4,5,6,7"
+
         command = (
-            f'CUDA_VISIBLE_DEVICES={index} python {args.script} '
+            f'CUDA_VISIBLE_DEVICES={cuda} python {args.script} '
             f'--start {start} '
             f'--end {end} '
             f'--index {index} '

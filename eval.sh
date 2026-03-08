@@ -9,10 +9,10 @@ export PYTHONPATH=$(pwd):${PYTHONPATH}
 
 PROJECT=llama3-8b
 
-MODEL=HASS-3
+MODEL=Eagle2
 NAME=${MODEL}-100k
 
-EA_MODEL_DIR=checkpoints/${PROJECT}/${NAME}
+EA_MODEL_DIR=/mnt/inaisfs/data/home/liuf_criait/project/LD/checkpoints/${PROJECT}/${NAME}
 EA_CONFIG_PATH=train/llama3-8b/${MODEL}_config.json
 BASE_MODEL_PATH=/mnt/inaisfs/data/home/liuf_criait/data/model/Llama-3-8B-Instruct
 

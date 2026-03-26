@@ -6,14 +6,19 @@ import torch
 from datasets import concatenate_datasets, load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from storage_utils import ChunkWriter
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--start", type=int, default=0)
 parser.add_argument("--end", type=int, default=100)
 parser.add_argument("--index", type=int, default=0)
-parser.add_argument("--outdir", type=str, default="0")
+parser.add_argument("--local_outdir", type=str, required=True)
+parser.add_argument("--hdfs_outdir", type=str, default=None)
 parser.add_argument("--data_path", type=str, default="0")
 parser.add_argument("--model_path", type=str, default="0")
 parser.add_argument("--dataset_name", type=str, default="ShareGPT")
+parser.add_argument("--samples_per_file", type=int, default=20)
+parser.add_argument("--move_every_files", type=int, default=100)
 args = parser.parse_args()
 
 bigname = args.model_path
@@ -245,17 +250,16 @@ def ge(data):
     return td
 
 
-outdir = f"{args.outdir}/{args.index}"
-if not os.path.exists(outdir):
-    os.makedirs(outdir)
-
-
-def writedata(name, data_point):
-    if not os.path.exists(name):
-        os.makedirs(name)
-    current_length = len(os.listdir(name))
-    idx = current_length
-    torch.save(data_point, f"{name}/data_{idx}.ckpt")
+local_root = args.local_outdir
+hdfs_root = args.hdfs_outdir or local_root
+local_outdir = os.path.join(local_root, str(args.index))
+hdfs_outdir = os.path.join(hdfs_root, str(args.index))
+writer = ChunkWriter(
+    local_dir=local_outdir,
+    hdfs_dir=hdfs_outdir,
+    samples_per_file=args.samples_per_file,
+    move_every_files=args.move_every_files,
+)
 
 
 for id, data in enumerate(ds):
@@ -264,4 +268,6 @@ for id, data in enumerate(ds):
     if id % 1000 == 0:
         print("")
     outdata = ge(data)
-    writedata(outdir, outdata)
+    writer.add(outdata)
+
+writer.close()

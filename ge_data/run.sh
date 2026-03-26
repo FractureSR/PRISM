@@ -22,7 +22,7 @@ python allocation.py \
     --data_path ${DATASET_DIR}/ShareGPT_V4.3_unfiltered_cleaned_split.json \
     --model_path ${MODEL_DIR} \
     --dataset_name ShareGPT \
-    --num_rows 68000
+    --end_rows 68000
 
 python allocation.py \
     --script ${SCRIPT} \
@@ -30,7 +30,7 @@ python allocation.py \
     --data_path ${DATASET_DIR}/ultrachat_200k \
     --model_path ${MODEL_DIR} \
     --dataset_name UltraChat \
-    --num_rows 463000
+    --end_rows 463000
 
 python allocation.py \
     --script ${SCRIPT} \
@@ -38,6 +38,6 @@ python allocation.py \
     --data_path ${DATASET_DIR}/OpenThoughts2-1M \
     --model_path ${MODEL_DIR} \
     --dataset_name OpenThoughts2 \
-    --num_rows 269000
+    --end_rows 269000
 
 echo "end time: $(date)"

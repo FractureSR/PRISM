@@ -29,33 +29,42 @@ def main():
     parser = argparse.ArgumentParser()
 
     # entrance
-    parser.add_argument('--script', type=str)
+    parser.add_argument('--script', type=str, required=True)
     # path
-    parser.add_argument('--outdir', type=str)
-    parser.add_argument('--data_path', type=str)
-    parser.add_argument('--model_path', type=str)
+    parser.add_argument('--outdir', type=str, required=True)
+    parser.add_argument('--data_path', type=str, required=True)
+    parser.add_argument('--model_path', type=str, required=True)
     # data
     parser.add_argument('--dataset_name', type=str, default='ShareGPT')
-    parser.add_argument('--num_rows', type=int, default=68000)
-    parser.add_argument('--num_gpus', type=int, default=2)
+    parser.add_argument('--start_row', type=int, default=0)
+    parser.add_argument('--end_row', type=int, required=True)
+    parser.add_argument('--num_instances', type=int, default=4)
+    parser.add_argument('--gpus_per_instance', type=int, default=2)
 
     args = parser.parse_args()
 
     dataset_name = args.dataset_name
-    num_rows = args.num_rows
-    num_gpus = args.num_gpus
+    start_row = args.start_row
+    end_row = args.end_row
+    num_instances = args.num_instances
+    gpus_per_instance = args.gpus_per_instance
 
-    outdir = f'{args.outdir}/{dataset_name}_{num_rows}'
+    gpu_groups = [
+        ",".join(str(g) for g in range(i * gpus_per_instance, (i + 1) * gpus_per_instance))
+        for i in range(num_instances)
+    ]
+
+    outdir = args.outdir
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
-    intervals = split_range(0, num_rows - 1, num_gpus, over=True)
+    intervals = split_range(start_row, end_row - 1, num_instances, over=True)
 
     commands = []
-    for index in range(num_gpus):
+    for index in range(num_instances):
         start, end = intervals[index]
 
-        cuda = "0,1,2,3" if index == 0 else "4,5,6,7"
+        cuda = gpu_groups[index]
 
         command = (
             f'CUDA_VISIBLE_DEVICES={cuda} python {args.script} '

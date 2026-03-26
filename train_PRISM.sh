@@ -5,6 +5,7 @@
 #SBATCH -n 128
 #SBATCH --gres=gpu:8
 
+set -euo pipefail
 set -x
 
 nvcc -V
@@ -13,11 +14,14 @@ python -V
 export PYTHONPATH=$(pwd):${PYTHONPATH}
 export WANDB_API_KEY=05ac0c7fac19bec004160369c32723326fa8a618
 
-PART=llama3-8b
+PART=${PART:-llama3-8b}
 PROJECT=LD-${PART}
 
 MODEL=LD-5s
 NAME=${MODEL}-100k
+TRAIN_DATA_DIR=${TRAIN_DATA_DIR:-ge_data/${PART}}
+LOCAL_TRAIN_CACHE_DIR=${LOCAL_TRAIN_CACHE_DIR:-}
+PREFETCH_CHUNK_COUNT=${PREFETCH_CHUNK_COUNT:-0}
 
 DATA_PATH=/mnt/inaisfs/data/home/liuf_criait/data
 BASE_PATH=${DATA_PATH}/model/Llama-3-8B-Instruct
@@ -25,11 +29,19 @@ CONFIG_PATH=train/${PART}/${MODEL}_config.json
 
 echo "start time: $(date)"
 
+EXTRA_ARGS=()
+if [ -n "${LOCAL_TRAIN_CACHE_DIR}" ] && [ "${PREFETCH_CHUNK_COUNT}" -gt 0 ]; then
+    EXTRA_ARGS+=(
+        --local_cache_dir "${LOCAL_TRAIN_CACHE_DIR}"
+        --prefetch_chunk_count "${PREFETCH_CHUNK_COUNT}"
+    )
+fi
+
 accelerate launch train/main_LD.py \
     --project ${PROJECT} \
     --name ${NAME} \
     --basepath ${BASE_PATH} \
-    --tmpdir ge_data/${PART} \
+    --tmpdir ${TRAIN_DATA_DIR} \
     --cpdir checkpoints/${PART}/${NAME} \
     --configpath ${CONFIG_PATH} \
     --epoch 8 \
@@ -41,6 +53,7 @@ accelerate launch train/main_LD.py \
     --lr 1e-5 \
     --train_LD \
     --hass_path checkpoints/${PART}/HASS-1-5s-100k/state_39/pytorch_model.bin \
-    --v_w 0
+    --v_w 0 \
+    "${EXTRA_ARGS[@]}"
 
 echo "end time: $(date)"

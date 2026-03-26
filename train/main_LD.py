@@ -1,5 +1,10 @@
 import argparse
+import json
+import os
 import random
+import re
+import shutil
+import tempfile
 
 from loguru import logger
 
@@ -12,6 +17,8 @@ parser.add_argument('--lr', type=float, default=3e-5)
 parser.add_argument('--bs', type=int, default=4)
 parser.add_argument('--gradient-accumulation-steps', type=int, default=1)
 parser.add_argument('--tmpdir', type=str, default=None)
+parser.add_argument('--local_cache_dir', type=str, default=None)
+parser.add_argument('--prefetch_chunk_count', type=int, default=0)
 parser.add_argument('--cpdir', type=str, default=None)
 parser.add_argument('--epoch', type=int, default=40)
 parser.add_argument('--topk', type=int, default=10)
@@ -62,11 +69,9 @@ train_config = {
     "grad_clip": 0.5,
     "save_freq": 1
 }
-import json
 import safetensors
 from safetensors import safe_open
 # from transformers import AutoModelForCausalLM, AutoTokenizer,AutoModelForSequenceClassification
-import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = "0,1
 import torch
 
@@ -123,34 +128,149 @@ for param in head.parameters():
     param.requires_grad = False
 
 
+CHUNK_FILE_PATTERN = re.compile(r'^chunk_(\d+)_(\d+)\.ckpt$')
+
+
+def index_is_stale(path: str, index_file_path: str):
+    if not os.path.exists(index_file_path):
+        return True
+
+    index_mtime = os.path.getmtime(index_file_path)
+    for root, _, files in os.walk(path):
+        for file in files:
+            if not file.endswith('.ckpt'):
+                continue
+            file_path = os.path.join(root, file)
+            if os.path.getmtime(file_path) > index_mtime:
+                return True
+    return False
+
+
+def ensure_dir(path: str):
+    if path:
+        os.makedirs(path, exist_ok=True)
+
+
+def normalize_entry(entry):
+    if isinstance(entry, str):
+        return {"path": entry, "sample_idx": None}
+    return dict(entry)
+
+
+def copy_file_atomic(source_path: str, target_path: str):
+    ensure_dir(os.path.dirname(target_path))
+
+    if os.path.exists(target_path):
+        try:
+            if os.path.getsize(source_path) == os.path.getsize(target_path):
+                return
+        except OSError:
+            pass
+
+    fd, tmp_path = tempfile.mkstemp(
+        dir=os.path.dirname(target_path),
+        prefix=".tmp_prefetch_",
+        suffix=".ckpt",
+    )
+    os.close(fd)
+    try:
+        shutil.copy2(source_path, tmp_path)
+        os.replace(tmp_path, target_path)
+    except Exception:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+        raise
+
+
 def list_files(
         path: str,
-        index_file_name: str = 'index.txt',
+        index_file_name: str = 'sample_index.jsonl',
         num: int = 800000
 ):
     datapath = []
+    rng = random.Random(42)
 
     index_file_path = os.path.join(path, index_file_name)
-    if os.path.exists(index_file_path):
+    if not index_is_stale(path, index_file_path):
         logger.info('data index file exists.')
         with open(index_file_path, mode='r', encoding='utf-8') as reader:
             for line in reader:
-                file_path = line.strip()
-                datapath.append(file_path)
+                line = line.strip()
+                if not line:
+                    continue
+                if line.startswith('{'):
+                    datapath.append(json.loads(line))
+                else:
+                    datapath.append({"path": line, "sample_idx": None})
     else:
+        groups = []
         for root, _, files in os.walk(path):
             for file in files:
+                if not file.endswith('.ckpt'):
+                    continue
                 file_path = os.path.join(root, file)
-                datapath.append(file_path)
+                match = CHUNK_FILE_PATTERN.match(file)
+                if match:
+                    sample_count = int(match.group(2))
+                    sample_indices = list(range(sample_count))
+                    rng.shuffle(sample_indices)
+                    groups.append(
+                        [
+                            {"path": file_path, "sample_idx": sample_idx}
+                            for sample_idx in sample_indices
+                        ]
+                    )
+                else:
+                    groups.append([{"path": file_path, "sample_idx": None}])
 
-        random.seed(42)
-        random.shuffle(datapath)
+        rng.shuffle(groups)
+        datapath = [entry for group in groups for entry in group]
         with open(index_file_path, mode='w', encoding='utf-8') as writer:
-            for file_path in datapath:
-                writer.write(file_path + '\n')
+            for entry in datapath:
+                writer.write(json.dumps(entry) + '\n')
 
     logger.info(f'there are {len(datapath)} samples, select first {num}.')
     return datapath[:num]
+
+
+def build_prefetch_map(datapath, source_root: str, local_cache_dir: str, prefetch_chunk_count: int):
+    if not local_cache_dir or prefetch_chunk_count <= 0:
+        return {}
+
+    prefetch_map = {}
+    for entry in datapath:
+        normalized = normalize_entry(entry)
+        source_path = normalized["path"]
+        if source_path in prefetch_map:
+            continue
+
+        relative_path = os.path.relpath(source_path, source_root)
+        prefetch_map[source_path] = os.path.join(local_cache_dir, relative_path)
+        if len(prefetch_map) >= prefetch_chunk_count:
+            break
+
+    return prefetch_map
+
+
+def prefetch_chunk_files(prefetch_map):
+    for source_path, target_path in prefetch_map.items():
+        copy_file_atomic(source_path, target_path)
+
+
+def localize_prefetched_entries(datapath, prefetch_map):
+    localized_datapath = []
+    localized_sample_count = 0
+
+    for entry in datapath:
+        normalized = normalize_entry(entry)
+        source_path = normalized["path"]
+        target_path = prefetch_map.get(source_path)
+        if target_path and os.path.exists(target_path):
+            normalized["path"] = target_path
+            localized_sample_count += 1
+        localized_datapath.append(normalized)
+
+    return localized_datapath, localized_sample_count
 
 
 class AddGaussianNoise:
@@ -182,13 +302,32 @@ class CustomDataset(Dataset):
     def __init__(self, datapath, transform=None):
         self.data = datapath
         self.transform = transform
+        self._cached_path = None
+        self._cached_data = None
 
     def __len__(self):
         return len(self.data)
 
+    def _load_sample(self, entry):
+        if isinstance(entry, str):
+            entry = {"path": entry, "sample_idx": None}
+
+        file_path = entry["path"]
+        sample_idx = entry.get("sample_idx")
+
+        if self._cached_path != file_path:
+            self._cached_path = file_path
+            self._cached_data = torch.load(file_path, map_location="cpu")
+
+        data = self._cached_data
+        if isinstance(data, dict) and data.get("format") == "prism_chunk_v1":
+            if sample_idx is None:
+                raise ValueError(f"Missing sample index for chunk file: {file_path}")
+            return data["samples"][sample_idx]
+        return data
+
     def __getitem__(self, index):
-        # try:
-        data = torch.load(self.data[index])
+        data = self._load_sample(self.data[index])
         new_data = {}
         hidden_state = data['hidden_state'][:train_config["max_len"]][None, :]
         input_ids = data['input_ids'][:train_config["max_len"]][None, :]
@@ -363,13 +502,32 @@ else:
     aug = None
 
 datapath = list_files(train_config["datapath"], num=train_config["data_num"])
+prefetch_map = build_prefetch_map(
+    datapath,
+    source_root=train_config["datapath"],
+    local_cache_dir=args.local_cache_dir,
+    prefetch_chunk_count=args.prefetch_chunk_count,
+)
+if prefetch_map:
+    if accelerator.is_main_process:
+        logger.info(
+            f'prefetch {len(prefetch_map)} chunk files from '
+            f'{train_config["datapath"]} to {args.local_cache_dir}'
+        )
+        prefetch_chunk_files(prefetch_map)
+    accelerator.wait_for_everyone()
+    datapath, localized_sample_count = localize_prefetched_entries(datapath, prefetch_map)
+    logger.info(
+        f'{localized_sample_count}/{len(datapath)} samples will be read from local cache.'
+    )
 
 traindatapath = datapath[:int(len(datapath) * 0.95)]
 testdatapath = datapath[int(len(datapath) * 0.95):]
 
 traindataset = CustomDataset(traindatapath, transform=aug)
 testdataset = CustomDataset(testdatapath)
-train_loader = DataLoader(traindataset, batch_size=train_config["bs"], shuffle=True,
+# The sample index is pre-shuffled in chunk groups to keep chunk-file reads cache-friendly.
+train_loader = DataLoader(traindataset, batch_size=train_config["bs"], shuffle=False,
                           collate_fn=DataCollatorWithPadding(), num_workers=train_config["num_workers"],
                           pin_memory=True)
 test_loader = DataLoader(testdataset, batch_size=train_config["bs"], shuffle=False,

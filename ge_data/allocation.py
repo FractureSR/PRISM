@@ -1,9 +1,13 @@
 import argparse
 import os
+import re
 import shlex
 from concurrent.futures import ThreadPoolExecutor
 
 from loguru import logger
+
+
+CHUNK_FILE_PATTERN = re.compile(r"^chunk_(\d+)_(\d+)\.ckpt$")
 
 
 def split_range(start, end, n, over=False):
@@ -24,6 +28,18 @@ def split_range(start, end, n, over=False):
         previous += current_interval
 
     return intervals
+
+
+def count_generated_chunks(directory):
+    if not directory or not os.path.isdir(directory):
+        return 0
+
+    count = 0
+    with os.scandir(directory) as entries:
+        for entry in entries:
+            if entry.is_file() and CHUNK_FILE_PATTERN.match(entry.name):
+                count += 1
+    return count
 
 
 def main():
@@ -65,12 +81,27 @@ def main():
     commands = []
     for index in range(num_workers):
         start, end = intervals[index]
+        worker_hdfs_outdir = os.path.join(hdfs_outdir, str(index))
+        generated_files = count_generated_chunks(worker_hdfs_outdir)
+        resume_start = min(end, start + generated_files * args.samples_per_file)
+
+        if resume_start >= end:
+            logger.info(
+                f"worker={index} already finished: "
+                f"range=[{start}, {end}), generated_files={generated_files}"
+            )
+            continue
+
         first_gpu = index * 2
         cuda = f"{first_gpu},{first_gpu + 1}"
 
+        logger.info(
+            f"worker={index} resume from {resume_start} "
+            f"(range=[{start}, {end}), generated_files={generated_files})"
+        )
         command = (
             f'CUDA_VISIBLE_DEVICES={cuda} python {shlex.quote(args.script)} '
-            f'--start {start} '
+            f'--start {resume_start} '
             f'--end {end} '
             f'--index {index} '
             f'--local_outdir {shlex.quote(local_outdir)} '
@@ -83,6 +114,10 @@ def main():
         )
         commands.append(command)
     logger.info('\n'.join(commands))
+
+    if not commands:
+        logger.info('No pending work. All workers are already complete.')
+        return
 
     with ThreadPoolExecutor(max_workers=len(commands)) as executor:
         for command in commands:
